@@ -344,23 +344,25 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     private void showControls() {
         try {
             int previousFontSize = fontSize;
-            fontSize = 16;
+            fontSize = 14;
             width = px / fontSize;
             height = py / fontSize;
             setupScreen();
 
-            textGraphics.putString(0, 0, "Keyboard Controls", SGR.BOLD);
             int row = 2;
-            int col = 5;
+            textGraphics.putString(0, row++, "\tKeyboard Controls", SGR.BOLD);
+            row++;
             for (Controls.Control control : controls.controls) {
-                textGraphics.putString(col, row++, control.ch() + ": " + control.desc());
+                textGraphics.putString(0, row++, "\t\t"+control.ch() + ": " + control.desc());
+                row++;
             }
 
             row++;
-            textGraphics.putString(0, row++, "Mouse Controls", SGR.BOLD);
+            textGraphics.putString(0, row++, "\tMouse Controls", SGR.BOLD);
             row++;
             for (Controls.MouseControl control : controls.mouseControls) {
-                textGraphics.putString(col, row++, control.button() + ": " + control.desc());
+                textGraphics.putString(0, row++, "\t\t"+control.button() + ": " + control.desc());
+                row++;
             }
 
             screen.refresh();
