@@ -31,23 +31,26 @@ import java.util.Objects;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
- * Manages the view and user interaction for a cellular automaton, controlling the Lanterna terminal and automaton execution.
- * Supports initialization, configuration selection, input processing (e.g., pause, resume, resize), and terminal management.
+ * Manages the visualization and user interaction for a cellular automaton, controlling the Lanterna terminal
+ * and automaton execution. Supports grid initialization, configuration application, input handling (e.g., pause,
+ * resume, resize), and terminal management.
  *
  * @param <C> the type of cells in the automaton, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
 public class ControlView<C extends Cell<S>, S extends CellState<?>> {
-    /**
-     * Logger for recording view events and errors.
-     */
+
+    /** Logger for recording view events and errors. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ControlView.class);
+
+    /** Maps configuration class names to their corresponding state renderers. */
     @SuppressWarnings("rawtypes")
     private static final Map<String, StateRenderer> CELL_RENDERER;
+
+    /** Maps configuration class names to a boolean indicating if they use boolean states. */
     private static final Map<String, Boolean> IS_CONFIGURATION_BOOLEAN;
 
     static {
-
         BooleanStateRenderer booleanRenderer = new BooleanStateRenderer();
         BooleanEchoStateRenderer booleanEchoRenderer = new BooleanEchoStateRenderer();
 
@@ -66,34 +69,52 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(HGlassConfiguration.class.getName(), true);
     }
 
+    /** The pixel width of the terminal window. */
     private final int px;
+
+    /** The pixel height of the terminal window. */
     private final int py;
+
+    /** The controls for keyboard and mouse interactions. */
     private final Controls controls;
-    /**
-     * The configuration defining the automaton's setup and behavior.
-     */
+
+    /** The configuration defining the automaton's setup and behavior. */
     private final Configuration<C, S> configuration;
-    /**
-     * The automaton being controlled.
-     */
+
+    /** The automaton being controlled. */
     private Automa<C, S> automaton;
-    /**
-     * The Lanterna terminal screen for rendering the grid.
-     */
+
+    /** The Lanterna terminal screen for rendering the grid. */
     private TerminalScreen screen;
-    /**
-     * The width (number of columns) of the grid and terminal.
-     */
+
+    /** The width (number of columns) of the grid and terminal. */
     private int width;
-    /**
-     * The height (number of rows) of the grid and terminal.
-     */
+
+    /** The height (number of rows) of the grid and terminal. */
     private int height;
+
+    /** The interval between automaton steps, in milliseconds. */
     private long intervalMillis;
+
+    /** The text graphics context for rendering on the screen. */
     private TextGraphics textGraphics;
+
+    /** The font size used for terminal rendering. */
     private int fontSize;
+
+    /** The renderer for displaying the grid's boolean states. */
     private GridRenderer<Cell<BooleanState>, BooleanState> renderer;
 
+    /**
+     * Constructs a new view controller with the specified terminal dimensions, font size, and configuration.
+     * Initializes the grid size based on pixel dimensions and font size, and sets up the automaton and terminal.
+     *
+     * @param px            the pixel width of the terminal window
+     * @param py            the pixel height of the terminal window
+     * @param fontSize      the font size for terminal rendering
+     * @param configuration the automaton configuration, must not be null
+     * @throws NullPointerException if configuration is null
+     */
     public ControlView(int px, int py, int fontSize, @NonNull Configuration<C, S> configuration) {
         Objects.requireNonNull(configuration);
         this.px = px;
@@ -106,23 +127,31 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         initialize();
     }
 
-
+    /**
+     * Initializes the terminal screen, automaton, and renderer. Sets up the screen, configures the automaton
+     * with the provided configuration, and assigns an appropriate renderer based on the configuration type.
+     *
+     * @throws RuntimeException if an error occurs during initialization
+     */
+    @SuppressWarnings("rawtypes")
     public void initialize() {
         try {
-
             setupScreen();
-
-            // Configure automaton
             automaton = new Automa<>();
             configureAutoma();
-            //noinspection rawtypes
             renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
             automaton.setGridConsumer((GridRenderer<C, S>) renderer);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to initialize ControlView: " + e.getMessage(), e);
         }
     }
 
+    /**
+     * Sets up the Lanterna terminal screen by closing any existing terminal, creating a new one, and starting
+     * the screen with text graphics.
+     *
+     * @throws RuntimeException if an error occurs during screen setup
+     */
     private void setupScreen() {
         try {
             closeTerminal();
@@ -131,12 +160,13 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             screen.startScreen();
             textGraphics = screen.newTextGraphics();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to set up screen: " + e.getMessage(), e);
         }
     }
 
     /**
-     * Configures the automaton using the current configuration.
+     * Configures the automaton using the current configuration, applying the grid size and update interval.
+     * Uses a default interval of 100 milliseconds if none is specified.
      */
     private void configureAutoma() {
         if (intervalMillis <= 0) {
@@ -146,12 +176,12 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Closes the terminal, stopping the screen and releasing resources.
+     * Closes the terminal, stopping the screen and releasing resources. Logs any errors during closure.
      */
     private void closeTerminal() {
         try {
             if (screen != null) {
-                LOGGER.debug("Stop screen");
+                LOGGER.debug("Stopping screen");
                 screen.stopScreen(true);
                 screen.close();
             }
@@ -161,12 +191,13 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Sets up the Lanterna terminal with the specified dimensions and font configuration.
+     * Sets up the Lanterna terminal with the specified dimensions and a custom font. Configures the terminal
+     * size, title, and font, and adds mouse listeners for boolean configurations.
      *
-     * @throws IOException if an error occurs during terminal creation
+     * @throws IOException         if an error occurs during terminal creation
+     * @throws FontFormatException if the custom font cannot be loaded
      */
     private void setupTerminal() throws IOException, FontFormatException {
-
         final InputStream is = ControlView.class.getResourceAsStream(
                 "/fonts/Px437 IBM Conv/Px437_IBM_Conv.ttf"
         );
@@ -191,12 +222,17 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                 swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(viewMouseListener);
                 swingTerminalFrame.getContentPane().getComponent(0).addMouseWheelListener(viewMouseListener);
             }
-
         }
         screen = new TerminalScreen(terminal);
         screen.setCursorPosition(null);
     }
 
+    /**
+     * Runs the main interaction loop, starting the automaton and processing user input for actions such as
+     * pausing, resuming, stepping, resizing, or exiting. Updates the display and handles terminal events.
+     *
+     * @throws RuntimeException if an I/O error occurs during input processing
+     */
     public void run() {
         boolean scaleChange = false;
         boolean showControls = false;
@@ -210,9 +246,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                 } else if (key.getKeyType() == KeyType.Character) {
                     Character character = key.getCharacter();
                     switch (character) {
-                        case 'q', 'Q' -> {
-                            quit = true;
-                        }
+                        case 'q', 'Q' -> quit = true;
                         case 'p', 'P' -> {
                             if (automaton.isRunning()) {
                                 automaton.stop();
@@ -276,16 +310,13 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                             textGraphics.fillRectangle(topLeft, size, textCharacter);
                             screen.refresh(Screen.RefreshType.DELTA);
                         }
-                        case '?' -> {
-                            showControls = true;
-                        }
+                        case '?' -> showControls = true;
                     }
                 }
 
                 if (scaleChange || showControls || quit) {
                     break;
                 }
-
             }
         } catch (IOException e) {
             LOGGER.error("Error reading input: {}", e.getMessage(), e);
@@ -304,9 +335,14 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         }
     }
 
+    /**
+     * Displays a controls menu listing keyboard and mouse interactions, temporarily resizing the terminal
+     * to a fixed font size for readability. Returns to the main view after user input.
+     *
+     * @throws RuntimeException if an error occurs during menu display
+     */
     private void showControls() {
         try {
-
             int previousFontSize = fontSize;
             fontSize = 16;
             width = px / fontSize;
@@ -336,30 +372,60 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             initialize();
             run();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to display controls: " + e.getMessage(), e);
         }
     }
 
+    /**
+     * Returns the automaton being controlled.
+     *
+     * @return the {@link Automa}
+     */
     public Automa<C, S> getAutomaton() {
         return automaton;
     }
 
+    /**
+     * Returns the current font size used for terminal rendering.
+     *
+     * @return the font size
+     */
     public int getFontSize() {
         return fontSize;
     }
 
+    /**
+     * Returns the renderer used for displaying the grid's boolean states.
+     *
+     * @return the {@link GridRenderer} for boolean states
+     */
     public GridRenderer<Cell<BooleanState>, BooleanState> getRenderer() {
         return renderer;
     }
 
+    /**
+     * Returns the width (number of columns) of the grid and terminal.
+     *
+     * @return the width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Returns the height (number of rows) of the grid and terminal.
+     *
+     * @return the height
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Returns the configuration defining the automaton's setup and behavior.
+     *
+     * @return the {@link Configuration}
+     */
     public Configuration<C, S> getConfiguration() {
         return configuration;
     }
