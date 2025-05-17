@@ -247,7 +247,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                     Character character = key.getCharacter();
                     switch (character) {
                         case 'q', 'Q' -> quit = true;
-                        case 'p', 'P' -> {
+                        case 'p', 'P', ' ' -> {
                             if (automaton.isRunning()) {
                                 automaton.stop();
                                 TerminalPosition topLeft = new TerminalPosition(width - 3, 0);
@@ -353,15 +353,15 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             textGraphics.putString(0, row++, "\tKeyboard Controls", SGR.BOLD);
             row++;
             for (Controls.Control control : controls.controls) {
-                textGraphics.putString(0, row++, "\t\t"+control.ch() + ": " + control.desc());
+                textGraphics.putString(0, row++, "\t\t"+control.control() + ":\t" + control.desc());
                 row++;
             }
 
             row++;
             textGraphics.putString(0, row++, "\tMouse Controls", SGR.BOLD);
             row++;
-            for (Controls.MouseControl control : controls.mouseControls) {
-                textGraphics.putString(0, row++, "\t\t"+control.button() + ": " + control.desc());
+            for (Controls.Control control : controls.mouseControls) {
+                textGraphics.putString(0, row++, "\t\t"+control.control() + ":\t" + control.desc());
                 row++;
             }
 

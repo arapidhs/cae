@@ -240,12 +240,12 @@ public class SelectView<C extends Cell<S>, S extends CellState<?>> {
         StringBuilder sb = new StringBuilder();
 
         for (Controls.Control c : controls.controls) {
-            sb.append(c.ch()).append("  ").append(c.desc()).append("\n");
+            sb.append(c.control()).append("\t").append(c.desc()).append("\n");
         }
 
         sb.append("\nMouse:\n");
-        for (Controls.MouseControl mc : controls.mouseControls) {
-            sb.append(mc.button()).append("  - ").append(mc.desc()).append("\n");
+        for (Controls.Control mc : controls.mouseControls) {
+            sb.append(mc.control()).append(": ").append(mc.desc()).append("\n");
         }
 
         return sb.toString();
