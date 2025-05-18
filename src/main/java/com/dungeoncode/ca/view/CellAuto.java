@@ -51,6 +51,7 @@ public class CellAuto {
             configurations.add(new GameOfLifeWithTracingConfiguration());
             configurations.add(new HGlassConfiguration());
             configurations.add(new ParityConfiguration());
+            configurations.add(new PulseWeaverConfiguration());
 
             running = true; // Set application running state
             selectView = new SelectView(configurations);

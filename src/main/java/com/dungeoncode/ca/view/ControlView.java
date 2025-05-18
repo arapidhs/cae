@@ -3,10 +3,7 @@ package com.dungeoncode.ca.view;
 import com.dungeoncode.ca.automa.*;
 import com.dungeoncode.ca.core.*;
 import com.dungeoncode.ca.core.impl.BooleanState;
-import com.dungeoncode.ca.view.render.BooleanEchoStateRenderer;
-import com.dungeoncode.ca.view.render.BooleanStateRenderer;
-import com.dungeoncode.ca.view.render.GridRenderer;
-import com.dungeoncode.ca.view.render.LiveSumStateRenderer;
+import com.dungeoncode.ca.view.render.*;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -64,6 +61,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         BooleanStateRenderer booleanRenderer = new BooleanStateRenderer();
         BooleanEchoStateRenderer booleanEchoRenderer = new BooleanEchoStateRenderer();
         LiveSumStateRenderer liveSumStateRenderer = new LiveSumStateRenderer(LiveSumStateRenderer.Palette.DEFAULT);
+        PulseWeaverStateRenderer pulseWeaverStateRenderer =new PulseWeaverStateRenderer();
 
         CELL_RENDERER = new HashMap<>();
         CELL_RENDERER.put(InkspotConfiguration.class.getName(), booleanRenderer);
@@ -72,6 +70,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(GameOfLifeWithTracingConfiguration.class.getName(), booleanEchoRenderer);
         CELL_RENDERER.put(HGlassConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(ParityConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
         IS_CONFIGURATION_BOOLEAN.put(InkspotConfiguration.class.getName(), true);
@@ -282,7 +281,8 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             swingTerminalFrame.setLocationRelativeTo(null);
             swingTerminalFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-            if (IS_CONFIGURATION_BOOLEAN.get(configuration.getClass().getName())) {
+            if ( IS_CONFIGURATION_BOOLEAN.containsKey(configuration.getClass().getName())
+                    && IS_CONFIGURATION_BOOLEAN.get(configuration.getClass().getName())) {
                 ViewMouseListener<C, S> viewMouseListener = new ViewMouseListener<>(this);
                 swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(viewMouseListener);
                 swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(viewMouseListener);

@@ -134,7 +134,6 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
         // Copy newGrid back to grid
         for (int y = 0; y < grid.getHeight(); y++) {
             for (int x = 0; x < grid.getWidth(); x++) {
-                C cell = grid.getCell(x, y);
                 grid.setCellState(x, y, newStates[x][y]);
             }
         }
