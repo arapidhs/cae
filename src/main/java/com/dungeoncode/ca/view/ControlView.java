@@ -522,6 +522,11 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             // Save the image
             ImageIO.write(image, "png", outputFile);
             LOGGER.info("Screen saved to {}", outputFile.getAbsolutePath());
+
+            getTextGraphics().drawLine(0,height/2,width,height/2,
+                    TextCharacter.fromString("-", TextColor.ANSI.YELLOW,null,SGR.REVERSE)[0]);
+
+            screen.refresh(Screen.RefreshType.DELTA);
         } else {
             throw new IllegalStateException("Screen capture is only supported with SwingTerminalFrame");
         }
