@@ -241,21 +241,62 @@ public class SelectView<C extends Cell<S>, S extends CellState<?>> {
         Controls controls = new Controls();
         StringBuilder sb = new StringBuilder();
 
-        // Compute max label width for keyboard controls
-        int maxKeyLen = controls.controls.stream()
-                .mapToInt(c -> String.valueOf(c.control()).length())
+        // Split keyboard controls into two halves
+        List<Controls.Control> keyboardControls = controls.controls;
+        int totalControls = keyboardControls.size();
+        int midPoint = (totalControls + 1) / 2;
+
+        List<Controls.Control> leftControls = keyboardControls.subList(0, midPoint);
+        List<Controls.Control> rightControls = keyboardControls.subList(midPoint, totalControls);
+
+        // Compute max key length for each column
+        int maxKeyLenLeft = leftControls.stream()
+                .mapToInt(c -> c.control().length())
+                .max()
+                .orElse(1);
+        int maxDescLenLeft = leftControls.stream()
+                .mapToInt(c -> c.desc().length())
                 .max()
                 .orElse(1);
 
+        int maxKeyLenRight = rightControls.stream()
+                .mapToInt(c -> c.control().length())
+                .max()
+                .orElse(1);
+
+        // Define widths for formatting the two-column layout
+        int leftKeyWidth = maxKeyLenLeft + 2; // Key + padding
+        int leftDescWidth = maxDescLenLeft + 4; // Description + padding for separation
+        int rightKeyWidth = maxKeyLenRight + 2; // Key + padding
+
         sb.append("Keyboard Controls\n\n");
-        for (Controls.Control c : controls.controls) {
-            String label = String.format("%-" + maxKeyLen + "s", c.control());
-            sb.append(label).append("  ").append(c.desc()).append("\n");
+
+        // Iterate through rows, displaying left and right controls side by side
+        int maxRows = Math.max(leftControls.size(), rightControls.size());
+        for (int i = 0; i < maxRows; i++) {
+            // Left column
+            if (i < leftControls.size()) {
+                Controls.Control left = leftControls.get(i);
+                sb.append(String.format("%-" + leftKeyWidth + "s", left.control()));
+                sb.append(String.format("%-" + leftDescWidth + "s", left.desc()));
+            } else {
+                // Empty left column
+                sb.append(String.format("%-" + (leftKeyWidth + leftDescWidth) + "s", ""));
+            }
+
+            // Right column
+            if (i < rightControls.size()) {
+                Controls.Control right = rightControls.get(i);
+                sb.append(String.format("%-" + rightKeyWidth + "s", right.control()));
+                sb.append(right.desc());
+            }
+
+            sb.append("\n");
         }
 
         sb.append("\nMouse Controls\n\n");
 
-        // Compute max label width for mouse controls
+        // Mouse controls
         int maxMouseLen = controls.mouseControls.stream()
                 .mapToInt(c -> c.control().length())
                 .max()

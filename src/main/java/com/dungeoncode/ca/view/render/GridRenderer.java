@@ -76,4 +76,9 @@ public class GridRenderer<C extends Cell<S>, S extends CellState<?>> implements 
             throw new RuntimeException(String.format("Failed to render grid: %s", e.getMessage()), e);
         }
     }
+
+    public StateRenderer<S> getStateRenderer() {
+        return stateRenderer;
+    }
+
 }

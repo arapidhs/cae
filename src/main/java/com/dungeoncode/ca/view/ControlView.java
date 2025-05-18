@@ -356,6 +356,14 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                     if (key.getCharacter() == 's') {
                         saveScreenToImage();
                     }
+                } else if (key.getKeyType() == KeyType.ArrowLeft) {
+                    if( renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
+                        ((LiveSumStateRenderer) renderer.getStateRenderer()).previousPalette();
+                    }
+                }  else if (key.getKeyType() == KeyType.ArrowRight) {
+                    if( renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
+                        ((LiveSumStateRenderer) renderer.getStateRenderer()).nextPalette();
+                    }
                 } else if (key.getKeyType() == KeyType.Character) {
                     Character character = key.getCharacter();
                     switch (character) {

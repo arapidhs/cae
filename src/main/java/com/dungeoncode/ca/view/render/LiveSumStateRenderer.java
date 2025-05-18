@@ -184,7 +184,7 @@ public class LiveSumStateRenderer implements StateRenderer<BooleanState> {
     }
 
     /** The selected color palette for rendering. */
-    private final Palette palette;
+    private Palette palette;
 
     /**
      * Constructs a renderer with the default ANSI color palette.
@@ -247,4 +247,19 @@ public class LiveSumStateRenderer implements StateRenderer<BooleanState> {
         }
         return TextCharacter.fromString(" ", color, null, SGR.REVERSE)[0];
     }
+
+    public void previousPalette() {
+        Palette[] palettes = Palette.values();
+        int currentIndex = palette.ordinal();
+        int prevIndex = (currentIndex - 1 + palettes.length) % palettes.length;
+        palette = palettes[prevIndex];
+    }
+
+    public void nextPalette() {
+        Palette[] palettes = Palette.values();
+        int currentIndex = palette.ordinal();
+        int nextIndex = (currentIndex + 1) % palettes.length;
+        palette = palettes[nextIndex];
+    }
+
 }
