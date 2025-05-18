@@ -36,6 +36,7 @@ public class BriansBrainRule implements Rule<BrainCell, BrainState> {
         int width = grid.getWidth();
         int height = grid.getHeight();
         BrainState currentState = cell.getState();
+        BrainState.BrainStateValue echo = currentState.getValue();
 
         // Count Firing neighbors in the Moore neighborhood (excluding the center)
         int firingCount = 0;
@@ -57,17 +58,17 @@ public class BriansBrainRule implements Rule<BrainCell, BrainState> {
             case READY -> {
                 // Ready cell fires if exactly two neighbors are Firing
                 if (firingCount == 2) {
-                    yield new BrainState(BrainState.BrainStateValue.FIRING);
+                    yield new BrainState(BrainState.BrainStateValue.FIRING, echo);
                 }
                 yield currentState;
             }
             case FIRING -> {
                 // Firing cell always becomes Refractory
-                yield new BrainState(BrainState.BrainStateValue.REFRACTORY);
+                yield new BrainState(BrainState.BrainStateValue.REFRACTORY, echo);
             }
             case REFRACTORY -> {
                 // Refractory cell always returns to Ready
-                yield new BrainState(BrainState.BrainStateValue.READY);
+                yield new BrainState(BrainState.BrainStateValue.READY, echo);
             }
         };
     }

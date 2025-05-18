@@ -19,17 +19,6 @@ public class BrainCell extends AbstractCell<BrainState> {
     private BrainState state;
 
     /**
-     * Constructs a new BRIAN'S-BRAIN cell with the specified coordinates and an initial Ready state.
-     *
-     * @param x the x-coordinate (column) of the cell
-     * @param y the y-coordinate (row) of the cell
-     */
-    public BrainCell(int x, int y) {
-        super(x, y);
-        this.state = new BrainState(BrainState.BrainStateValue.READY);
-    }
-
-    /**
      * Constructs a new BRIAN'S-BRAIN cell with the specified coordinates and initial state.
      *
      * @param x     the x-coordinate (column) of the cell
