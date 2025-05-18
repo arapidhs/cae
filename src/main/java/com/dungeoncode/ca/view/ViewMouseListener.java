@@ -62,13 +62,6 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         calculateRadius();
     }
 
-    private void calculateRadius() {
-        // Calculate radius based on grid size and multiplier
-        int width = controlView.getWidth();
-        int height = controlView.getHeight();
-        radius = (int) Math.max(3, Math.min(width, height) * radiusMultiplier);
-    }
-
     /**
      * Handles mouse click events by applying cell state changes at the clicked position.
      * Converts pixel coordinates to grid coordinates and updates cells based on the mouse button.
@@ -143,6 +136,13 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         int row = e.getY() / controlView.getCellFontSize();
 
         applyChanges(col, row, button); // Apply changes to the grid
+    }
+
+    private void calculateRadius() {
+        // Calculate radius based on grid size and multiplier
+        int width = controlView.getWidth();
+        int height = controlView.getHeight();
+        radius = (int) Math.max(3, Math.min(width, height) * radiusMultiplier);
     }
 
     /**

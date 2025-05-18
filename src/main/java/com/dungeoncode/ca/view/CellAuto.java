@@ -50,6 +50,7 @@ public class CellAuto {
             configurations.add(new GameOfLifeWithEchoConfiguration());
             configurations.add(new GameOfLifeWithTracingConfiguration());
             configurations.add(new HGlassConfiguration());
+            configurations.add(new ParityConfiguration());
 
             running = true; // Set application running state
             selectView = new SelectView(configurations);

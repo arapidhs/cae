@@ -100,7 +100,10 @@ public class HGlassRule implements Rule<BooleanCell, BooleanState> {
         if (north) index |= 0b00010;
         if (center) index |= 0b00001;
 
+        // Compute the sum of live (true) states
+        int liveSum = (center ? 1 : 0) + (north ? 1 : 0) + (south ? 1 : 0) + (west ? 1 : 0) + (east ? 1 : 0);
+
         // Look up the new state in the rule table
-        return new BooleanState(RULE_TABLE[index]);
+        return new BooleanState(RULE_TABLE[index],cell.getState().getValue(),liveSum);
     }
 }

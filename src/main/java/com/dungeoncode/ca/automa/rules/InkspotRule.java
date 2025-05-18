@@ -31,8 +31,10 @@ public class InkspotRule extends BooleanNeighborCountRule {
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
         int liveCount = countLiveNeighbors(grid, x, y);
+
+        boolean echo=cell.getState().getValue();
         boolean isLive = cell.getState() != null && cell.getState().getValue();
-        return new BooleanState(liveCount == 3 || isLive);
+        return new BooleanState(liveCount == 3 || isLive,echo,liveCount);
     }
 
 }

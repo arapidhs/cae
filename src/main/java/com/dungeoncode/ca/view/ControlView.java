@@ -6,6 +6,7 @@ import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.view.render.BooleanEchoStateRenderer;
 import com.dungeoncode.ca.view.render.BooleanStateRenderer;
 import com.dungeoncode.ca.view.render.GridRenderer;
+import com.dungeoncode.ca.view.render.LiveSumStateRenderer;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -62,6 +63,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     static {
         BooleanStateRenderer booleanRenderer = new BooleanStateRenderer();
         BooleanEchoStateRenderer booleanEchoRenderer = new BooleanEchoStateRenderer();
+        LiveSumStateRenderer liveSumStateRenderer = new LiveSumStateRenderer(LiveSumStateRenderer.Palette.DEFAULT);
 
         CELL_RENDERER = new HashMap<>();
         CELL_RENDERER.put(InkspotConfiguration.class.getName(), booleanRenderer);
@@ -69,6 +71,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(GameOfLifeWithEchoConfiguration.class.getName(), booleanEchoRenderer);
         CELL_RENDERER.put(GameOfLifeWithTracingConfiguration.class.getName(), booleanEchoRenderer);
         CELL_RENDERER.put(HGlassConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(ParityConfiguration.class.getName(), liveSumStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
         IS_CONFIGURATION_BOOLEAN.put(InkspotConfiguration.class.getName(), true);
@@ -76,6 +79,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(GameOfLifeWithEchoConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(GameOfLifeWithTracingConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(HGlassConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(ParityConfiguration.class.getName(), true);
     }
 
     /**
@@ -482,8 +486,8 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
 
     /**
      * Saves the current terminal screen as a PNG image in the user's home directory under
-     * .cell-automata/screenshots/. The filename is the configuration name appended with a timestamp
-     * (e.g., GameOfLife_202505181157.png).
+     * .cell-automata/screenshots/. The filename is the configuration name appended with a millisecond-precision
+     * timestamp (e.g., GameOfLife_20250518115712345.png).
      *
      * @throws IOException if an error occurs during image capture or file writing
      */
@@ -510,9 +514,10 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                 throw new IOException("Failed to create directory: " + screenshotDir.getAbsolutePath());
             }
 
-            // Generate filename with configuration name and timestamp
+            // Generate filename with configuration name and millisecond-precision timestamp
             String configName = configuration.getName().replaceAll("[^a-zA-Z0-9]", "_");
-            String timestamp = String.format("%tY%tm%td%tH%tM",
+            String timestamp = String.format("%tY%tm%td%tH%tM%tS%tL",
+                    System.currentTimeMillis(), System.currentTimeMillis(),
                     System.currentTimeMillis(), System.currentTimeMillis(),
                     System.currentTimeMillis(), System.currentTimeMillis(),
                     System.currentTimeMillis());
@@ -523,9 +528,9 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             ImageIO.write(image, "png", outputFile);
             LOGGER.info("Screen saved to {}", outputFile.getAbsolutePath());
 
-            getTextGraphics().drawLine(0,height/2,width,height/2,
-                    TextCharacter.fromString("-", TextColor.ANSI.YELLOW,null,SGR.REVERSE)[0]);
-
+            // Draw confirmation line on screen
+            getTextGraphics().drawLine(0, height / 2, width, height / 2,
+                    TextCharacter.fromString("-", TextColor.ANSI.YELLOW, null, SGR.REVERSE)[0]);
             screen.refresh(Screen.RefreshType.DELTA);
         } else {
             throw new IllegalStateException("Screen capture is only supported with SwingTerminalFrame");

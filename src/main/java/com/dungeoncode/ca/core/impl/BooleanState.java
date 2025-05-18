@@ -4,8 +4,9 @@ import com.dungeoncode.ca.core.CellState;
 
 /**
  * Represents a boolean state for a cell in a cellular automaton, indicating an active ({@code true}) or inactive
- * ({@code false}) state, with an optional echo flag for tracking state history. Implements {@link CellState} with a
- * boolean value and supports configurations requiring temporal state visualization.
+ * ({@code false}) state, with an optional echo flag for tracking state history and a live sum for neighborhood
+ * activity. Implements {@link CellState} with a boolean value and supports configurations requiring temporal
+ * state visualization or neighbor-based rendering.
  */
 public class BooleanState implements CellState<Boolean> {
 
@@ -20,23 +21,40 @@ public class BooleanState implements CellState<Boolean> {
     private final boolean echo;
 
     /**
-     * Constructs a new boolean state with the specified value and no echo effect.
+     * The number of live (active) cells in the cell's neighborhood, used for rendering based on local activity.
+     */
+    private final int liveSum;
+
+    /**
+     * Constructs a new boolean state with the specified value, no echo effect, and zero live sum.
      *
      * @param value the boolean value ({@code true} for active, {@code false} for inactive)
      */
     public BooleanState(boolean value) {
-        this(value, false);
+        this(value, false, 0);
     }
 
     /**
-     * Constructs a new boolean state with the specified value and echo flag.
+     * Constructs a new boolean state with the specified value, echo flag, and zero live sum.
      *
      * @param value the boolean value ({@code true} for active, {@code false} for inactive)
      * @param echo  {@code true} to enable echo effect, {@code false} otherwise
      */
     public BooleanState(boolean value, boolean echo) {
+        this(value, echo, 0);
+    }
+
+    /**
+     * Constructs a new boolean state with the specified value, echo flag, and live sum.
+     *
+     * @param value   the boolean value ({@code true} for active, {@code false} for inactive)
+     * @param echo    {@code true} to enable echo effect, {@code false} otherwise
+     * @param liveSum the number of live cells in the neighborhood
+     */
+    public BooleanState(boolean value, boolean echo, final int liveSum) {
         this.value = value;
         this.echo = echo;
+        this.liveSum = liveSum;
     }
 
     /**
@@ -56,5 +74,14 @@ public class BooleanState implements CellState<Boolean> {
      */
     public boolean isEcho() {
         return echo;
+    }
+
+    /**
+     * Returns the number of live cells in the cell's neighborhood.
+     *
+     * @return the live sum
+     */
+    public int getLiveSum() {
+        return liveSum;
     }
 }
