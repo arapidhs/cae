@@ -6,12 +6,18 @@ package com.dungeoncode.ca.core;
  */
 public class Constants {
 
-    /** Key for the grid configuration parameter. */
+    /**
+     * Key for the grid configuration parameter.
+     */
     public static final String CONF_GRID = "grid";
 
-    /** Key for the rule configuration parameter. */
+    /**
+     * Key for the rule configuration parameter.
+     */
     public static final String CONF_RULE = "rule";
 
-    /** Key for the update interval configuration parameter, in milliseconds. */
+    /**
+     * Key for the update interval configuration parameter, in milliseconds.
+     */
     public static final String CONF_INTERVAL_MILLIS = "intervalMillis";
 }

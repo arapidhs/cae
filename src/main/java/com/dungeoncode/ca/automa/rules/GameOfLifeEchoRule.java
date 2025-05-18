@@ -18,7 +18,9 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  */
 public class GameOfLifeEchoRule extends BooleanNeighborCountRule {
 
-    /** Indicates whether tracing mode is enabled for persistent echo tracking. */
+    /**
+     * Indicates whether tracing mode is enabled for persistent echo tracking.
+     */
     private final boolean tracingEnabled;
 
     /**

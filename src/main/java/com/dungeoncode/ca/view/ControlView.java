@@ -20,7 +20,10 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -33,21 +36,27 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 /**
  * Manages the visualization and user interaction for a cellular automaton, controlling the Lanterna terminal
  * and automaton execution. Supports grid initialization, configuration application, input handling (e.g., pause,
- * resume, resize), and terminal management.
+ * resume, resize, screenshot), and terminal management with distinct fonts for simulation and display modes.
  *
  * @param <C> the type of cells in the automaton, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
 public class ControlView<C extends Cell<S>, S extends CellState<?>> {
 
-    /** Logger for recording view events and errors. */
+    /**
+     * Logger for recording view events and errors.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ControlView.class);
 
-    /** Maps configuration class names to their corresponding state renderers. */
+    /**
+     * Maps configuration class names to their corresponding state renderers.
+     */
     @SuppressWarnings("rawtypes")
     private static final Map<String, StateRenderer> CELL_RENDERER;
 
-    /** Maps configuration class names to a boolean indicating if they use boolean states. */
+    /**
+     * Maps configuration class names to a boolean indicating if they use boolean states.
+     */
     private static final Map<String, Boolean> IS_CONFIGURATION_BOOLEAN;
 
     static {
@@ -69,76 +78,131 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(HGlassConfiguration.class.getName(), true);
     }
 
-    /** The pixel width of the terminal window. */
+    /**
+     * The pixel width of the terminal window.
+     */
     private final int px;
 
-    /** The pixel height of the terminal window. */
+    /**
+     * The pixel height of the terminal window.
+     */
     private final int py;
 
-    /** The controls for keyboard and mouse interactions. */
+    /**
+     * The controls for keyboard and mouse interactions.
+     */
     private final Controls controls;
 
-    /** The configuration defining the automaton's setup and behavior. */
+    /**
+     * The configuration defining the automaton's setup and behavior.
+     */
     private final Configuration<C, S> configuration;
-
-    /** The automaton being controlled. */
+    /**
+     * The font size used for rendering display elements like the controls menu.
+     */
+    private final int displayFontSize;
+    /**
+     * The automaton being controlled.
+     */
     private Automa<C, S> automaton;
-
-    /** The Lanterna terminal screen for rendering the grid. */
+    /**
+     * The Lanterna terminal screen for rendering the grid or controls menu.
+     */
     private TerminalScreen screen;
-
-    /** The width (number of columns) of the grid and terminal. */
+    /**
+     * The width (number of columns) of the grid and terminal.
+     */
     private int width;
-
-    /** The height (number of rows) of the grid and terminal. */
+    /**
+     * The height (number of rows) of the grid and terminal.
+     */
     private int height;
-
-    /** The interval between automaton steps, in milliseconds. */
+    /**
+     * The interval between automaton steps, in milliseconds.
+     */
     private long intervalMillis;
-
-    /** The text graphics context for rendering on the screen. */
+    /**
+     * The text graphics context for rendering on the screen.
+     */
     private TextGraphics textGraphics;
-
-    /** The font size used for terminal rendering. */
-    private int fontSize;
-
-    /** The renderer for displaying the grid's boolean states. */
+    /**
+     * The font used for rendering simulation cells.
+     */
+    private Font cellFont;
+    /**
+     * The font size used for rendering simulation cells.
+     */
+    private int cellFontSize;
+    /**
+     * The font used for rendering display elements like the controls menu.
+     */
+    private Font displayFont;
+    /**
+     * The renderer for displaying the grid's boolean states.
+     */
     private GridRenderer<Cell<BooleanState>, BooleanState> renderer;
 
     /**
-     * Constructs a new view controller with the specified terminal dimensions, font size, and configuration.
-     * Initializes the grid size based on pixel dimensions and font size, and sets up the automaton and terminal.
+     * Constructs a new control view with the specified terminal dimensions, cell font size, and configuration.
+     * Initializes the grid size based on pixel dimensions and cell font size, sets up fonts, and prepares the
+     * automaton and terminal.
      *
      * @param px            the pixel width of the terminal window
      * @param py            the pixel height of the terminal window
-     * @param fontSize      the font size for terminal rendering
+     * @param cellFontSize  the font size for rendering simulation cells
      * @param configuration the automaton configuration, must not be null
      * @throws NullPointerException if configuration is null
+     * @throws RuntimeException     if font loading fails
      */
-    public ControlView(int px, int py, int fontSize, @NonNull Configuration<C, S> configuration) {
+    public ControlView(int px, int py, int cellFontSize, @NonNull Configuration<C, S> configuration) {
         Objects.requireNonNull(configuration);
         this.px = px;
         this.py = py;
-        this.fontSize = fontSize;
-        this.width = px / fontSize;
-        this.height = py / fontSize;
+        this.cellFontSize = cellFontSize;
+        this.width = px / cellFontSize;
+        this.height = py / cellFontSize;
         this.controls = new Controls();
         this.configuration = configuration;
-        initialize();
+        this.displayFontSize = 18;
+        setupFonts();
+        initialize(true);
+    }
+
+    /**
+     * Loads and configures fonts for simulation cells and display elements, using a custom font for cells and
+     * a standard font for the controls menu.
+     *
+     * @throws RuntimeException if an error occurs during font loading
+     */
+    private void setupFonts() {
+        try {
+            final InputStream is = ControlView.class.getResourceAsStream(
+                    "/fonts/Px437 IBM Conv/Px437_IBM_Conv.ttf"
+            );
+            assert is != null;
+            cellFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, cellFontSize);
+            is.close();
+            displayFont = new Font("Courier New", Font.PLAIN, displayFontSize);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load fonts: " + e.getMessage(), e);
+        }
     }
 
     /**
      * Initializes the terminal screen, automaton, and renderer. Sets up the screen, configures the automaton
      * with the provided configuration, and assigns an appropriate renderer based on the configuration type.
      *
+     * @param resetAutoma whether to reset the automaton instance and reconfigure it
      * @throws RuntimeException if an error occurs during initialization
      */
     @SuppressWarnings("rawtypes")
-    public void initialize() {
+    public void initialize(boolean resetAutoma) {
         try {
-            setupScreen();
-            automaton = new Automa<>();
-            configureAutoma();
+            setupScreen(true);
+            if (resetAutoma) {
+                automaton = new Automa<>();
+                configureAutoma();
+            }
             renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
             automaton.setGridConsumer((GridRenderer<C, S>) renderer);
         } catch (Exception e) {
@@ -148,14 +212,20 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
 
     /**
      * Sets up the Lanterna terminal screen by closing any existing terminal, creating a new one, and starting
-     * the screen with text graphics.
+     * the screen with text graphics. Configures the terminal for either simulation or display mode based on
+     * the specified parameter.
      *
+     * @param simulation true to set up for simulation (using cell font), false for display (using display font)
      * @throws RuntimeException if an error occurs during screen setup
      */
-    private void setupScreen() {
+    private void setupScreen(boolean simulation) {
         try {
             closeTerminal();
-            setupTerminal();
+            if (simulation) {
+                setupSimulationTerminal();
+            } else {
+                setupDisplayTerminal();
+            }
             assert screen != null;
             screen.startScreen();
             textGraphics = screen.newTextGraphics();
@@ -191,25 +261,17 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Sets up the Lanterna terminal with the specified dimensions and a custom font. Configures the terminal
-     * size, title, and font, and adds mouse listeners for boolean configurations.
+     * Sets up the Lanterna terminal for simulation mode with the specified dimensions and custom cell font.
+     * Configures the terminal size, title, and font, and adds mouse listeners for boolean configurations.
      *
-     * @throws IOException         if an error occurs during terminal creation
-     * @throws FontFormatException if the custom font cannot be loaded
+     * @throws IOException if an error occurs during terminal creation
      */
-    private void setupTerminal() throws IOException, FontFormatException {
-        final InputStream is = ControlView.class.getResourceAsStream(
-                "/fonts/Px437 IBM Conv/Px437_IBM_Conv.ttf"
-        );
-        assert is != null;
-        final Font font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, fontSize);
-        is.close();
-
+    private void setupSimulationTerminal() throws IOException {
         final DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory(System.out, System.in, StandardCharsets.UTF_8);
         terminalFactory.setInitialTerminalSize(new TerminalSize(width, height));
         terminalFactory.setTerminalEmulatorTitle("Cellular Automata");
         terminalFactory.setTerminalEmulatorFontConfiguration(
-                SwingTerminalFontConfiguration.newInstance(font));
+                SwingTerminalFontConfiguration.newInstance(cellFont));
         Terminal terminal = terminalFactory.createTerminal();
         if (terminal instanceof SwingTerminalFrame swingTerminalFrame) {
             swingTerminalFrame.setResizable(false);
@@ -228,8 +290,31 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
+     * Sets up the Lanterna terminal for display mode (e.g., controls menu) with fixed dimensions and standard
+     * display font. Configures the terminal size, title, and font.
+     *
+     * @throws IOException if an error occurs during terminal creation
+     */
+    private void setupDisplayTerminal() throws IOException {
+        final DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory(System.out, System.in, StandardCharsets.UTF_8);
+        terminalFactory.setInitialTerminalSize(new TerminalSize(80, 25));
+        terminalFactory.setTerminalEmulatorTitle("Cellular Automata");
+        terminalFactory.setTerminalEmulatorFontConfiguration(
+                SwingTerminalFontConfiguration.newInstance(displayFont));
+        Terminal terminal = terminalFactory.createTerminal();
+        if (terminal instanceof SwingTerminalFrame swingTerminalFrame) {
+            swingTerminalFrame.setResizable(false);
+            swingTerminalFrame.setLocationRelativeTo(null);
+            swingTerminalFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        }
+        screen = new TerminalScreen(terminal);
+        screen.setCursorPosition(null);
+    }
+
+    /**
      * Runs the main interaction loop, starting the automaton and processing user input for actions such as
-     * pausing, resuming, stepping, resizing, or exiting. Updates the display and handles terminal events.
+     * pausing, resuming, stepping, resizing, saving screenshots, or exiting. Updates the display and handles
+     * terminal events.
      *
      * @throws RuntimeException if an I/O error occurs during input processing
      */
@@ -243,6 +328,10 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                 KeyStroke key = screen.readInput();
                 if (key.getKeyType() == KeyType.Escape) {
                     break; // Exit on ESC
+                } else if (key.isCtrlDown() && key.getKeyType() == KeyType.Character) {
+                    if (key.getCharacter() == 's') {
+                        saveScreenToImage();
+                    }
                 } else if (key.getKeyType() == KeyType.Character) {
                     Character character = key.getCharacter();
                     switch (character) {
@@ -268,18 +357,18 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                         }
                         case '+' -> {
                             automaton.stop();
-                            --fontSize;
-                            fontSize = Math.max(fontSize, 2);
-                            width = px / fontSize;
-                            height = py / fontSize;
+                            --cellFontSize;
+                            cellFontSize = Math.max(cellFontSize, 2);
+                            width = px / cellFontSize;
+                            height = py / cellFontSize;
                             scaleChange = true;
                         }
                         case '-' -> {
                             automaton.stop();
-                            ++fontSize;
-                            fontSize = Math.min(fontSize, 32);
-                            width = px / fontSize;
-                            height = py / fontSize;
+                            ++cellFontSize;
+                            cellFontSize = Math.min(cellFontSize, 32);
+                            width = px / cellFontSize;
+                            height = py / cellFontSize;
                             scaleChange = true;
                         }
                         case '<' -> {
@@ -315,6 +404,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                 }
 
                 if (scaleChange || showControls || quit) {
+                    setupFonts();
                     break;
                 }
             }
@@ -326,7 +416,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         }
 
         if (scaleChange) {
-            initialize();
+            initialize(true);
             run();
         }
 
@@ -336,45 +426,104 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Displays a controls menu listing keyboard and mouse interactions, temporarily resizing the terminal
-     * to a fixed font size for readability. Returns to the main view after user input.
+     * Displays a controls menu listing keyboard and mouse interactions, using a fixed font size and aligned
+     * columns for readability. Returns to the main simulation view after user input.
      *
      * @throws RuntimeException if an error occurs during menu display
      */
     private void showControls() {
         try {
-            int previousFontSize = fontSize;
-            fontSize = 14;
-            width = px / fontSize;
-            height = py / fontSize;
-            setupScreen();
 
-            int row = 2;
-            textGraphics.putString(0, row++, "\tKeyboard Controls", SGR.BOLD);
+            boolean simulation = false;
+            setupScreen(simulation);
+
+            int row = 0;
+            textGraphics.putString(0, row++, "Keyboard Controls", SGR.BOLD);
             row++;
+
+            // Determine max label width for keyboard controls
+            int maxKeyLabelWidth = controls.controls.stream()
+                    .mapToInt(c -> c.control().length())
+                    .max()
+                    .orElse(1);
+
+            // Print keyboard controls with aligned columns
             for (Controls.Control control : controls.controls) {
-                textGraphics.putString(0, row++, "\t\t"+control.control() + ":\t" + control.desc());
-                row++;
+                String label = String.format("%-" + maxKeyLabelWidth + "s", control.control());
+                textGraphics.putString(0, row++, "  " + label + "  " + control.desc());
             }
 
             row++;
-            textGraphics.putString(0, row++, "\tMouse Controls", SGR.BOLD);
+            textGraphics.putString(0, row++, "Mouse Controls", SGR.BOLD);
             row++;
+
+            // Determine max label width for mouse controls
+            int maxMouseLabelWidth = controls.mouseControls.stream()
+                    .mapToInt(c -> c.control().length())
+                    .max()
+                    .orElse(1);
+
+            // Print mouse controls with aligned columns
             for (Controls.Control control : controls.mouseControls) {
-                textGraphics.putString(0, row++, "\t\t"+control.control() + ":\t" + control.desc());
-                row++;
+                String label = String.format("%-" + maxMouseLabelWidth + "s", control.control());
+                textGraphics.putString(0, row++, "  " + label + "  " + control.desc());
             }
 
             screen.refresh();
             screen.readInput();
 
-            fontSize = previousFontSize;
-            width = px / fontSize;
-            height = py / fontSize;
-            initialize();
+            boolean resetAutoma = false;
+            initialize(resetAutoma);
             run();
         } catch (Exception e) {
             throw new RuntimeException("Failed to display controls: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Saves the current terminal screen as a PNG image in the user's home directory under
+     * .cell-automata/screenshots/. The filename is the configuration name appended with a timestamp
+     * (e.g., GameOfLife_202505181157.png).
+     *
+     * @throws IOException if an error occurs during image capture or file writing
+     */
+    public void saveScreenToImage() throws IOException {
+        if (screen != null && screen.getTerminal() instanceof SwingTerminalFrame swingTerminalFrame) {
+            Component component = swingTerminalFrame.getContentPane().getComponent(0);
+
+            // Create a BufferedImage to hold the component's content
+            BufferedImage image = new BufferedImage(
+                    component.getWidth(),
+                    component.getHeight(),
+                    BufferedImage.TYPE_INT_RGB
+            );
+
+            // Paint the component to the image
+            Graphics2D g2d = image.createGraphics();
+            component.paint(g2d);
+            g2d.dispose();
+
+            // Create the screenshots directory in the user's home directory
+            String userHome = System.getProperty("user.home");
+            File screenshotDir = new File(userHome, ".cell-automata/screenshots");
+            if (!screenshotDir.exists() && !screenshotDir.mkdirs()) {
+                throw new IOException("Failed to create directory: " + screenshotDir.getAbsolutePath());
+            }
+
+            // Generate filename with configuration name and timestamp
+            String configName = configuration.getName().replaceAll("[^a-zA-Z0-9]", "_");
+            String timestamp = String.format("%tY%tm%td%tH%tM",
+                    System.currentTimeMillis(), System.currentTimeMillis(),
+                    System.currentTimeMillis(), System.currentTimeMillis(),
+                    System.currentTimeMillis());
+            String fileName = configName + "_" + timestamp + ".png";
+            File outputFile = new File(screenshotDir, fileName);
+
+            // Save the image
+            ImageIO.write(image, "png", outputFile);
+            LOGGER.info("Screen saved to {}", outputFile.getAbsolutePath());
+        } else {
+            throw new IllegalStateException("Screen capture is only supported with SwingTerminalFrame");
         }
     }
 
@@ -388,12 +537,12 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Returns the current font size used for terminal rendering.
+     * Returns the current font size used for rendering simulation cells.
      *
-     * @return the font size
+     * @return the cell font size
      */
-    public int getFontSize() {
-        return fontSize;
+    public int getCellFontSize() {
+        return cellFontSize;
     }
 
     /**
@@ -430,5 +579,23 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      */
     public Configuration<C, S> getConfiguration() {
         return configuration;
+    }
+
+    /**
+     * Returns the text graphics context for rendering on the screen.
+     *
+     * @return the {@link TextGraphics}
+     */
+    public TextGraphics getTextGraphics() {
+        return textGraphics;
+    }
+
+    /**
+     * Returns the Lanterna terminal screen.
+     *
+     * @return the {@link TerminalScreen}
+     */
+    public TerminalScreen getScreen() {
+        return screen;
     }
 }

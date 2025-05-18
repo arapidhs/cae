@@ -233,23 +233,42 @@ public class SelectView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Prints all control bindings as a single formatted string.
+     * Builds a formatted string listing all keyboard and mouse controls with aligned descriptions.
+     *
+     * @return formatted controls string
      */
     private String getControlsText() {
         Controls controls = new Controls();
         StringBuilder sb = new StringBuilder();
 
+        // Compute max label width for keyboard controls
+        int maxKeyLen = controls.controls.stream()
+                .mapToInt(c -> String.valueOf(c.control()).length())
+                .max()
+                .orElse(1);
+
+        sb.append("Keyboard Controls\n\n");
         for (Controls.Control c : controls.controls) {
-            sb.append(c.control()).append("\t").append(c.desc()).append("\n");
+            String label = String.format("%-" + maxKeyLen + "s", c.control());
+            sb.append(label).append("  ").append(c.desc()).append("\n");
         }
 
-        sb.append("\nMouse:\n");
+        sb.append("\nMouse Controls\n\n");
+
+        // Compute max label width for mouse controls
+        int maxMouseLen = controls.mouseControls.stream()
+                .mapToInt(c -> c.control().length())
+                .max()
+                .orElse(1);
+
         for (Controls.Control mc : controls.mouseControls) {
-            sb.append(mc.control()).append(": ").append(mc.desc()).append("\n");
+            String label = String.format("%-" + maxMouseLen + "s", mc.control());
+            sb.append(label).append("  ").append(mc.desc()).append("\n");
         }
 
         return sb.toString();
     }
+
 
     /**
      * Fully exits the application and cleans up terminal state.

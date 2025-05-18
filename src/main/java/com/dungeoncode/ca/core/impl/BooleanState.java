@@ -9,10 +9,14 @@ import com.dungeoncode.ca.core.CellState;
  */
 public class BooleanState implements CellState<Boolean> {
 
-    /** The boolean value of the state ({@code true} for active, {@code false} for inactive). */
+    /**
+     * The boolean value of the state ({@code true} for active, {@code false} for inactive).
+     */
     private final boolean value;
 
-    /** Indicates whether the state includes an echo effect for visualization. */
+    /**
+     * Indicates whether the state includes an echo effect for visualization.
+     */
     private final boolean echo;
 
     /**

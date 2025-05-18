@@ -90,6 +90,57 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
+     * Resumes or starts the automaton, scheduling periodic updates at the configured interval.
+     * If already running, this method has no effect.
+     */
+    public void resume() {
+        if (!isRunning) {
+            isRunning = true;
+            LOGGER.info("Automaton resumed with interval: {}ms", intervalMillis);
+            executor.scheduleAtFixedRate(() -> {
+                try {
+                    if (isRunning) {
+                        step();
+                        if (gridConsumer != null) {
+                            gridConsumer.accept(grid);
+                        } else {
+                            LOGGER.warn("No gridConsumer set");
+                        }
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("Error in step execution: {}", e.getMessage(), e);
+                    isRunning = false;
+                }
+            }, 0, intervalMillis, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    /**
+     * Executes a single step of the automaton, updating cell states based on the configured rule.
+     * The current grid is copied to a secondary grid, rules are applied to update states, and the
+     * updated states are copied back to the primary grid.
+     */
+    public void step() {
+
+        // Apply rules to update newGrid
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                C cell = grid.getCell(x, y);
+                S newState = rule.apply(grid, cell);
+                newStates[x][y] = newState;
+            }
+        }
+
+        // Copy newGrid back to grid
+        for (int y = 0; y < grid.getHeight(); y++) {
+            for (int x = 0; x < grid.getWidth(); x++) {
+                C cell = grid.getCell(x, y);
+                grid.setCellState(x, y, newStates[x][y]);
+            }
+        }
+    }
+
+    /**
      * Sets the consumer responsible for rendering or processing the grid after each step.
      *
      * @param gridConsumer the consumer to process the grid, or null to disable rendering
@@ -155,57 +206,6 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
             }
             LOGGER.info("Automaton stopped");
             this.executor = Executors.newSingleThreadScheduledExecutor();
-        }
-    }
-
-    /**
-     * Resumes or starts the automaton, scheduling periodic updates at the configured interval.
-     * If already running, this method has no effect.
-     */
-    public void resume() {
-        if (!isRunning) {
-            isRunning = true;
-            LOGGER.info("Automaton resumed with interval: {}ms", intervalMillis);
-            executor.scheduleAtFixedRate(() -> {
-                try {
-                    if (isRunning) {
-                        step();
-                        if (gridConsumer != null) {
-                            gridConsumer.accept(grid);
-                        } else {
-                            LOGGER.warn("No gridConsumer set");
-                        }
-                    }
-                } catch (Exception e) {
-                    LOGGER.error("Error in step execution: {}", e.getMessage(), e);
-                    isRunning = false;
-                }
-            }, 0, intervalMillis, TimeUnit.MILLISECONDS);
-        }
-    }
-
-    /**
-     * Executes a single step of the automaton, updating cell states based on the configured rule.
-     * The current grid is copied to a secondary grid, rules are applied to update states, and the
-     * updated states are copied back to the primary grid.
-     */
-    public void step() {
-
-        // Apply rules to update newGrid
-        for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
-                C cell = grid.getCell(x, y);
-                S newState = rule.apply(grid, cell);
-                newStates[x][y] = newState;
-            }
-        }
-
-        // Copy newGrid back to grid
-        for (int y = 0; y < grid.getHeight(); y++) {
-            for (int x = 0; x < grid.getWidth(); x++) {
-                C cell = grid.getCell(x, y);
-                grid.setCellState(x, y, newStates[x][y]);
-            }
         }
     }
 }

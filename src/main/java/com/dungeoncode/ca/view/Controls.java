@@ -34,22 +34,22 @@ public class Controls {
         controls.add(new Control("<", "Decrease speed"));
         controls.add(new Control("+", "Increase grid resolution"));
         controls.add(new Control("-", "Decrease grid resolution"));
+        controls.add(new Control("Ctrl+s", "Save screen as image"));
 
         mouseControls = new ArrayList<>();
-        mouseControls.add(new Control("Left Click / Drag", "Paint random cells"));
-        mouseControls.add(new Control("Middle Click / Drag", "Paint live cells"));
-        mouseControls.add(new Control("Right Click / Drag", "Paint dead cells"));
+        mouseControls.add(new Control("L. Clk Drag", "Paint random cells"));
+        mouseControls.add(new Control("M. Clk Drag", "Paint live cells"));
+        mouseControls.add(new Control("R. Clk Drag", "Paint dead cells"));
         mouseControls.add(new Control("Scroll Up", "Larger brush size"));
         mouseControls.add(new Control("Scroll Down", "Smaller brush size"));
     }
 
     /**
-     * Represents a keyboard control with a control (key/mouse) and its description.
+     * Represents a control entry with a label and description.
      *
-     * @param control   the control
-     * @param desc the description of the key's action
+     * @param control the key or mouse action label
+     * @param desc    the description of the action
      */
     public record Control(String control, String desc) {
     }
-
 }

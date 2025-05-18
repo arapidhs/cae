@@ -4,6 +4,7 @@ import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.view.StateRenderer;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TextColor;
 
 /**
  * Renders a {@link BooleanState} as a {@link TextCharacter} for display in a Lanterna terminal.
@@ -24,7 +25,7 @@ public class BooleanStateRenderer implements StateRenderer<BooleanState> {
     public TextCharacter render(BooleanState state) {
         TextCharacter[] textCharacter;
         if (state.getValue()) {
-            textCharacter = TextCharacter.fromString(" ", null, null, SGR.REVERSE);
+            textCharacter = TextCharacter.fromString(" ", TextColor.ANSI.WHITE_BRIGHT, null, SGR.REVERSE);
         } else {
             textCharacter = TextCharacter.fromString(" ");
         }

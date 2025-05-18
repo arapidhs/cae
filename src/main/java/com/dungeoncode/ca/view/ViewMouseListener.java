@@ -5,6 +5,11 @@ import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.screen.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +49,8 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
      */
     private double radiusMultiplier;
 
+    private int radius;
+
     /**
      * Constructs a new mouse listener for the specified control view.
      *
@@ -52,6 +59,14 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     public ViewMouseListener(ControlView<C, S> controlView) {
         this.controlView = controlView;
         this.radiusMultiplier = 0.05; // Initial radius multiplier
+        calculateRadius();
+    }
+
+    private void calculateRadius() {
+        // Calculate radius based on grid size and multiplier
+        int width = controlView.getWidth();
+        int height = controlView.getHeight();
+        radius = (int) Math.max(3, Math.min(width, height) * radiusMultiplier);
     }
 
     /**
@@ -63,8 +78,8 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     @Override
     public void mouseClicked(MouseEvent e) {
         // Convert pixel coordinates to terminal grid coordinates
-        int col = e.getX() / controlView.getFontSize();
-        int row = e.getY() / controlView.getFontSize();
+        int col = e.getX() / controlView.getCellFontSize();
+        int row = e.getY() / controlView.getCellFontSize();
         int button = e.getButton();
 
         applyChanges(col, row, button); // Apply changes to the grid
@@ -81,10 +96,12 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     }
 
     /**
-     * Handles mouse wheel movements to adjust the radius of the affected grid area.
-     * Increases the radius for upward scrolls and decreases it for downward scrolls.
+     * Handles mouse wheel movements to adjust the radius of the affected grid area for mouse interactions.
+     * Increases the radius for upward scrolls and decreases it for downward scrolls, updating the radius
+     * and drawing a rectangular outline around the cursor position if the automaton is running.
      *
      * @param e the mouse wheel event
+     * @throws RuntimeException if an error occurs while drawing the radius outline
      */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
@@ -92,6 +109,24 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
             radiusMultiplier += 0.01; // Increase radius for upward scroll
         } else {
             radiusMultiplier -= 0.01; // Decrease radius for downward scroll
+        }
+        calculateRadius();
+
+        if (controlView.getAutomaton().isRunning()) {
+            try {
+                // Convert pixel coordinates to terminal grid coordinates
+                int col = e.getX() / controlView.getCellFontSize();
+                int row = e.getY() / controlView.getCellFontSize();
+
+                controlView.getTextGraphics().drawRectangle(
+                        new TerminalPosition(col - radius, row - radius),
+                        new TerminalSize(2 * radius, 2 * radius),
+                        TextCharacter.fromCharacter('-', TextColor.ANSI.WHITE, null)[0]
+                );
+                controlView.getScreen().refresh(Screen.RefreshType.DELTA);
+            } catch (Exception ex) {
+                throw new RuntimeException("Failed to draw radius outline: " + ex.getMessage(), ex);
+            }
         }
     }
 
@@ -104,8 +139,8 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     @Override
     public void mouseDragged(MouseEvent e) {
         // Convert pixel coordinates to terminal grid coordinates
-        int col = e.getX() / controlView.getFontSize();
-        int row = e.getY() / controlView.getFontSize();
+        int col = e.getX() / controlView.getCellFontSize();
+        int row = e.getY() / controlView.getCellFontSize();
 
         applyChanges(col, row, button); // Apply changes to the grid
     }
@@ -124,7 +159,6 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         // Calculate radius based on grid size and multiplier
         int width = controlView.getWidth();
         int height = controlView.getHeight();
-        int radius = (int) Math.max(3, Math.min(width, height) * radiusMultiplier);
 
         // Iterate over a square area around the center
         for (int dy = -radius; dy <= radius; dy++) {
