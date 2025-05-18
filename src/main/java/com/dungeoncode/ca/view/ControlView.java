@@ -84,6 +84,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(BanksConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(BriansBrainConfiguration.class.getName(), brainStateRenderer);
         CELL_RENDERER.put(GreenbergConfiguration.class.getName(), brainStateRenderer);
+        CELL_RENDERER.put(ParityFlipConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
@@ -103,6 +104,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(MajorityConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(AnnealConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(BanksConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(ParityFlipConfiguration.class.getName(), true);
 
     }
 
