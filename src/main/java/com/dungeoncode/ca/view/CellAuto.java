@@ -58,6 +58,7 @@ public class CellAuto {
             configurations.add(new LichensConfiguration());
             configurations.add(new LichensWithDeathConfiguration());
             configurations.add(new MajorityConfiguration());
+            configurations.add(new AnnealConfiguration());
             configurations.add(new PulseWeaverConfiguration());
 
             running = true; // Set application running state
