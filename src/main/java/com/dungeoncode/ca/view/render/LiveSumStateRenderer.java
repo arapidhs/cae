@@ -73,7 +73,42 @@ public class LiveSumStateRenderer implements StateRenderer<BooleanState> {
                 new TextColor.RGB(102, 0, 153),   // Inactive with echo, live sum 0: Deep purple
                 new TextColor.RGB(51, 0, 102),    // Inactive without echo, live sum 0: Darkest purple
                 new TextColor.RGB(255, 255, 255)  // Default: White
+        ),
+        FIRE_GRADIENT(
+        "Fire Gradient",
+                "A fiery palette ranging from deep ember red to bright yellow for increasing live neighbor counts. Bright orange for active cells with no live neighbors, dark red for echoing inactive cells, and charcoal gray for inactive, stable dead cells. Useful for intense, heat-map-like visualization.",
+                new TextColor.RGB(51, 0, 0),       // Live sum 1: Dark ember
+                new TextColor.RGB(102, 0, 0),      // Live sum 2: Deep red
+                new TextColor.RGB(153, 0, 0),      // Live sum 3: Red
+                new TextColor.RGB(204, 51, 0),     // Live sum 4: Reddish orange
+                new TextColor.RGB(255, 102, 0),    // Live sum 5: Orange
+                new TextColor.RGB(255, 153, 0),    // Live sum 6: Bright orange
+                new TextColor.RGB(255, 178, 51),   // Live sum 7: Soft yellow-orange
+                new TextColor.RGB(255, 204, 102),  // Live sum 8: Light yellow-orange
+                new TextColor.RGB(255, 255, 153),  // Live sum 9: Bright yellow
+                new TextColor.RGB(255, 128, 0),    // Active, live sum 0: Bright orange
+                new TextColor.RGB(128, 0, 0),      // Inactive with echo, live sum 0: Dark red
+                new TextColor.RGB(64, 64, 64),     // Inactive without echo, live sum 0: Charcoal gray
+                new TextColor.RGB(255, 255, 255)   // Default: White
+                ),
+        EARTH_TONES(
+                "Earth Tones",
+                "A natural palette using warm earth tones, from deep brown through amber to pale sand, for increasing live neighbor counts, with forest green for active cells with no live neighbors, terracotta for recently died cells, and dark soil color for stayed-dead cells. Perfect for a warm, organic visualization with a natural aesthetic.",
+                new TextColor.RGB(59, 31, 24),     // Live sum 1: Deep brown
+                new TextColor.RGB(87, 46, 28),     // Live sum 2: Rich brown
+                new TextColor.RGB(120, 60, 30),    // Live sum 3: Medium brown
+                new TextColor.RGB(150, 82, 45),    // Live sum 4: Terracotta
+                new TextColor.RGB(179, 106, 51),   // Live sum 5: Bronze
+                new TextColor.RGB(204, 133, 63),   // Live sum 6: Amber
+                new TextColor.RGB(224, 163, 97),   // Live sum 7: Light amber
+                new TextColor.RGB(237, 195, 137),  // Live sum 8: Sand
+                new TextColor.RGB(245, 222, 179),  // Live sum 9: Pale sand
+                new TextColor.RGB(34, 102, 51),    // Active, live sum 0: Forest green
+                new TextColor.RGB(150, 82, 45),    // Inactive with echo, live sum 0: Terracotta
+                new TextColor.RGB(35, 18, 11),     // Inactive without echo, live sum 0: Dark soil
+                new TextColor.RGB(255, 255, 255)   // Default: White
         );
+
 
         /** The user-friendly name of the palette. */
         private final String name;
