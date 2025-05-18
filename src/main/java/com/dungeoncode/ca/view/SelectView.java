@@ -166,7 +166,7 @@ public class SelectView<C extends Cell<S>, S extends CellState<?>> {
             }
         }));
 
-        buttonsPanel.addComponent(new Button("Show Controls", () ->
+        buttonsPanel.addComponent(new Button("Controls", () ->
                 MessageDialog.showMessageDialog(textGUI, "Controls", getControlsText(), MessageDialogButton.OK)));
 
         buttonsPanel.addComponent(new Button("Exit", () -> confirmExit(textGUI)));

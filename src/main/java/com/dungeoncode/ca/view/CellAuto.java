@@ -33,6 +33,8 @@ public class CellAuto {
      */
     static boolean running;
 
+    static List<Configuration> configurations;
+
     /**
      * Starts the Cellular Automata application. Initializes a list of available configurations,
      * creates a selection view, and enters a loop to display the selection screen and launch
@@ -44,7 +46,7 @@ public class CellAuto {
     public static void main(String[] args) {
         try {
             // Initialize available configurations
-            List<Configuration> configurations = new ArrayList<>();
+            configurations = new ArrayList<>();
             configurations.add(new InkspotConfiguration());
             configurations.add(new GameOfLifeConfiguration());
             configurations.add(new GameOfLifeWithEchoConfiguration());
@@ -84,7 +86,7 @@ public class CellAuto {
             // Launch simulation with selected configuration
             Configuration conf = selectView.getSelectedConfiguration();
             ControlView<Cell<CellState<?>>, CellState<?>> controlView =
-                    new ControlView<>(1080, 720, 4, conf);
+                    new ControlView<>(1080, 720, 4, configurations, conf);
             controlView.run();
         } else {
             System.exit(0); // Exit if no configuration is selected

@@ -26,9 +26,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.googlecode.lanterna.input.KeyType.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
@@ -121,15 +123,17 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     /**
      * The configuration defining the automaton's setup and behavior.
      */
-    private final Configuration<C, S> configuration;
+    private Configuration<C, S> configuration;
     /**
      * The font size used for rendering display elements like the controls menu.
      */
     private final int displayFontSize;
+
+    private final List<Configuration> configurations;
     /**
      * The automaton being controlled.
      */
-    private Automa<C, S> automaton;
+    private Automa<C, S> automa;
     /**
      * The Lanterna terminal screen for rendering the grid or controls menu.
      */
@@ -172,14 +176,15 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      * Initializes the grid size based on pixel dimensions and cell font size, sets up fonts, and prepares the
      * automaton and terminal.
      *
-     * @param px            the pixel width of the terminal window
-     * @param py            the pixel height of the terminal window
-     * @param cellFontSize  the font size for rendering simulation cells
-     * @param configuration the automaton configuration, must not be null
+     * @param px             the pixel width of the terminal window
+     * @param py             the pixel height of the terminal window
+     * @param cellFontSize   the font size for rendering simulation cells
+     * @param configurations
+     * @param configuration  the automaton configuration, must not be null
      * @throws NullPointerException if configuration is null
      * @throws RuntimeException     if font loading fails
      */
-    public ControlView(int px, int py, int cellFontSize, @NonNull Configuration<C, S> configuration) {
+    public ControlView(int px, int py, int cellFontSize, List<Configuration> configurations, @NonNull Configuration<C, S> configuration) {
         Objects.requireNonNull(configuration);
         this.px = px;
         this.py = py;
@@ -189,6 +194,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         this.controls = new Controls();
         this.configuration = configuration;
         this.displayFontSize = 18;
+        this.configurations = configurations;
         setupFonts();
         initialize(true);
     }
@@ -220,16 +226,19 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      * @param resetAutoma whether to reset the automaton instance and reconfigure it
      * @throws RuntimeException if an error occurs during initialization
      */
-    @SuppressWarnings("rawtypes")
     public void initialize(boolean resetAutoma) {
         try {
             setupScreen(true);
             if (resetAutoma) {
-                automaton = new Automa<>();
+                if(automa != null && automa.isRunning()){
+                    automa.stop();
+                }
+                automa = new Automa<>();
                 configureAutoma();
+            } else {
+                renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
+                automa.setGridConsumer((GridRenderer<C, S>) renderer);
             }
-            renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
-            automaton.setGridConsumer((GridRenderer<C, S>) renderer);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize ControlView: " + e.getMessage(), e);
         }
@@ -267,7 +276,9 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         if (intervalMillis <= 0) {
             intervalMillis = 100;
         }
-        configuration.configure(automaton, width, height, intervalMillis);
+        configuration.configure(automa, width, height, intervalMillis);
+        renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
+        automa.setGridConsumer((GridRenderer<C, S>) renderer);
     }
 
     /**
@@ -347,32 +358,46 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     public void run() {
         boolean scaleChange = false;
         boolean showControls = false;
+        boolean showConfigurationDetails=false;
         boolean quit = false;
-        automaton.start();
+        automa.start();
         try {
             while (true) {
                 KeyStroke key = screen.readInput();
-                if (key.getKeyType() == KeyType.Escape) {
-                    break; // Exit on ESC
+                KeyType keyType = key.getKeyType();
+                if (keyType != Character) {
+                    switch (key.getKeyType()) {
+                        case Escape -> {
+                            quit=true;
+                        }
+                        case ArrowLeft -> {
+                            if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
+                                automa.stop();
+                                ((LiveSumStateRenderer) renderer.getStateRenderer()).previousPalette();
+                                automa.start();
+                            }
+                        }
+                        case ArrowRight -> {
+                            if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
+                                automa.stop();
+                                ((LiveSumStateRenderer) renderer.getStateRenderer()).nextPalette();
+                                automa.start();
+                            }
+                        }
+                        case PageDown -> startNextAutoma();
+                        case PageUp -> startPreviousAutoma();
+                    }
                 } else if (key.isCtrlDown() && key.getKeyType() == KeyType.Character) {
                     if (key.getCharacter() == 's') {
                         saveScreenToImage();
-                    }
-                } else if (key.getKeyType() == KeyType.ArrowLeft) {
-                    if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
-                        ((LiveSumStateRenderer) renderer.getStateRenderer()).previousPalette();
-                    }
-                } else if (key.getKeyType() == KeyType.ArrowRight) {
-                    if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
-                        ((LiveSumStateRenderer) renderer.getStateRenderer()).nextPalette();
                     }
                 } else if (key.getKeyType() == KeyType.Character) {
                     Character character = key.getCharacter();
                     switch (character) {
                         case 'q', 'Q' -> quit = true;
                         case 'p', 'P', ' ' -> {
-                            if (automaton.isRunning()) {
-                                automaton.stop();
+                            if (automa.isRunning()) {
+                                automa.stop();
                                 TerminalPosition topLeft = new TerminalPosition(width - 3, 0);
                                 TerminalSize size = new TerminalSize(3, 3);
                                 TextCharacter textCharacter = TextCharacter.fromCharacter(' ', TextColor.ANSI.RED, null, SGR.REVERSE, SGR.BLINK)[0];
@@ -380,17 +405,20 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                                 screen.refresh(Screen.RefreshType.DELTA);
                                 LOGGER.debug("Automaton stopped");
                             } else {
-                                automaton.resume();
+                                automa.resume();
                                 LOGGER.debug("Automaton resumed");
                             }
                         }
                         case 'r', 'R' -> {
-                            automaton.stop();
-                            automaton.getGrid().initialize();
-                            automaton.resume();
+                            automa.stop();
+                            automa.getGrid().initialize();
+                            automa.resume();
+                        }
+                        case 'i', 'I' -> {
+                            showConfigurationDetails=true;
                         }
                         case '+' -> {
-                            automaton.stop();
+                            automa.stop();
                             --cellFontSize;
                             cellFontSize = Math.max(cellFontSize, 2);
                             width = px / cellFontSize;
@@ -398,7 +426,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                             scaleChange = true;
                         }
                         case '-' -> {
-                            automaton.stop();
+                            automa.stop();
                             ++cellFontSize;
                             cellFontSize = Math.min(cellFontSize, 32);
                             width = px / cellFontSize;
@@ -406,27 +434,27 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                             scaleChange = true;
                         }
                         case '<' -> {
-                            if (automaton.isRunning()) {
-                                long intervalMillis = automaton.getIntervalMillis();
+                            if (automa.isRunning()) {
+                                long intervalMillis = automa.getIntervalMillis();
                                 intervalMillis = (long) Math.min(2000, intervalMillis + intervalMillis * 0.25);
-                                automaton.setIntervalMillis(intervalMillis);
+                                automa.setIntervalMillis(intervalMillis);
                                 this.intervalMillis = intervalMillis;
                             }
                         }
                         case '>' -> {
-                            if (automaton.isRunning()) {
-                                long intervalMillis = automaton.getIntervalMillis();
+                            if (automa.isRunning()) {
+                                long intervalMillis = automa.getIntervalMillis();
                                 intervalMillis = (long) Math.max(20, intervalMillis - intervalMillis * 0.25);
-                                automaton.setIntervalMillis(intervalMillis);
+                                automa.setIntervalMillis(intervalMillis);
                                 this.intervalMillis = intervalMillis;
                             }
                         }
                         case 's' -> {
-                            if (automaton.isRunning()) {
-                                automaton.stop();
+                            if (automa.isRunning()) {
+                                automa.stop();
                             }
-                            automaton.step();
-                            renderer.accept((Grid<Cell<BooleanState>, BooleanState>) automaton.getGrid());
+                            automa.step();
+                            renderer.accept((Grid<Cell<BooleanState>, BooleanState>) automa.getGrid());
                             TerminalPosition topLeft = new TerminalPosition(width - 3, 0);
                             TerminalSize size = new TerminalSize(3, 3);
                             TextCharacter textCharacter = TextCharacter.fromCharacter(' ', TextColor.ANSI.BLUE, null, SGR.REVERSE, SGR.BLINK)[0];
@@ -437,7 +465,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                     }
                 }
 
-                if (scaleChange || showControls || quit) {
+                if (scaleChange || showControls || showConfigurationDetails || quit) {
                     setupFonts();
                     break;
                 }
@@ -445,18 +473,19 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         } catch (IOException e) {
             LOGGER.error("Error reading input: {}", e.getMessage(), e);
         } finally {
-            automaton.stop();
+            automa.stop();
             closeTerminal();
         }
 
         if (scaleChange) {
             initialize(true);
             run();
+        } else if (showControls) {
+            showControls();
+        } else  if(showConfigurationDetails){
+            showConfigurationDetails();
         }
 
-        if (showControls) {
-            showControls();
-        }
     }
 
     /**
@@ -467,7 +496,6 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      */
     private void showControls() {
         try {
-
             boolean simulation = false;
             setupScreen(simulation);
 
@@ -475,16 +503,48 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             textGraphics.putString(0, row++, "Keyboard Controls", SGR.BOLD);
             row++;
 
-            // Determine max label width for keyboard controls
-            int maxKeyLabelWidth = controls.controls.stream()
+            // Split keyboard controls into two halves
+            List<Controls.Control> keyboardControls = controls.controls;
+            int totalControls = keyboardControls.size();
+            int midPoint = (totalControls + 1) / 2;
+
+            List<Controls.Control> leftControls = keyboardControls.subList(0, midPoint);
+            List<Controls.Control> rightControls = keyboardControls.subList(midPoint, totalControls);
+
+            // Determine max label width for left and right columns
+            int maxLeftKeyWidth = leftControls.stream()
                     .mapToInt(c -> c.control().length())
                     .max()
                     .orElse(1);
 
-            // Print keyboard controls with aligned columns
-            for (Controls.Control control : controls.controls) {
-                String label = String.format("%-" + maxKeyLabelWidth + "s", control.control());
-                textGraphics.putString(0, row++, "  " + label + "  " + control.desc());
+            int maxRightKeyWidth = rightControls.stream()
+                    .mapToInt(c -> c.control().length())
+                    .max()
+                    .orElse(1);
+
+            // Calculate column positioning - adjust these values as needed for your screen width
+            int leftKeyColumn = 2;
+            int leftDescColumn = leftKeyColumn + maxLeftKeyWidth + 2;
+            int rightKeyColumn = leftDescColumn + 30; // Allow 30 characters for left descriptions with extra spacing
+
+            // Print keyboard controls in two columns
+            int maxRows = Math.max(leftControls.size(), rightControls.size());
+            for (int i = 0; i < maxRows; i++) {
+                // Left column
+                if (i < leftControls.size()) {
+                    Controls.Control left = leftControls.get(i);
+                    textGraphics.putString(leftKeyColumn, row, left.control());
+                    textGraphics.putString(leftDescColumn, row, left.desc());
+                }
+
+                // Right column
+                if (i < rightControls.size()) {
+                    Controls.Control right = rightControls.get(i);
+                    textGraphics.putString(rightKeyColumn, row, right.control());
+                    textGraphics.putString(rightKeyColumn + maxRightKeyWidth + 2, row, right.desc());
+                }
+
+                row++;
             }
 
             row++;
@@ -512,6 +572,130 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         } catch (Exception e) {
             throw new RuntimeException("Failed to display controls: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Displays the selected configuration details on the left side of the screen and
+     * a list of all available configurations on the right.
+     * Handles text wrapping for long descriptions and citations.
+     */
+    private void showConfigurationDetails() {
+        try {
+            boolean simulation = false;
+            setupScreen(simulation);
+
+            // Clear screen
+            textGraphics.fill(' ');
+
+            // ===== LEFT SIDE: Configuration Details =====
+            int leftColumnWidth = screen.getTerminalSize().getColumns() / 2 - 5; // Half screen minus margin
+            int leftStartCol = 2;
+            int row = 1;
+
+            // Show configuration details if one is selected
+            if (configuration != null) {
+                // Display Name with emphasis
+                textGraphics.putString(leftStartCol, row++, "Automa: " + configuration.getName(), SGR.BOLD);
+                row++;
+
+                // Display Description with word wrapping
+                //textGraphics.putString(leftStartCol, row++, "Description:", SGR.BOLD);
+                String description = configuration.getDescription();
+                if (description != null && !description.isEmpty()) {
+                    row = wrapAndPrintText(description, leftStartCol + 2, row, leftColumnWidth - 2);
+                } else {
+                    textGraphics.putString(leftStartCol + 2, row++, "No description available.");
+                }
+
+            } else {
+                textGraphics.putString(leftStartCol, row++, "No configuration selected.", SGR.BOLD);
+            }
+
+            // ===== RIGHT SIDE: Configuration List =====
+            int rightStartCol = leftColumnWidth + 7; // Position right after left column with padding
+            row = 1;
+
+            textGraphics.putString(rightStartCol, row++, "Available Automas:", SGR.BOLD);
+            row++;
+
+            // Print numbered list of configurations
+            for (int i = 0; i < configurations.size(); i++) {
+                Configuration<C, S> config = configurations.get(i);
+                String listItem = String.format("%d. %s", i + 1, config.getName());
+
+                // Highlight selected configuration
+                if (config == configuration) {
+                    textGraphics.putString(rightStartCol, row++, listItem, SGR.BOLD, SGR.REVERSE);
+                } else {
+                    textGraphics.putString(rightStartCol, row++, listItem);
+                }
+            }
+
+            // Instructions at bottom
+            int bottomRow = screen.getTerminalSize().getRows() - 2;
+            textGraphics.putString(leftStartCol, bottomRow, "Press any key to return", SGR.ITALIC);
+
+            screen.refresh();
+            screen.readInput(); // Wait for user input before returning
+
+            boolean resetAutoma = false;
+            initialize(resetAutoma);
+            run();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to display configuration details: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Helper method to wrap text at word boundaries and print it line by line.
+     *
+     * @param text The text to wrap and print
+     * @param startCol The starting column (x position)
+     * @param startRow The starting row (y position)
+     * @param maxWidth The maximum width for wrapping
+     * @return The next row position after all text is printed
+     */
+    private int wrapAndPrintText(String text, int startCol, int startRow, int maxWidth) {
+        int currentRow = startRow;
+
+        // Split by existing line breaks first
+        String[] paragraphs = text.split("\\n");
+
+        for (String paragraph : paragraphs) {
+            if (paragraph.isEmpty()) {
+                currentRow++;
+                continue;
+            }
+
+            // Now handle word wrapping within each paragraph
+            String[] words = paragraph.split("\\s+");
+            StringBuilder currentLine = new StringBuilder();
+
+            for (String word : words) {
+                // Check if adding this word would exceed the max width
+                if (currentLine.length() + word.length() + 1 > maxWidth) {
+                    // Print current line and reset
+                    textGraphics.putString(startCol, currentRow++, currentLine.toString());
+                    currentLine = new StringBuilder(word);
+                } else {
+                    // Add word to current line
+                    if (!currentLine.isEmpty()) {
+                        currentLine.append(" ");
+                    }
+                    currentLine.append(word);
+                }
+            }
+
+            // Print any remaining text
+            if (!currentLine.isEmpty()) {
+                textGraphics.putString(startCol, currentRow++, currentLine.toString());
+            }
+
+            // Add a blank line between paragraphs
+            currentRow++;
+        }
+
+        return currentRow;
     }
 
     /**
@@ -568,12 +752,36 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
+     * Advances to the next configuration in the list, wrapping around to the first if currently at the end.
+     * Stops the current automaton, updates the configuration, reconfigures the automaton, and restarts it.
+     */
+    public void startNextAutoma() {
+        int i = configurations.indexOf(configuration);
+        this.configuration = (Configuration<C,S>) configurations.get((i + 1) % configurations.size());
+        automa.stop();
+        configureAutoma();
+        automa.start();
+    }
+
+    /**
+     * Reverts to the previous configuration in the list, wrapping around to the last if currently at the start.
+     * Stops the current automaton, updates the configuration, reconfigures the automaton, and restarts it.
+     */
+    public void startPreviousAutoma() {
+        int i = configurations.indexOf(configuration);
+        this.configuration = (Configuration<C,S>) configurations.get((i - 1 + configurations.size()) % configurations.size());
+        automa.stop();
+        configureAutoma();
+        automa.start();
+    }
+
+    /**
      * Returns the automaton being controlled.
      *
      * @return the {@link Automa}
      */
-    public Automa<C, S> getAutomaton() {
-        return automaton;
+    public Automa<C, S> getAutoma() {
+        return automa;
     }
 
     /**

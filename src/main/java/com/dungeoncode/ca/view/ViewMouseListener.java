@@ -62,6 +62,13 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         calculateRadius();
     }
 
+    private void calculateRadius() {
+        // Calculate radius based on grid size and multiplier
+        int width = controlView.getWidth();
+        int height = controlView.getHeight();
+        radius = (int) Math.max(3, Math.min(width, height) * radiusMultiplier);
+    }
+
     /**
      * Handles mouse click events by applying cell state changes at the clicked position.
      * Converts pixel coordinates to grid coordinates and updates cells based on the mouse button.
@@ -105,7 +112,7 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         }
         calculateRadius();
 
-        if (controlView.getAutomaton().isRunning()) {
+        if (controlView.getAutoma().isRunning()) {
             try {
                 // Convert pixel coordinates to terminal grid coordinates
                 int col = e.getX() / controlView.getCellFontSize();
@@ -138,13 +145,6 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         applyChanges(col, row, button); // Apply changes to the grid
     }
 
-    private void calculateRadius() {
-        // Calculate radius based on grid size and multiplier
-        int width = controlView.getWidth();
-        int height = controlView.getHeight();
-        radius = (int) Math.max(3, Math.min(width, height) * radiusMultiplier);
-    }
-
     /**
      * Applies cell state changes to a circular area around the specified grid coordinates.
      * Uses the mouse button to determine the state change: left-click sets random states with
@@ -156,6 +156,13 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
      * @param button the mouse button (1 = left, 2 = middle, 3 = right)
      */
     private void applyChanges(int col, int row, int button) {
+
+        // If the grid is not a grid of Boolean Cells, return.
+        C cl = controlView.getAutoma().getGrid().getCell(0, 0);
+        if(!(cl instanceof  BooleanCell)){
+            return;
+        }
+
         // Calculate radius based on grid size and multiplier
         int width = controlView.getWidth();
         int height = controlView.getHeight();
@@ -169,7 +176,7 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
                     int nx = (col + dx + width) % width;
                     int ny = (row + dy + height) % height;
                     if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                        BooleanCell cell = (BooleanCell) controlView.getAutomaton().getGrid().getCell(nx, ny);
+                        BooleanCell cell = (BooleanCell) controlView.getAutoma().getGrid().getCell(nx, ny);
                         if (cell != null) {
                             try {
                                 if (button == 1) {
@@ -192,8 +199,8 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         }
 
         // Update display if automaton is paused
-        if (!controlView.getAutomaton().isRunning()) {
-            controlView.getRenderer().accept((Grid<Cell<BooleanState>, BooleanState>) controlView.getAutomaton().getGrid());
+        if (!controlView.getAutoma().isRunning()) {
+            controlView.getRenderer().accept((Grid<Cell<BooleanState>, BooleanState>) controlView.getAutoma().getGrid());
         }
     }
 }
