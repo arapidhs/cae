@@ -86,6 +86,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(BriansBrainConfiguration.class.getName(), brainStateRenderer);
         CELL_RENDERER.put(GreenbergConfiguration.class.getName(), brainStateRenderer);
         CELL_RENDERER.put(ParityFlipConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(TimeTunnelConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
@@ -106,6 +107,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(AnnealConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(BanksConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(ParityFlipConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(TimeTunnelConfiguration.class.getName(), true);
 
     }
 
@@ -772,7 +774,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
 
             // Draw confirmation line on screen
             getTextGraphics().drawLine(0, height / 2, width, height / 2,
-                    TextCharacter.fromString("-", TextColor.ANSI.YELLOW, null, SGR.REVERSE)[0]);
+                    TextCharacter.fromString(" ", TextColor.ANSI.GREEN_BRIGHT, null, SGR.REVERSE)[0]);
             screen.refresh(Screen.RefreshType.DELTA);
         } else {
             throw new IllegalStateException("Screen capture is only supported with SwingTerminalFrame");
