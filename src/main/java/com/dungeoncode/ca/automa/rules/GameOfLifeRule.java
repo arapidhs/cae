@@ -28,7 +28,7 @@ public class GameOfLifeRule extends BooleanNeighborCountRule {
     public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
-        int liveCount = countLiveNeighbors(grid, x, y);
+        int liveCount = countLiveMooreNeighbors(grid, x, y);
         boolean echo=cell.getState().getValue();
         if (cell.getState().getValue()) {
             return new BooleanState(liveCount == 2 || liveCount == 3,echo,liveCount);

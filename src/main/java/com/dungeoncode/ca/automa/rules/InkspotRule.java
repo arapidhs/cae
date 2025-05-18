@@ -30,7 +30,7 @@ public class InkspotRule extends BooleanNeighborCountRule {
     public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
-        int liveCount = countLiveNeighbors(grid, x, y);
+        int liveCount = countLiveMooreNeighbors(grid, x, y);
 
         boolean echo=cell.getState().getValue();
         boolean isLive = cell.getState() != null && cell.getState().getValue();

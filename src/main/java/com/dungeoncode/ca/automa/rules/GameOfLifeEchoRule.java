@@ -50,7 +50,7 @@ public class GameOfLifeEchoRule extends BooleanNeighborCountRule {
 
         // Apply standard Game of Life rules
         boolean newAlive;
-        int liveCount = countLiveNeighbors(grid, x, y);
+        int liveCount = countLiveMooreNeighbors(grid, x, y);
         if (cell.getState().getValue()) {
             newAlive = liveCount == 2 || liveCount == 3;
         } else {
