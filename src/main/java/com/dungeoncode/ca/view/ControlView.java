@@ -61,7 +61,8 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         BooleanStateRenderer booleanRenderer = new BooleanStateRenderer();
         BooleanEchoStateRenderer booleanEchoRenderer = new BooleanEchoStateRenderer();
         LiveSumStateRenderer liveSumStateRenderer = new LiveSumStateRenderer(LiveSumStateRenderer.Palette.FIRE_GRADIENT);
-        PulseWeaverStateRenderer pulseWeaverStateRenderer =new PulseWeaverStateRenderer();
+        PulseWeaverStateRenderer pulseWeaverStateRenderer = new PulseWeaverStateRenderer();
+        BrainStateRenderer brainStateRenderer = new BrainStateRenderer();
 
         CELL_RENDERER = new HashMap<>();
         CELL_RENDERER.put(InkspotConfiguration.class.getName(), booleanRenderer);
@@ -79,6 +80,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(MajorityConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(AnnealConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(BanksConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(BriansBrainConfiguration.class.getName(), brainStateRenderer);
         CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
@@ -301,7 +303,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             swingTerminalFrame.setLocationRelativeTo(null);
             swingTerminalFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-            if ( IS_CONFIGURATION_BOOLEAN.containsKey(configuration.getClass().getName())
+            if (IS_CONFIGURATION_BOOLEAN.containsKey(configuration.getClass().getName())
                     && IS_CONFIGURATION_BOOLEAN.get(configuration.getClass().getName())) {
                 ViewMouseListener<C, S> viewMouseListener = new ViewMouseListener<>(this);
                 swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(viewMouseListener);
@@ -357,11 +359,11 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                         saveScreenToImage();
                     }
                 } else if (key.getKeyType() == KeyType.ArrowLeft) {
-                    if( renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
+                    if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
                         ((LiveSumStateRenderer) renderer.getStateRenderer()).previousPalette();
                     }
-                }  else if (key.getKeyType() == KeyType.ArrowRight) {
-                    if( renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
+                } else if (key.getKeyType() == KeyType.ArrowRight) {
+                    if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
                         ((LiveSumStateRenderer) renderer.getStateRenderer()).nextPalette();
                     }
                 } else if (key.getKeyType() == KeyType.Character) {

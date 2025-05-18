@@ -60,6 +60,7 @@ public class CellAuto {
             configurations.add(new MajorityConfiguration());
             configurations.add(new AnnealConfiguration());
             configurations.add(new BanksConfiguration());
+            configurations.add(new BriansBrainConfiguration());
             configurations.add(new PulseWeaverConfiguration());
 
             running = true; // Set application running state
