@@ -34,7 +34,7 @@ public class LichensConfiguration extends AbstractConfiguration<BooleanCell, Boo
                 "Lichens",
                 "A cellular automaton where a cell becomes active if it has exactly 3, 7, or 8 live neighbors in " +
                         "its Moore neighborhood (eight surrounding cells, excluding the center), and remains unchanged " +
-                        "otherwise. Initialized with a 3x3 central region of active cells, it requires a seed of at " +
+                        "otherwise. Initialized with a 5x5 central region of random state cells, it requires a seed of at " +
                         "least three cells to initiate growth, producing an irregular, lichen-like pattern with " +
                         "constrained growth, as described in Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
@@ -55,7 +55,7 @@ public class LichensConfiguration extends AbstractConfiguration<BooleanCell, Boo
     @Override
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
-        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new CentralBlobInitializer(5,5));
+        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new CentralBlobInitializer(2,2));
         config.put("grid", grid);
         config.put("rule", new LichensRule());
         config.put("intervalMillis", intervalMillis);

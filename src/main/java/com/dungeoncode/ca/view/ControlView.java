@@ -60,7 +60,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     static {
         BooleanStateRenderer booleanRenderer = new BooleanStateRenderer();
         BooleanEchoStateRenderer booleanEchoRenderer = new BooleanEchoStateRenderer();
-        LiveSumStateRenderer liveSumStateRenderer = new LiveSumStateRenderer(LiveSumStateRenderer.Palette.DEFAULT);
+        LiveSumStateRenderer liveSumStateRenderer = new LiveSumStateRenderer(LiveSumStateRenderer.Palette.FIRE_GRADIENT);
         PulseWeaverStateRenderer pulseWeaverStateRenderer =new PulseWeaverStateRenderer();
 
         CELL_RENDERER = new HashMap<>();
@@ -74,7 +74,9 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(DiamondsConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(TrianglesConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(OneOutOfEightConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(LichensConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(LichensConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(LichensWithDeathConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(MajorityConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
@@ -89,6 +91,8 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(TrianglesConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(OneOutOfEightConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(LichensConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(LichensWithDeathConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(MajorityConfiguration.class.getName(), true);
 
     }
 
