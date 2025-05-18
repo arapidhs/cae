@@ -78,6 +78,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(LichensWithDeathConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(MajorityConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(AnnealConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(BanksConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
@@ -94,7 +95,9 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(LichensConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(LichensWithDeathConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(MajorityConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(MajorityConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(AnnealConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(BanksConfiguration.class.getName(), true);
 
     }
 
