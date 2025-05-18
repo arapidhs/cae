@@ -2,6 +2,7 @@ package com.dungeoncode.ca.view;
 
 import com.dungeoncode.ca.automa.*;
 import com.dungeoncode.ca.core.*;
+import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.view.render.*;
 import com.googlecode.lanterna.*;
@@ -30,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.googlecode.lanterna.input.KeyType.*;
+import static com.googlecode.lanterna.input.KeyType.Character;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
@@ -122,17 +123,15 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      * The controls for keyboard and mouse interactions.
      */
     private final Controls controls;
-
-    /**
-     * The configuration defining the automaton's setup and behavior.
-     */
-    private Configuration<C, S> configuration;
     /**
      * The font size used for rendering display elements like the controls menu.
      */
     private final int displayFontSize;
-
     private final List<Configuration> configurations;
+    /**
+     * The configuration defining the automaton's setup and behavior.
+     */
+    private Configuration<C, S> configuration;
     /**
      * The automaton being controlled.
      */
@@ -172,7 +171,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     /**
      * The renderer for displaying the grid's boolean states.
      */
-    private GridRenderer<Cell<BooleanState>, BooleanState> renderer;
+    private GridRenderer<C,S> renderer;
 
     /**
      * Constructs a new control view with the specified terminal dimensions, cell font size, and configuration.
@@ -233,7 +232,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
         try {
             setupScreen(true);
             if (resetAutoma) {
-                if(automa != null && automa.isRunning()){
+                if (automa != null && automa.isRunning()) {
                     automa.stop();
                 }
                 automa = new Automa<>();
@@ -361,7 +360,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     public void run() {
         boolean scaleChange = false;
         boolean showControls = false;
-        boolean showConfigurationDetails=false;
+        boolean showConfigurationDetails = false;
         boolean quit = false;
         automa.start();
         try {
@@ -371,7 +370,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                 if (keyType != Character) {
                     switch (key.getKeyType()) {
                         case Escape -> {
-                            quit=true;
+                            quit = true;
                         }
                         case ArrowLeft -> {
                             if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
@@ -418,23 +417,27 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                             automa.resume();
                         }
                         case 'i', 'I' -> {
-                            showConfigurationDetails=true;
+                            showConfigurationDetails = true;
                         }
                         case '+' -> {
-                            automa.stop();
-                            --cellFontSize;
-                            cellFontSize = Math.max(cellFontSize, 2);
-                            width = px / cellFontSize;
-                            height = py / cellFontSize;
-                            scaleChange = true;
+                            if (cellFontSize > 2) {
+                                automa.stop();
+                                --cellFontSize;
+                                cellFontSize = Math.max(cellFontSize, 2);
+                                width = px / cellFontSize;
+                                height = py / cellFontSize;
+                                scaleChange = true;
+                            }
                         }
                         case '-' -> {
-                            automa.stop();
-                            ++cellFontSize;
-                            cellFontSize = Math.min(cellFontSize, 32);
-                            width = px / cellFontSize;
-                            height = py / cellFontSize;
-                            scaleChange = true;
+                            if (cellFontSize < 18) {
+                                automa.stop();
+                                ++cellFontSize;
+                                cellFontSize = Math.min(cellFontSize, 18);
+                                width = px / cellFontSize;
+                                height = py / cellFontSize;
+                                scaleChange = true;
+                            }
                         }
                         case '<' -> {
                             if (automa.isRunning()) {
@@ -457,12 +460,34 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                                 automa.stop();
                             }
                             automa.step();
-                            renderer.accept((Grid<Cell<BooleanState>, BooleanState>) automa.getGrid());
+                            renderer.accept((Grid<C, S>) automa.getGrid());
                             TerminalPosition topLeft = new TerminalPosition(width - 3, 0);
                             TerminalSize size = new TerminalSize(3, 3);
                             TextCharacter textCharacter = TextCharacter.fromCharacter(' ', TextColor.ANSI.BLUE, null, SGR.REVERSE, SGR.BLINK)[0];
                             textGraphics.fillRectangle(topLeft, size, textCharacter);
                             screen.refresh(Screen.RefreshType.DELTA);
+                        }
+                        case 'e' -> {
+                            if (automa.getGrid().getCell(0, 0) instanceof BooleanCell) {
+                                boolean wasRunning = automa.isRunning();
+                                if (automa.isRunning()) {
+                                    automa.stop();
+                                }
+                                Grid<BooleanCell, BooleanState> grid = (Grid<BooleanCell, BooleanState>) automa.getGrid();
+                                int width = grid.getWidth();
+                                int height = grid.getHeight();
+                                // Set all cells to Ready state initially
+                                for (int y = 0; y < height; y++) {
+                                    for (int x = 0; x < width; x++) {
+                                        BooleanCell cell = grid.getCell(x, y);
+                                        cell.getState().swapEcho();
+                                    }
+                                }
+                                renderer.accept((Grid<C, S>) grid);
+                                if (wasRunning) {
+                                    automa.start();
+                                }
+                            }
                         }
                         case '?' -> showControls = true;
                     }
@@ -485,7 +510,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             run();
         } else if (showControls) {
             showControls();
-        } else  if(showConfigurationDetails){
+        } else if (showConfigurationDetails) {
             showConfigurationDetails();
         }
 
@@ -652,7 +677,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
     /**
      * Helper method to wrap text at word boundaries and print it line by line.
      *
-     * @param text The text to wrap and print
+     * @param text     The text to wrap and print
      * @param startCol The starting column (x position)
      * @param startRow The starting row (y position)
      * @param maxWidth The maximum width for wrapping
@@ -760,7 +785,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      */
     public void startNextAutoma() {
         int i = configurations.indexOf(configuration);
-        this.configuration = (Configuration<C,S>) configurations.get((i + 1) % configurations.size());
+        this.configuration = (Configuration<C, S>) configurations.get((i + 1) % configurations.size());
         automa.stop();
         configureAutoma();
         automa.start();
@@ -772,7 +797,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      */
     public void startPreviousAutoma() {
         int i = configurations.indexOf(configuration);
-        this.configuration = (Configuration<C,S>) configurations.get((i - 1 + configurations.size()) % configurations.size());
+        this.configuration = (Configuration<C, S>) configurations.get((i - 1 + configurations.size()) % configurations.size());
         automa.stop();
         configureAutoma();
         automa.start();
@@ -801,7 +826,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      *
      * @return the {@link GridRenderer} for boolean states
      */
-    public GridRenderer<Cell<BooleanState>, BooleanState> getRenderer() {
+    public GridRenderer<C,S> getRenderer() {
         return renderer;
     }
 

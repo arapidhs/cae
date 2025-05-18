@@ -200,7 +200,7 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
 
         // Update display if automaton is paused
         if (!controlView.getAutoma().isRunning()) {
-            controlView.getRenderer().accept((Grid<Cell<BooleanState>, BooleanState>) controlView.getAutoma().getGrid());
+            controlView.getRenderer().accept(controlView.getAutoma().getGrid());
         }
     }
 }

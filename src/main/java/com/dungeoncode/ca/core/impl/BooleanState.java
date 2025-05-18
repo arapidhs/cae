@@ -13,17 +13,17 @@ public class BooleanState implements CellState<Boolean> {
     /**
      * The boolean value of the state ({@code true} for active, {@code false} for inactive).
      */
-    private final boolean value;
+    private boolean value;
 
     /**
      * Indicates whether the state includes an echo effect for visualization.
      */
-    private final boolean echo;
+    private boolean echo;
 
     /**
      * The number of live (active) cells in the cell's neighborhood, used for rendering based on local activity.
      */
-    private final int liveSum;
+    private int liveSum;
 
     /**
      * Constructs a new boolean state with the specified value, no echo effect, and zero live sum.
@@ -84,4 +84,14 @@ public class BooleanState implements CellState<Boolean> {
     public int getLiveSum() {
         return liveSum;
     }
+
+    /**
+     * Swap the values of value and echo.
+     */
+    public void swapEcho() {
+        boolean v=value;
+        this.value=this.echo;
+        this.echo=v;
+    }
+
 }
