@@ -66,7 +66,6 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
      */
     public void setup() {
         try {
-            this.selected = -1;
 
             // Configure terminal settings
             final DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory(System.out, System.in, StandardCharsets.UTF_8);
@@ -151,17 +150,14 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
             }
             Configuration<C, S> selectedConf = configurations.get(selectedIndex);
             selected = selectedIndex;
-
-            String name = selectedConf.getName();
-            String description = selectedConf.getDescription();
-            String citation = selectedConf.getCitation() == null ? "" : selectedConf.getCitation();
-
-            String formatted = formatWithWrapping(name, 38) + "\n\n"
-                    + formatWithWrapping(description, 38) + "\n\n"
-                    + formatWithWrapping(citation, 38);
-
-            detailsBox.setText(formatted);
+            setDetailsBoxText(selectedConf, detailsBox);
         });
+
+        if(selected>-1){
+            Configuration<C, S> selectedConf = configurations.get(selected);
+            configList.setSelectedIndex(selected);
+            setDetailsBoxText(selectedConf, detailsBox);
+        }
 
         centerPanel.addComponent(configList.withBorder(Borders.singleLine("Available Configurations")));
         centerPanel.addComponent(detailsBox.withBorder(Borders.singleLine("Configuration Details")));
@@ -189,6 +185,18 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
 
         // Launch the GUI
         textGUI.addWindowAndWait(window);
+    }
+
+    private void setDetailsBoxText(Configuration<C, S> selectedConf, TextBox detailsBox) {
+        String name = selectedConf.getName();
+        String description = selectedConf.getDescription();
+        String citation = selectedConf.getCitation() == null ? "" : selectedConf.getCitation();
+
+        String formatted = formatWithWrapping(name, 38) + "\n\n"
+                + formatWithWrapping(description, 38) + "\n\n"
+                + formatWithWrapping(citation, 38);
+
+        detailsBox.setText(formatted);
     }
 
     /**
@@ -440,15 +448,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
             Configuration<C, S> selectedConf = configurations.get(selectedIndex);
             selected = selectedIndex;
 
-            String name = selectedConf.getName();
-            String description = selectedConf.getDescription();
-            String citation = selectedConf.getCitation() == null ? "" : selectedConf.getCitation();
-
-            String formatted = formatWithWrapping(name, 38) + "\n\n"
-                    + formatWithWrapping(description, 38) + "\n\n"
-                    + formatWithWrapping(citation, 38);
-
-            detailsBox.setText(formatted);
+            setDetailsBoxText(selectedConf, detailsBox);
         });
 
 
