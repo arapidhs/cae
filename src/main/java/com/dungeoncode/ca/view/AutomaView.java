@@ -28,6 +28,7 @@ import com.googlecode.lanterna.terminal.swing.SwingTerminalFrame;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -43,8 +44,8 @@ import static com.googlecode.lanterna.gui2.Window.Hint.*;
 public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
 
     private final int width = 80;
-    private final int height = 25;
-    private final int fontSize = 20;
+    private final int height = 40;
+    private final int fontSize = 24;
 
     private final List<Configuration<C, S>> configurations;
     private int selected;
@@ -67,12 +68,25 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
     public void setup() {
         try {
 
+            Font font;
+            try {
+                final InputStream is = AutomaController.class.getResourceAsStream(
+                        "/fonts/oldschool-pc-fonts/Ac437_IBM_VGA_9x14.ttf"
+                );
+                assert is != null;
+                font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, fontSize);
+                is.close();
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load fonts: " + e.getMessage(), e);
+            }
+
             // Configure terminal settings
             final DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory(System.out, System.in, StandardCharsets.UTF_8);
             terminalFactory.setTerminalEmulatorTitle("Cellular Automata");
             terminalFactory.setInitialTerminalSize(new TerminalSize(width, height));
             terminalFactory.setTerminalEmulatorFontConfiguration(
-                    SwingTerminalFontConfiguration.newInstance(new Font("Courier New", Font.PLAIN, fontSize)));
+                    SwingTerminalFontConfiguration.newInstance(font)
+            );
 
             screen = terminalFactory.createScreen();
             Terminal terminal = screen.getTerminal();
@@ -110,10 +124,12 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         });
 
         final BasicWindow window = new BasicWindow("Cellular Automata Simulator");
+        window.setHints(List.of(FULL_SCREEN,FIT_TERMINAL_WINDOW));
 
         // === Root Layout ===
         Panel rootPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
-        rootPanel.setPreferredSize(new TerminalSize(76, 21));
+        rootPanel.setFillColorOverride(TextColor.ANSI.BLUE);
+        rootPanel.setPreferredSize(new TerminalSize(80, 40));
 
         // === Panels ===
         Panel topPanel = new Panel(new LinearLayout(Direction.VERTICAL))
@@ -129,18 +145,18 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         topPanel.addComponent(new Label("Explore, configure, and run dynamic automata systems").addStyle(SGR.ITALIC));
         topPanel.addComponent(new Label("in a fully interactive text interface.").addStyle(SGR.ITALIC));
         topPanel.addComponent(new EmptySpace());
-        topPanel.addComponent(new Label("Select an automaton and press Start to begin the simulation.")
+        topPanel.addComponent(new Label("Select an automaton and press Start to begin the simulation.").addStyle(SGR.ITALIC)
                 .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Beginning)));
 
         // === Configuration List ===
         RadioBoxList<String> configList = new RadioBoxList<>();
-        configList.setPreferredSize(new TerminalSize(30, 15));
+        configList.setPreferredSize(new TerminalSize(30, 35));
         for (Configuration<C, S> config : configurations) {
             configList.addItem(config.getName());
         }
 
         // === Details Text Area ===
-        TextBox detailsBox = new TextBox(new TerminalSize(40, 15)).setReadOnly(true);
+        TextBox detailsBox = new TextBox(new TerminalSize(45, 35)).setReadOnly(true);
 
         // Listener for selection change: updates detail text box
         // start simulation if selection is the same

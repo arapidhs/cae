@@ -212,7 +212,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     private void setupFonts() {
         try {
             final InputStream is = AutomaController.class.getResourceAsStream(
-                    "/fonts/Px437 IBM Conv/Px437_IBM_Conv.ttf"
+                    "/fonts/oldschool-pc-fonts/Px437_IBM_Conv.ttf"
             );
             assert is != null;
             cellFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, cellFontSize);
