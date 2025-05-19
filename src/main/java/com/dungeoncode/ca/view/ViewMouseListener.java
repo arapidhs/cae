@@ -65,7 +65,7 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         // Calculate radius based on grid size and multiplier
         int width = automaController.getWidth();
         int height = automaController.getHeight();
-        radius = (int) Math.max(3, Math.min(width, height) * radiusMultiplier);
+        radius = (int) Math.max(1, Math.min(width, height) * radiusMultiplier);
     }
 
     /**

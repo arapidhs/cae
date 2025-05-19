@@ -786,6 +786,8 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             screen.refresh(Screen.RefreshType.DELTA);
             if(wasRunning){
                 automa.start();
+            } else {
+                renderer.accept(automa.getGrid());
             }
         } else {
             throw new IllegalStateException("Screen capture is only supported with SwingTerminalFrame");
