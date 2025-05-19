@@ -59,9 +59,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
      * @param configurations the list of available automata configurations
      */
     public AutomaView(List<Configuration<C, S>> configurations) {
-        // Sort configurations by name before adding to the list
-        this.configurations = configurations.stream()
-                .sorted(Comparator.comparing(Configuration::getName)).toList();
+        this.configurations=configurations;
         this.selected = -1;
     }
 

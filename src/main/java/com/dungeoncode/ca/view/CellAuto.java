@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -68,6 +69,9 @@ public class CellAuto {
             configurations.add(new TimeTunnelConfiguration());
             configurations.add(new CandleRainConfiguration());
             configurations.add(new PulseWeaverConfiguration());
+
+            // Sort the list by configuration name
+            configurations.sort(Comparator.comparing(Configuration::getName));
 
             running = true; // Set application running state
             automaView = new AutomaView(configurations);
