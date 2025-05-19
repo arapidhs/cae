@@ -7,7 +7,6 @@ import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.PrimevalSoupBooleanInitializer;
-import com.dungeoncode.ca.core.impl.PrimevalSoupBooleanInitializer;
 
 import java.util.HashMap;
 import java.util.Map;

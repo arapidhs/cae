@@ -2,6 +2,7 @@ package com.dungeoncode.ca.core.impl;
 
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
+import com.dungeoncode.ca.core.RuleCategory;
 
 /**
  * Abstract base class for rules that rely on counting live neighbors in a cellular automaton grid.
@@ -87,5 +88,10 @@ public abstract class BooleanNeighborCountRule implements Rule<BooleanCell, Bool
         }
 
         return count;
+    }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
     }
 }

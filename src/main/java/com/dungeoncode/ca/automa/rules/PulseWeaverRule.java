@@ -2,6 +2,7 @@ package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.PulseWeaverCell;
 import com.dungeoncode.ca.core.impl.PulseWeaverState;
 
@@ -83,5 +84,10 @@ public class PulseWeaverRule implements Rule<PulseWeaverCell, PulseWeaverState> 
                 yield new PulseWeaverState(PulseWeaverState.PulseState.DORMANT);
             }
         };
+    }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.PROBABILISTIC;
     }
 }

@@ -17,4 +17,6 @@ public interface Rule<C extends Cell<S>, S extends CellState<?>> {
      * @return the new state of the cell, of type {@code S}
      */
     S apply(Grid<C, S> grid, C cell);
+
+    RuleCategory getRuleCategory();
 }

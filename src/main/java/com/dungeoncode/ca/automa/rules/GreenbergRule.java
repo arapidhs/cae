@@ -2,6 +2,7 @@ package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BrainCell;
 import com.dungeoncode.ca.core.impl.BrainState;
 
@@ -101,4 +102,10 @@ public class GreenbergRule implements Rule<BrainCell, BrainState> {
 
         return new BrainState(nextValue, nextEcho);
     }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
+    }
+
 }

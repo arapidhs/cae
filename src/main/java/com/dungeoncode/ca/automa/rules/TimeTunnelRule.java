@@ -2,6 +2,7 @@ package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -71,5 +72,10 @@ public class TimeTunnelRule implements Rule<BooleanCell, BooleanState> {
 
         // Modeling, Chapter 6, Section 6.2, p. 51. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001
         return new BooleanState(newState, currentState.getValue(),liveSum);
+    }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
     }
 }

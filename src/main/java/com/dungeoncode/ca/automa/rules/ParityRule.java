@@ -2,6 +2,7 @@ package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -46,5 +47,10 @@ public class ParityRule implements Rule<BooleanCell, BooleanState> {
         // Compute parity using XOR (odd number of true values yields true)
         boolean newState = center ^ north ^ south ^ west ^ east;
         return new BooleanState(newState,cell.getState().getValue(),liveSum);
+    }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
     }
 }
