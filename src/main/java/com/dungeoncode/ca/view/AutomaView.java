@@ -187,6 +187,14 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         textGUI.addWindowAndWait(window);
     }
 
+    /**
+     * Sets the text content of the details box with formatted information about the selected configuration.
+     * The method formats the configuration's name, description, and citation with proper text wrapping
+     * and spacing for display in a text box with a width of 38 characters.
+     *
+     * @param selectedConf the selected configuration to display details for
+     * @param detailsBox  the text box to display the formatted details in
+     */
     private void setDetailsBoxText(Configuration<C, S> selectedConf, TextBox detailsBox) {
         String name = selectedConf.getName();
         String description = selectedConf.getDescription();
