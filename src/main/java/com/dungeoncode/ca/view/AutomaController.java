@@ -63,31 +63,32 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     static {
         BooleanStateRenderer booleanRenderer = new BooleanStateRenderer();
         BooleanEchoStateRenderer booleanEchoRenderer = new BooleanEchoStateRenderer();
-        LiveSumStateRenderer liveSumStateRenderer = new LiveSumStateRenderer(LiveSumStateRenderer.Palette.FIRE_GRADIENT);
+        LiveSumStateRenderer liveSumStateRenderer = new LiveSumStateRenderer(LiveSumStateRenderer.Palette.DEFAULT);
         PulseWeaverStateRenderer pulseWeaverStateRenderer = new PulseWeaverStateRenderer();
         BrainStateRenderer brainStateRenderer = new BrainStateRenderer();
 
         CELL_RENDERER = new HashMap<>();
-        CELL_RENDERER.put(InkspotConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(GameOfLifeConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(InkspotConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(GameOfLifeConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(GameOfLifeWithEchoConfiguration.class.getName(), booleanEchoRenderer);
         CELL_RENDERER.put(GameOfLifeWithTracingConfiguration.class.getName(), booleanEchoRenderer);
-        CELL_RENDERER.put(HGlassConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(HGlassConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(ParityConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(SquaresConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(DiamondsConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(TrianglesConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(OneOutOfEightConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(LichensConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(LichensWithDeathConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(MajorityConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(AnnealConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(BanksConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(SquaresConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(DiamondsConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(TrianglesConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(OneOutOfEightConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(LichensConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(LichensWithDeathConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(MajorityConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(AnnealConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(BanksConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(BriansBrainConfiguration.class.getName(), brainStateRenderer);
         CELL_RENDERER.put(GreenbergConfiguration.class.getName(), brainStateRenderer);
         CELL_RENDERER.put(ParityFlipConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(TimeTunnelConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(CandleRainConfiguration.class.getName(), booleanRenderer);
+        CELL_RENDERER.put(CandleRainConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(RandomAnnealConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
@@ -110,6 +111,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(ParityFlipConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(TimeTunnelConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(CandleRainConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(RandomAnnealConfiguration.class.getName(), true);
 
     }
 
