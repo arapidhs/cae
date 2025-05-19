@@ -2,7 +2,6 @@ package com.dungeoncode.ca.view;
 
 import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
-import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.googlecode.lanterna.TerminalPosition;
@@ -37,7 +36,7 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     /**
      * The control view managing the automaton and terminal display.
      */
-    private final ControlView<C, S> controlView;
+    private final AutomaController<C, S> automaController;
 
     /**
      * The mouse button currently pressed (1 = left, 2 = middle, 3 = right).
@@ -54,18 +53,18 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     /**
      * Constructs a new mouse listener for the specified control view.
      *
-     * @param controlView the control view managing the automaton and terminal display
+     * @param automaController the control view managing the automaton and terminal display
      */
-    public ViewMouseListener(ControlView<C, S> controlView) {
-        this.controlView = controlView;
+    public ViewMouseListener(AutomaController<C, S> automaController) {
+        this.automaController = automaController;
         this.radiusMultiplier = 0.05; // Initial radius multiplier
         calculateRadius();
     }
 
     private void calculateRadius() {
         // Calculate radius based on grid size and multiplier
-        int width = controlView.getWidth();
-        int height = controlView.getHeight();
+        int width = automaController.getWidth();
+        int height = automaController.getHeight();
         radius = (int) Math.max(3, Math.min(width, height) * radiusMultiplier);
     }
 
@@ -78,8 +77,8 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     @Override
     public void mouseClicked(MouseEvent e) {
         // Convert pixel coordinates to terminal grid coordinates
-        int col = e.getX() / controlView.getCellFontSize();
-        int row = e.getY() / controlView.getCellFontSize();
+        int col = e.getX() / automaController.getCellFontSize();
+        int row = e.getY() / automaController.getCellFontSize();
         int button = e.getButton();
 
         applyChanges(col, row, button); // Apply changes to the grid
@@ -112,18 +111,18 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         }
         calculateRadius();
 
-        if (controlView.getAutoma().isRunning()) {
+        if (automaController.getAutoma().isRunning()) {
             try {
                 // Convert pixel coordinates to terminal grid coordinates
-                int col = e.getX() / controlView.getCellFontSize();
-                int row = e.getY() / controlView.getCellFontSize();
+                int col = e.getX() / automaController.getCellFontSize();
+                int row = e.getY() / automaController.getCellFontSize();
 
-                controlView.getTextGraphics().drawRectangle(
+                automaController.getTextGraphics().drawRectangle(
                         new TerminalPosition(col - radius, row - radius),
                         new TerminalSize(2 * radius, 2 * radius),
                         TextCharacter.fromCharacter('-', TextColor.ANSI.WHITE, null)[0]
                 );
-                controlView.getScreen().refresh(Screen.RefreshType.DELTA);
+                automaController.getScreen().refresh(Screen.RefreshType.DELTA);
             } catch (Exception ex) {
                 throw new RuntimeException("Failed to draw radius outline: " + ex.getMessage(), ex);
             }
@@ -139,8 +138,8 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     @Override
     public void mouseDragged(MouseEvent e) {
         // Convert pixel coordinates to terminal grid coordinates
-        int col = e.getX() / controlView.getCellFontSize();
-        int row = e.getY() / controlView.getCellFontSize();
+        int col = e.getX() / automaController.getCellFontSize();
+        int row = e.getY() / automaController.getCellFontSize();
 
         applyChanges(col, row, button); // Apply changes to the grid
     }
@@ -158,14 +157,14 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
     private void applyChanges(int col, int row, int button) {
 
         // If the grid is not a grid of Boolean Cells, return.
-        C cl = controlView.getAutoma().getGrid().getCell(0, 0);
+        C cl = automaController.getAutoma().getGrid().getCell(0, 0);
         if(!(cl instanceof  BooleanCell)){
             return;
         }
 
         // Calculate radius based on grid size and multiplier
-        int width = controlView.getWidth();
-        int height = controlView.getHeight();
+        int width = automaController.getWidth();
+        int height = automaController.getHeight();
 
         // Iterate over a square area around the center
         for (int dy = -radius; dy <= radius; dy++) {
@@ -176,7 +175,7 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
                     int nx = (col + dx + width) % width;
                     int ny = (row + dy + height) % height;
                     if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                        BooleanCell cell = (BooleanCell) controlView.getAutoma().getGrid().getCell(nx, ny);
+                        BooleanCell cell = (BooleanCell) automaController.getAutoma().getGrid().getCell(nx, ny);
                         if (cell != null) {
                             try {
                                 if (button == 1) {
@@ -199,8 +198,8 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         }
 
         // Update display if automaton is paused
-        if (!controlView.getAutoma().isRunning()) {
-            controlView.getRenderer().accept(controlView.getAutoma().getGrid());
+        if (!automaController.getAutoma().isRunning()) {
+            automaController.getRenderer().accept(automaController.getAutoma().getGrid());
         }
     }
 }

@@ -31,7 +31,7 @@ import java.util.List;
  * @param <C> Cell type
  * @param <S> Cell state type
  */
-public class SelectView<C extends Cell<S>, S extends CellState<?>> {
+public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
 
     private final int width = 80;
     private final int height = 25;
@@ -46,7 +46,7 @@ public class SelectView<C extends Cell<S>, S extends CellState<?>> {
      *
      * @param configurations the list of available automata configurations
      */
-    public SelectView(List<Configuration<C, S>> configurations) {
+    public AutomaView(List<Configuration<C, S>> configurations) {
         this.configurations = configurations;
         this.selected = -1;
     }

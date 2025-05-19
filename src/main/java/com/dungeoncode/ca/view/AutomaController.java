@@ -42,12 +42,12 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  * @param <C> the type of cells in the automaton, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
-public class ControlView<C extends Cell<S>, S extends CellState<?>> {
+public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
 
     /**
      * Logger for recording view events and errors.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ControlView.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AutomaController.class);
 
     /**
      * Maps configuration class names to their corresponding state renderers.
@@ -188,7 +188,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      * @throws NullPointerException if configuration is null
      * @throws RuntimeException     if font loading fails
      */
-    public ControlView(int px, int py, int cellFontSize, List<Configuration> configurations, @NonNull Configuration<C, S> configuration) {
+    public AutomaController(int px, int py, int cellFontSize, List<Configuration> configurations, @NonNull Configuration<C, S> configuration) {
         Objects.requireNonNull(configuration);
         this.px = px;
         this.py = py;
@@ -211,7 +211,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      */
     private void setupFonts() {
         try {
-            final InputStream is = ControlView.class.getResourceAsStream(
+            final InputStream is = AutomaController.class.getResourceAsStream(
                     "/fonts/Px437 IBM Conv/Px437_IBM_Conv.ttf"
             );
             assert is != null;
@@ -244,7 +244,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                 automa.setGridConsumer((GridRenderer<C, S>) renderer);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize ControlView: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to initialize AutomaController: " + e.getMessage(), e);
         }
     }
 
@@ -469,7 +469,7 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
                             textGraphics.fillRectangle(topLeft, size, textCharacter);
                             screen.refresh(Screen.RefreshType.DELTA);
                         }
-                        case 'e' -> {
+                        case 'w' -> {
                             if (automa.getGrid().getCell(0, 0) instanceof BooleanCell) {
                                 boolean wasRunning = automa.isRunning();
                                 if (automa.isRunning()) {
@@ -736,6 +736,10 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
      * @throws IOException if an error occurs during image capture or file writing
      */
     public void saveScreenToImage() throws IOException {
+        boolean wasRunning=automa.isRunning();
+        if(automa.isRunning()){
+            automa.stop();
+        }
         if (screen != null && screen.getTerminal() instanceof SwingTerminalFrame swingTerminalFrame) {
             Component component = swingTerminalFrame.getContentPane().getComponent(0);
 
@@ -776,6 +780,9 @@ public class ControlView<C extends Cell<S>, S extends CellState<?>> {
             getTextGraphics().drawLine(0, height / 2, width, height / 2,
                     TextCharacter.fromString(" ", TextColor.ANSI.GREEN_BRIGHT, null, SGR.REVERSE)[0]);
             screen.refresh(Screen.RefreshType.DELTA);
+            if(wasRunning){
+                automa.start();
+            }
         } else {
             throw new IllegalStateException("Screen capture is only supported with SwingTerminalFrame");
         }

@@ -26,7 +26,7 @@ public class CellAuto {
     /**
      * The view for selecting automaton configurations.
      */
-    static SelectView selectView;
+    static AutomaView automaView;
 
     /**
      * Flag indicating whether the application is running.
@@ -69,7 +69,7 @@ public class CellAuto {
             configurations.add(new PulseWeaverConfiguration());
 
             running = true; // Set application running state
-            selectView = new SelectView(configurations);
+            automaView = new AutomaView(configurations);
             while (running) {
                 setup(); // Run configuration selection and simulation
             }
@@ -84,13 +84,13 @@ public class CellAuto {
      * is selected. Exits the application if no configuration is chosen.
      */
     private static void setup() {
-        selectView.setup(); // Display configuration selection view
-        if (selectView.getSelected() > -1) {
+        automaView.setup(); // Display configuration selection view
+        if (automaView.getSelected() > -1) {
             // Launch simulation with selected configuration
-            Configuration conf = selectView.getSelectedConfiguration();
-            ControlView<Cell<CellState<?>>, CellState<?>> controlView =
-                    new ControlView<>(1080, 720, 4, configurations, conf);
-            controlView.run();
+            Configuration conf = automaView.getSelectedConfiguration();
+            AutomaController<Cell<CellState<?>>, CellState<?>> automaController =
+                    new AutomaController<>(1080, 720, 4, configurations, conf);
+            automaController.run();
         } else {
             System.exit(0); // Exit if no configuration is selected
         }

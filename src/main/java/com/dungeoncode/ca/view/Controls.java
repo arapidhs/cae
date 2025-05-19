@@ -35,7 +35,7 @@ public class Controls {
         controls.add(new Control("q", "Exit simulation"));
         controls.add(new Control(">", "Inc. speed"));
         controls.add(new Control("<", "Dec. speed"));
-        controls.add(new Control("e", "Swap state with echo"));
+        controls.add(new Control("w", "Swap state with echo"));
         controls.add(new Control("+", "Inc. resolution"));
         controls.add(new Control("-", "Dec. resolution"));
         controls.add(new Control("→", "Next palette"));
