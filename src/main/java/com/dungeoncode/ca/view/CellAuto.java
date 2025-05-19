@@ -66,6 +66,7 @@ public class CellAuto {
             configurations.add(new GreenbergConfiguration());
             configurations.add(new ParityFlipConfiguration());
             configurations.add(new TimeTunnelConfiguration());
+            configurations.add(new CandleRainConfiguration());
             configurations.add(new PulseWeaverConfiguration());
 
             running = true; // Set application running state

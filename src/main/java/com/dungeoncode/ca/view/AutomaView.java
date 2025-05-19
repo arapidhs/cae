@@ -30,7 +30,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.googlecode.lanterna.gui2.Window.Hint.*;
 
@@ -57,7 +59,9 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
      * @param configurations the list of available automata configurations
      */
     public AutomaView(List<Configuration<C, S>> configurations) {
-        this.configurations = configurations;
+        // Sort configurations by name before adding to the list
+        this.configurations = configurations.stream()
+                .sorted(Comparator.comparing(Configuration::getName)).toList();
         this.selected = -1;
     }
 
@@ -71,7 +75,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
             Font font;
             try {
                 final InputStream is = AutomaController.class.getResourceAsStream(
-                        "/fonts/oldschool-pc-fonts/Ac437_IBM_VGA_9x14.ttf"
+                        "/fonts/ibm/Ac437_IBM_VGA_9x14.ttf"
                 );
                 assert is != null;
                 font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, fontSize);
@@ -151,6 +155,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         // === Configuration List ===
         RadioBoxList<String> configList = new RadioBoxList<>();
         configList.setPreferredSize(new TerminalSize(30, 35));
+
         for (Configuration<C, S> config : configurations) {
             configList.addItem(config.getName());
         }

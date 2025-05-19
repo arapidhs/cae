@@ -87,6 +87,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(GreenbergConfiguration.class.getName(), brainStateRenderer);
         CELL_RENDERER.put(ParityFlipConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(TimeTunnelConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(CandleRainConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
@@ -108,6 +109,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(BanksConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(ParityFlipConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(TimeTunnelConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(CandleRainConfiguration.class.getName(), true);
 
     }
 
@@ -212,7 +214,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     private void setupFonts() {
         try {
             final InputStream is = AutomaController.class.getResourceAsStream(
-                    "/fonts/oldschool-pc-fonts/Px437_IBM_Conv.ttf"
+                    "/fonts/ibm/Px437_IBM_Conv.ttf"
             );
             assert is != null;
             cellFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, cellFontSize);
