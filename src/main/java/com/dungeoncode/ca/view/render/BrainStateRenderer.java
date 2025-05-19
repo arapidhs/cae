@@ -6,8 +6,6 @@ import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TextColor;
 
-import static com.dungeoncode.ca.core.impl.BrainState.BrainStateValue.*;
-
 /**
  * Renders a {@link BrainState} for the BRIAN'S-BRAIN cellular automaton using Lanterna text characters, applying
  * colors based on the cell's state (Ready, Firing, or Refractory). Visualizes neural firing patterns with distinct
@@ -35,20 +33,9 @@ public class BrainStateRenderer implements StateRenderer<BrainState> {
     public TextCharacter render(BrainState state) {
         TextColor color = switch (state.getValue()) {
             case READY -> {
-//                if(state.getEcho()==REFRACTORY) {
-//                    yield TextColor.ANSI.BLACK_BRIGHT;
-//                } else {
-//                    yield TextColor.ANSI.MAGENTA;
-//                }
                 yield TextColor.ANSI.BLACK;
             } // Dark color for quiescent neurons
             case FIRING -> { // Bright color for active, firing neurons
-//                if(state.getEcho()==READY) {
-//                    yield TextColor.ANSI.CYAN_BRIGHT;
-//                } else {
-//                    yield TextColor.ANSI.BLUE_BRIGHT;
-//                }
-//            }
                 yield TextColor.ANSI.RED;
             }
             case REFRACTORY -> {

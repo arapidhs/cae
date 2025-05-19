@@ -4,14 +4,20 @@ import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.Configuration;
 import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.bundle.LanternaThemes;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.Panel;
+import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
+import com.googlecode.lanterna.gui2.menu.Menu;
+import com.googlecode.lanterna.gui2.menu.MenuBar;
+import com.googlecode.lanterna.gui2.menu.MenuItem;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -20,9 +26,12 @@ import com.googlecode.lanterna.terminal.swing.SwingTerminalFontConfiguration;
 import com.googlecode.lanterna.terminal.swing.SwingTerminalFrame;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import static com.googlecode.lanterna.gui2.Window.Hint.*;
 
 /**
  * Terminal-based user interface for selecting a cellular automata configuration before simulation starts.
@@ -85,6 +94,119 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         }
     }
 
+    private void window2(TerminalScreen screen) {
+        final MultiWindowTextGUI textGUI = new MultiWindowTextGUI(screen);
+        // textGUI.setTheme(LanternaThemes.getRegisteredTheme("conqueror"));
+
+        // ESC key to confirm exit
+        textGUI.addListener((gui, key) -> {
+            if (key.getKeyType() == KeyType.Escape) {
+                confirmExit(textGUI);
+            }
+            return false;
+        });
+
+        final BasicWindow window = new BasicWindow();
+        window.setFixedSize(new TerminalSize(width,height));
+        window.setHints(List.of(NO_DECORATIONS,NO_POST_RENDERING,CENTERED,FULL_SCREEN));
+
+        final BasicWindow window2 = new BasicWindow("Window 2");
+        window2.setHints(List.of(NO_POST_RENDERING,FIXED_POSITION));
+        window2.setFixedSize(new TerminalSize(width/4,height/4));
+        window2.setPosition(new TerminalPosition(50,10));
+
+        final BasicWindow window3 = new BasicWindow("Window 3");
+        window3.setFixedSize(new TerminalSize(width/3,height/3));
+        window3.setPosition(new TerminalPosition(50,15));;
+        // window.setHints(List.of(NO_DECORATIONS,NO_POST_RENDERING,CENTERED,FULL_SCREEN));
+
+        Panel rootPanel = new Panel(new AbsoluteLayout());
+        rootPanel.setFillColorOverride(TextColor.ANSI.BLUE);
+        rootPanel.setPosition(new TerminalPosition(10,10));
+        rootPanel.setSize(new TerminalSize(width/2,height/2));
+        rootPanel.setPreferredSize(new TerminalSize(width/2,height/2));
+        Panel topPanel = new Panel();
+        topPanel.setPosition(new TerminalPosition(2,2));
+        topPanel.setSize(new TerminalSize(35,3));
+        topPanel.setFillColorOverride(TextColor.ANSI.MAGENTA);
+        Panel centerPanel = new Panel();
+
+        centerPanel.setSize(new TerminalSize(width,height));
+        centerPanel.setPosition(new TerminalPosition(10,10));
+        centerPanel.setPosition(new TerminalPosition(5,5));
+        centerPanel.setPreferredSize(new TerminalSize(width,height));
+        centerPanel.setFillColorOverride(TextColor.ANSI.BLUE);
+        MenuBar menubar = new MenuBar();
+
+        // "File" menu
+        Menu menuFile = new Menu("File");
+        menubar.add(menuFile);
+        MenuItem openItem = new MenuItem("Open...", new Runnable() {
+            public void run() {
+                File file = new FileDialogBuilder().build().showDialog(textGUI);
+                if (file != null)
+                    MessageDialog.showMessageDialog(
+                            textGUI, "Open", "Selected file:\n" + file, MessageDialogButton.OK);
+            }
+        });
+        menuFile.add(openItem);
+
+        MenuItem exitItem = new MenuItem("Exit", new Runnable() {
+            public void run() {
+                System.exit(0);
+            }
+        });
+        menuFile.add(exitItem);
+
+        topPanel.addComponent(menubar);
+        rootPanel.addComponent(topPanel);
+        Border centerPanel1 = centerPanel.withBorder(Borders.singleLine("Center Panel"));
+        centerPanel1.setPosition(new TerminalPosition(5,5));
+        centerPanel1.setSize(new TerminalSize(30,8));
+        rootPanel.addComponent(centerPanel1);
+
+        // === Configuration List ===
+        RadioBoxList<String> configList = new RadioBoxList<>();
+        configList.setPreferredSize(new TerminalSize(30, 15));
+        for (Configuration<C, S> config : configurations) {
+            configList.addItem(config.getName());
+        }
+
+        // === Details Text Area ===
+        TextBox detailsBox = new TextBox(new TerminalSize(40, 15)).setReadOnly(true);
+
+        // Listener for selection change: updates detail text box
+        // start simulation if selection is the same
+        configList.addListener((selectedIndex, prev) -> {
+            if (selected == selectedIndex) {
+                close();
+            }
+            Configuration<C, S> selectedConf = configurations.get(selectedIndex);
+            selected = selectedIndex;
+
+            String name = selectedConf.getName();
+            String description = selectedConf.getDescription();
+            String citation = selectedConf.getCitation() == null ? "" : selectedConf.getCitation();
+
+            String formatted = formatWithWrapping(name, 38) + "\n\n"
+                    + formatWithWrapping(description, 38) + "\n\n"
+                    + formatWithWrapping(citation, 38);
+
+            detailsBox.setText(formatted);
+        });
+
+
+        centerPanel.addComponent(configList.withBorder(Borders.singleLine("Available Configurations")));
+        centerPanel.addComponent(detailsBox.withBorder(Borders.singleLine("Configuration Details")));
+
+        window.setComponent(rootPanel);
+
+        // Launch the GUI
+        textGUI.addWindow(window);
+        textGUI.addWindow(window2);
+        textGUI.addWindowAndWait(window3);
+
+    }
     /**
      * Builds and shows the main configuration selection window.
      * Allows the user to browse configurations, view details, and launch simulation.
