@@ -120,14 +120,7 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
         if (color == TextColor.ANSI.WHITE) return TextColor.ANSI.BLACK_BRIGHT;
         if (color == TextColor.ANSI.BLACK_BRIGHT) return TextColor.ANSI.WHITE;
         if (color == TextColor.ANSI.WHITE_BRIGHT) return TextColor.ANSI.BLACK;
-        
-        // For RGB colors
-        if (color instanceof TextColor.RGB) {
-            TextColor.RGB rgb = (TextColor.RGB) color;
-            return new TextColor.RGB(255 - rgb.getRed(), 255 - rgb.getGreen(), 255 - rgb.getBlue());
-        }
-        
-        return color; // Return original if no inversion rule exists
+        return color;
     }
 
     public void previousPalette() {
