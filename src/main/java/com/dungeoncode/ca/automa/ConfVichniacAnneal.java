@@ -24,14 +24,14 @@ import static com.dungeoncode.ca.core.Constants.*;
  * @see RuleAnneal
  * @see InitRandomBoolean
  */
-public class ConfAnneal extends AbstractConfiguration<BooleanCell, BooleanState> {
+public class ConfVichniacAnneal extends AbstractConfiguration<BooleanCell, BooleanState> {
 
     /**
      * Constructs a new ANNEAL configuration with metadata for name, description, and citation. The configuration
      * is named "Vichniac Anneal," described as a cellular automaton with voting-based domain annealing and
      * straightening boundaries, and cites the book by Toffoli and Margolus.
      */
-    public ConfAnneal() {
+    public ConfVichniacAnneal() {
         super(
                 "Vichniac Anneal",
                 "A cellular automaton, a variation of MAJORITY, where a cell becomes active if it has exactly 4 or " +
@@ -40,7 +40,8 @@ public class ConfAnneal extends AbstractConfiguration<BooleanCell, BooleanState>
                         "domains with dynamic boundaries that straighten over time, modeling surface tension where bays " +
                         "fill and capes erode, as proposed by Gerard Vichniac and described in Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 5, Section 5.4, p. 41. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 5, Section 5.4, p. 41. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                41
         );
     }
 

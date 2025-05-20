@@ -37,7 +37,8 @@ public class ConfInkspot extends AbstractConfiguration<BooleanCell, BooleanState
                         "in a 3x3 neighborhood or are already black, with initial random states in a central 7x7 region. " +
                         "Inspired by the INKSPOT recipe in Toffoli and Margolus (1987), it produces an irregular, " +
                         "organic spread resembling ink on fabric, with capes, bays, and occasional straight filaments.",
-                "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, Chapter 1, Section 1.2, p. 6. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, Chapter 1, Section 1.2, p. 6. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                6
         );
     }
 

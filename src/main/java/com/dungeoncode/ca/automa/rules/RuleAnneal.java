@@ -1,6 +1,7 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -46,4 +47,10 @@ public class RuleAnneal extends RuleBooleanNeighborCount {
         grid.getNextStates()[y][x].set(isActive, echo, liveNeighbors);
         return grid.getNextStates()[y][x];
     }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
+    }
+
 }

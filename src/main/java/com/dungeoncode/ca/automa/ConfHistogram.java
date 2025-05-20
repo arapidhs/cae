@@ -24,14 +24,14 @@ import static com.dungeoncode.ca.core.Constants.*;
  * @see RuleSafePass
  * @see InitHistogram
  */
-public class ConfSafePass extends AbstractConfiguration<BooleanCell, BooleanState> {
+public class ConfHistogram extends AbstractConfiguration<BooleanCell, BooleanState> {
 
     /**
      * Constructs a new SAFE-PASS configuration with metadata for name, description, and citation. The configuration
      * is named "Histogram Token Fall," described as a cellular automaton simulating particle conservation for histogram
      * creation, and cites the book by Toffoli and Margolus.
      */
-    public ConfSafePass() {
+    public ConfHistogram() {
         super(
                 "Histogram Token Fall",
                 "A cellular automaton simulating particle conservation, where tokens (state value=true) fall downward " +
@@ -40,7 +40,8 @@ public class ConfSafePass extends AbstractConfiguration<BooleanCell, BooleanStat
                         "of tokens (50% probability) and echo=false except for the bottom row (active, echo=true), it " +
                         "preserves token count while forming a histogram, as described in Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 9, Section 9.1, p. 78-80. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 9, Section 9.1, p. 78-80. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                78
         );
     }
 

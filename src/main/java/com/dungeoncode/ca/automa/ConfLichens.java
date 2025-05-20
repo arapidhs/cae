@@ -40,7 +40,8 @@ public class ConfLichens extends AbstractConfiguration<BooleanCell, BooleanState
                         "least three cells to initiate growth, producing an irregular, lichen-like pattern with " +
                         "constrained growth, as described in Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 5, Section 5.2, p. 40. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 5, Section 5.2, p. 40. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                40
         );
     }
 

@@ -15,10 +15,10 @@ import static com.dungeoncode.ca.core.Constants.*;
 
 /**
  * Configures an {@link Automa} to run the NAIVE-DIFFUSION cellular automaton, modeling diffusion of particles by
- * randomly moving them in one of four directions (north, south, east, west). The grid is initialized with a disk-shaped
- * region of active cells (radius 10) using {@link InitDisk}. This configuration produces a diffusion pattern
- * that breaks up into tongues of fire, as described in Chapter 9, Section 9.4 of <i>Cellular Automata Machines: A New
- * Environment for Modeling</i>.
+ * randomly copying the state of a neighboring cell in one of four directions (north, south, east, west). The grid is
+ * initialized with a disk-shaped region of active cells (radius based on grid dimensions) using {@link InitDisk}.
+ * This configuration produces a diffusion pattern that breaks up into tongues of fire, as described in Chapter 9,
+ * Section 9.4 of <i>Cellular Automata Machines: A New Environment for Modeling</i>.
  *
  * @see RuleNaiveDiffusion
  * @see InitDisk
@@ -34,19 +34,21 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
         super(
                 "Naive Particle Diffusion",
                 "A cellular automaton modeling diffusion of particles, where the state (value) represents particles " +
-                        "(true = particle, false = empty). Particles move randomly in one of four directions (north, south, " +
-                        "east, west) without handshaking, leading to non-conserved particle counts. Initialized with a " +
-                        "disk-shaped region of active cells (radius 10), it produces a diffusion pattern that breaks up into " +
-                        "tongues of fire, as described in Toffoli and Margolus (1987).",
+                        "(true = particle, false = empty). Each cell copies the state of a randomly chosen neighbor " +
+                        "in one of four directions (north, south, east, west), leading to non-conserved particle counts. " +
+                        "Initialized with a disk-shaped region of active cells (radius based on grid dimensions), it " +
+                        "produces a diffusion pattern that breaks up into tongues of fire, as described in Toffoli and " +
+                        "Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 9, Section 9.4, p. 84-86. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 9, Section 9.4, p. 84-86. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                84
         );
     }
 
     /**
      * Configures the specified {@link Automa} with a grid, rule, and interval for the NAIVE-DIFFUSION automaton.
-     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitDisk} with a disk-shaped
-     * region of active cells (radius 10), and applies the {@link RuleNaiveDiffusion} for state updates.
+     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitDisk} with a disk-shaped region of
+     * active cells (radius based on grid dimensions), and applies the {@link RuleNaiveDiffusion} for state updates.
      *
      * @param automa         the {@link Automa} to configure
      * @param width          the width (number of columns) of the grid
@@ -56,7 +58,7 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
     @Override
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
-        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitDisk(10));
+        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitDisk((width + height) / 8));
         config.put(CONF_GRID, grid);
         config.put(CONF_RULE, new RuleNaiveDiffusion());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);

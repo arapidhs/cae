@@ -1,6 +1,7 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -35,6 +36,11 @@ public class RuleInkspot extends RuleBooleanNeighborCount {
         boolean isLive = cell.getState() != null && cell.getState().getValue();
         grid.getNextStates()[y][x].set(liveCount == 3 || isLive, echo, liveCount);
         return grid.getNextStates()[y][x];
+    }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
     }
 
 }

@@ -40,7 +40,8 @@ public class ConfRandomAnneal extends AbstractConfiguration<BooleanCell, Boolean
                         "state and echo, it produces dynamic patterns with smoother domains, as described in Toffoli and " +
                         "Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 8, Section 8.3, p. 70. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 8, Section 8.3, p. 70. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                70
         );
     }
 

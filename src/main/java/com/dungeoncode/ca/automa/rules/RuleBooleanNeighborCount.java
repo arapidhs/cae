@@ -92,8 +92,4 @@ public abstract class RuleBooleanNeighborCount implements Rule<BooleanCell, Bool
         return count;
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
-    }
 }

@@ -25,16 +25,22 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
     private final String citation;
 
     /**
+     * The citation page;
+     */
+    private final int page;
+
+    /**
      * Constructs a new configuration with the specified metadata.
      *
      * @param name        the name of the configuration
      * @param description a description of the configuration
      * @param citation    a citation or reference for the configuration, or an empty string if none
      */
-    public AbstractConfiguration(String name, String description, String citation) {
+    public AbstractConfiguration(String name, String description, String citation, int page) {
         this.name = name;
         this.description = description;
         this.citation = citation;
+        this.page=page;
     }
 
     /**
@@ -65,5 +71,14 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
     @Override
     public String getCitation() {
         return citation;
+    }
+
+    /**
+     * Returns the citation page.
+     *
+     * @return the citation page or 0 if N/A.
+     */
+    public int getPage() {
+        return page;
     }
 }

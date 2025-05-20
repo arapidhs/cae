@@ -41,7 +41,8 @@ public class ConfHglass extends AbstractConfiguration<BooleanCell, BooleanState>
                         "patterns or localized blobs. The HGLASS rule is noted for its ability to produce complex, " +
                         "emergent patterns from simple rules.",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 4, Section 4.1, p. 29. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 4, Section 4.1, p. 29. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                29
         );
     }
 

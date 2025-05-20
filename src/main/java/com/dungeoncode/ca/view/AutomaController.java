@@ -74,7 +74,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfLichens.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfLichensWithDeath.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfMajority.class.getName(), rendererBoolean);
-        CELL_RENDERER.put(ConfAnneal.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfVichniacAnneal.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfBanks.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfBriansBrain.class.getName(), rendererBrain);
         CELL_RENDERER.put(ConfGreenberg.class.getName(), rendererBrain);
@@ -82,7 +82,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfTimeTunnel.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfCandleRain.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfRandomAnneal.class.getName(), rendererBoolean);
-        CELL_RENDERER.put(ConfSafePass.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfHistogram.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfTubeWorms.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfNaiveDiffusion.class.getName(), rendererBoolean);
 

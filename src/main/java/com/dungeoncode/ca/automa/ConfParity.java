@@ -40,7 +40,8 @@ public class ConfParity extends AbstractConfiguration<BooleanCell, BooleanState>
                         "wave interactions, as described in Toffoli and Margolus (1987). The rule's linearity leads to " +
                         "emergent behaviors, such as initial patterns reproducing in multiple copies over time.",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 4, Section 4.2, p. 31. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 4, Section 4.2, p. 31. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                31
         );
     }
 

@@ -39,7 +39,8 @@ public class ConfTubeWorms extends AbstractConfiguration<BooleanCell, BooleanSta
                         "values (0-3), it produces dynamic wave patterns like ripples or spirals, as described in Toffoli and " +
                         "Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 9, Section 9.3, p. 82-84. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 9, Section 9.3, p. 82-84. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                82
         );
     }
 

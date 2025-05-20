@@ -18,7 +18,7 @@ import static com.dungeoncode.ca.core.Constants.*;
  * tracking state transitions to enhance visualization of dynamic patterns. Cells evolve based on standard
  * Game of Life rules, with an echo effect that records recent state changes to distinguish active and static
  * regions. The grid is initialized with a random distribution of live and dead cells, simulating a "primeval
- * soup." This configuration is inspired by the echoing technique described in Chapter 3, Section 3.2 of
+ * soup." This configuration is inspired by the echoing technique described in Chapter 3, Section 3.1 of
  * <i>Cellular Automata Machines: A New Environment for Modeling</i>.
  *
  * @see RuleGameOfLife
@@ -42,7 +42,8 @@ public class ConfGameOfLife extends AbstractConfiguration<BooleanCell, BooleanSt
                         "with a random distribution of live and dead cells, it creates complex, evolving patterns with " +
                         "enhanced temporal feedback.",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 3, Section 3.2, p. 22. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 3, Section 3.1, p. 20. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                20
         );
     }
 

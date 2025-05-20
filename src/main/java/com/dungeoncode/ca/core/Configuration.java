@@ -39,4 +39,10 @@ public interface Configuration<C extends Cell<S>, S extends CellState<?>> {
      * @return the citation or an empty string if none
      */
     String getCitation();
+
+    /**
+     *  Returns the citation page if available, defaultsto 0.
+     * @return the citation's page if available, else 0.
+     */
+    int getPage();
 }

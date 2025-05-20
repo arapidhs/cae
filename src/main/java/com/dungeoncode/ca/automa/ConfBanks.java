@@ -39,7 +39,8 @@ public class ConfBanks extends AbstractConfiguration<BooleanCell, BooleanState> 
                         "distribution of active and inactive cells (50% probability), it shapes patterns through specific " +
                         "transitions, as proposed by Banks and described in Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 5, Section 5.5, p. 41. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 5, Section 5.5, p. 42. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                42
         );
     }
 

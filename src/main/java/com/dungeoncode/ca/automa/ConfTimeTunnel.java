@@ -18,7 +18,7 @@ import static com.dungeoncode.ca.core.Constants.*;
  * cell's state is updated by summing the von Neumann neighborhood, applying a decision table, and XORing with the
  * previous state, producing turbulent wave patterns. The grid is initialized with a centered 6x6 square of active
  * cells, with all other cells inactive, using {@link InitCentralSquare}. This configuration is inspired by the
- * TIME-TUNNEL rule described in Chapter 6, Section 6.2 of <i>Cellular Automata Machines: A New Environment for
+ * TIME-TUNNEL rule described in Chapter 6, Section 6.3 of <i>Cellular Automata Machines: A New Environment for
  * Modeling</i>.
  *
  * @see RuleTimeTunnel
@@ -41,7 +41,8 @@ public class ConfTimeTunnel extends AbstractConfiguration<BooleanCell, BooleanSt
                         "produces turbulent wave patterns that interfere due to the grid's toroidal topology, preserving " +
                         "four-fold symmetry, as described in Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 6, Section 6.3, p. 52. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 6, Section 6.3, p. 52. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                52
         );
     }
 

@@ -34,7 +34,7 @@ public class InitDisk extends InitNextStatesBoolean {
     /**
      * Initializes the specified grid by setting cells within a disk-shaped region (radius from the grid's center) to
      * active ({@code true}) states with echo set to false, and all other cells to inactive ({@code false}) with echo
-     * set to false.
+     * set to false. The disk is centered in the grid using Euclidean distance to determine the active region.
      *
      * @param grid the {@link Grid} to initialize
      */

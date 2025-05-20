@@ -1,6 +1,7 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -40,6 +41,11 @@ public class RuleFlipParity extends RuleParity {
         boolean newState = parity ^ currentState.isEcho();
         grid.getNextStates()[y][x].set(newState, currentState.getValue(), parityCell.getLiveSum());
         return grid.getNextStates()[y][x];
+    }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
     }
 
 }

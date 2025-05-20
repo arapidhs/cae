@@ -39,7 +39,8 @@ public class ConfSquares extends AbstractConfiguration<BooleanCell, BooleanState
                         "cells, it demonstrates monotonic, unconstrained growth, filling the grid with overlapping " +
                         "squares if multiple seeds are present, as described in Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 5, Section 5.1, p. 38. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 5, Section 5.1, p. 37. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                37
         );
     }
 

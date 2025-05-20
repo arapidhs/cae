@@ -3,7 +3,6 @@ package com.dungeoncode.ca.view.render;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TextColor;
-import com.googlecode.lanterna.SGR;
 
 /**
  * Renders a {@link BooleanState} for a cellular automaton using Lanterna text characters, applying colors

@@ -4,6 +4,7 @@ import com.dungeoncode.ca.automa.*;
 import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.Configuration;
+import com.dungeoncode.ca.core.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,7 @@ public class CellAuto {
      */
     public static void main(String[] args) {
         try {
+
             // Initialize available configurations
             configurations = new ArrayList<>();
             configurations.add(new ConfInkspot());
@@ -59,7 +61,7 @@ public class CellAuto {
             configurations.add(new ConfLichens());
             configurations.add(new ConfLichensWithDeath());
             configurations.add(new ConfMajority());
-            configurations.add(new ConfAnneal());
+            configurations.add(new ConfVichniacAnneal());
             configurations.add(new ConfBanks());
             configurations.add(new ConfBriansBrain());
             configurations.add(new ConfGreenberg());
@@ -67,12 +69,13 @@ public class CellAuto {
             configurations.add(new ConfTimeTunnel());
             configurations.add(new ConfCandleRain());
             configurations.add(new ConfRandomAnneal());
-            configurations.add(new ConfSafePass());
+            configurations.add(new ConfHistogram());
             configurations.add(new ConfTubeWorms());
             configurations.add(new ConfNaiveDiffusion());
 
             // Sort the list by configuration name
-            configurations.sort(Comparator.comparing(Configuration::getName));
+            configurations.sort(Comparator.comparing((Configuration c) -> c.getPage())
+                    .thenComparing(Configuration::getName));
 
             running = true; // Set application running state
             automaView = new AutomaView(configurations);

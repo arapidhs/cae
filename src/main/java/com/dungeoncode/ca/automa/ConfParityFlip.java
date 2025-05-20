@@ -39,7 +39,8 @@ public class ConfParityFlip extends AbstractConfiguration<BooleanCell, BooleanSt
                         "square of active cells, with all other cells inactive, it produces complex, dynamic patterns " +
                         "influenced by state history, as described in Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 6, Section 6.2, p. 50-51. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 6, Section 6.2, p. 50-51. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                50
         );
     }
 

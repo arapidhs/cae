@@ -41,7 +41,8 @@ public class ConfBriansBrain extends AbstractConfiguration<BrainCell, BrainState
                         "patterns resembling neural firing waves, as suggested by Brian Silverman and described in " +
                         "Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 6, Section 6.1, p. 48-49. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 6, Section 6.1, p. 47-48. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                47
         );
     }
 

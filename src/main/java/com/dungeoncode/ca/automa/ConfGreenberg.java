@@ -41,7 +41,8 @@ public class ConfGreenberg extends AbstractConfiguration<BrainCell, BrainState> 
                         "interiors that merge into larger structures, studied by Greenberg and Hastings, as described in " +
                         "Toffoli and Margolus (1987).",
                 "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-                        "Chapter 6, Section 6.1, p. 49-50. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001"
+                        "Chapter 6, Section 6.1, p. 49-50. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
+                49
         );
     }
 

@@ -2,6 +2,7 @@ package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -66,5 +67,10 @@ public class RuleTriangles extends RuleBooleanNeighborCount {
         int liveCount = countLiveMooreNeighbors(grid, x, y);
         grid.getNextStates()[y][x].set(isActive, echo, liveCount);
         return grid.getNextStates()[y][x];
+    }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
     }
 }

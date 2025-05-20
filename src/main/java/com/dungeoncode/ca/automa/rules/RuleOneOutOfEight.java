@@ -1,6 +1,7 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
+import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -42,5 +43,10 @@ public class RuleOneOutOfEight extends RuleBooleanNeighborCount {
         boolean echo = cell.getState().getValue();
         grid.getNextStates()[y][x].set(isActive || currentState, echo, liveNeighbors);
         return grid.getNextStates()[y][x];
+    }
+
+    @Override
+    public RuleCategory getRuleCategory() {
+        return RuleCategory.DETERMINISTIC;
     }
 }
