@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the SQUARES cellular automaton, where a cell's next state is the logical
  * OR of its Moore neighborhood, causing a single active cell (seed) to grow into a uniformly expanding square
@@ -55,9 +57,9 @@ public class ConfSquares extends AbstractConfiguration<BooleanCell, BooleanState
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(1));
-        config.put("grid", grid);
-        config.put("rule", new RuleSquares());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleSquares());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

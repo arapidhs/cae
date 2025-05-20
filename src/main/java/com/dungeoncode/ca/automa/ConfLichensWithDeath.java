@@ -12,6 +12,8 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the LICHENS-WITH-DEATH cellular automaton, where a cell becomes active if
  * it has exactly 3, 7, or 8 live neighbors, becomes inactive if it has exactly 4 live neighbors, and remains
@@ -58,9 +60,9 @@ public class ConfLichensWithDeath extends AbstractConfiguration<BooleanCell, Boo
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralBlob(2, 2));
-        config.put("grid", grid);
-        config.put("rule", new RuleLichensWithDeath());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleLichensWithDeath());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

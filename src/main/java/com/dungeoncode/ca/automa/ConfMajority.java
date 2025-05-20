@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the MAJORITY cellular automaton, where a cell adopts the state of the
  * majority in its 3x3 Moore neighborhood (including the center), becoming active if 5 or more cells are active,
@@ -56,9 +58,9 @@ public class ConfMajority extends AbstractConfiguration<BooleanCell, BooleanStat
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
-        config.put("grid", grid);
-        config.put("rule", new RuleMajority());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleMajority());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

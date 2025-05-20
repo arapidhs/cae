@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the PARITY-FLIP cellular automaton, a second-order dynamics version of the
  * PARITY rule where the result is XORed with the cell's previous state, producing complex, history-influenced patterns.
@@ -55,9 +57,9 @@ public class ConfParityFlip extends AbstractConfiguration<BooleanCell, BooleanSt
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(8));
-        config.put("grid", grid);
-        config.put("rule", new RuleFlipParity());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleFlipParity());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

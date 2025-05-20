@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitCentralBlob;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the Inkspot cellular automaton, where cells become black
  * if they have exactly three black neighbors in a 3x3 neighborhood or are already black.
@@ -54,9 +56,9 @@ public class ConfInkspot extends AbstractConfiguration<BooleanCell, BooleanState
                           long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralBlob(3, 3));
-        config.put("grid", grid);
-        config.put("rule", new RuleInkspot());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleInkspot());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

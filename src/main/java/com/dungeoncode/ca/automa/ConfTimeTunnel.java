@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the TIME-TUNNEL cellular automaton, a second-order reversible rule where the
  * cell's state is updated by summing the von Neumann neighborhood, applying a decision table, and XORing with the
@@ -58,9 +60,9 @@ public class ConfTimeTunnel extends AbstractConfiguration<BooleanCell, BooleanSt
         Map<String, Object> config = new HashMap<>();
         boolean withEcho = true;
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(3, withEcho));
-        config.put("grid", grid);
-        config.put("rule", new RuleTimeTunnel());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleTimeTunnel());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

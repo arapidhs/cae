@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitBrainRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the BRIAN'S-BRAIN cellular automaton, where cells transition between Ready,
  * Firing, and Refractory states, producing dynamic, neural firing-like patterns. The grid is initialized with a
@@ -58,9 +60,9 @@ public class ConfBriansBrain extends AbstractConfiguration<BrainCell, BrainState
     public void configure(Automa<BrainCell, BrainState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BrainCell, BrainState> grid = new Grid<>(width, height, new InitBrainRandom());
-        config.put("grid", grid);
-        config.put("rule", new RuleBriansBrain());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleBriansBrain());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

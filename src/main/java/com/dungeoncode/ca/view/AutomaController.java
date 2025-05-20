@@ -224,10 +224,10 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             Terminal terminal = screen.getTerminal();
             if (terminal instanceof SwingTerminalFrame swingTerminalFrame) {
                 if (automa.getGrid().getCell(0, 0) instanceof BooleanCell) {
-                    ViewMouseListener<C, S> viewMouseListener = new ViewMouseListener<>(this);
-                    swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(viewMouseListener);
-                    swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(viewMouseListener);
-                    swingTerminalFrame.getContentPane().getComponent(0).addMouseWheelListener(viewMouseListener);
+                    AutomaListener<C, S> automaListener = new AutomaListener<>(this);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(automaListener);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(automaListener);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseWheelListener(automaListener);
                 }
             }
 

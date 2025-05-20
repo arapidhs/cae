@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the RAND-ANNEAL cellular automaton, a probabilistic modification of the 5MAJ
  * majority voting rule that introduces thermal noise to smooth domain boundaries. The grid is initialized with a
@@ -57,9 +59,9 @@ public class ConfRandomAnneal extends AbstractConfiguration<BooleanCell, Boolean
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
-        config.put("grid", grid);
-        config.put("rule", new RuleRandomAnneal());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleRandomAnneal());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the TUBE-WORMS cellular automaton, modeling a reef of tube-worms with coupled
  * dynamics. The grid is initialized with a random distribution of active (out) and hiding worms in the state (50%
@@ -76,9 +78,9 @@ public class ConfTubeWorms extends AbstractConfiguration<BooleanCell, BooleanSta
                 }
             }
         });
-        config.put("grid", grid);
-        config.put("rule", new RuleTubeWorms());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleTubeWorms());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

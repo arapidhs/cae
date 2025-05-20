@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the 1-OUT-OF-8 cellular automaton, where a cell becomes active if it has
  * exactly one live neighbor in its Moore neighborhood, and remains unchanged otherwise, producing a sparse,
@@ -54,9 +56,9 @@ public class ConfOneOutOfEight extends AbstractConfiguration<BooleanCell, Boolea
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(1));
-        config.put("grid", grid);
-        config.put("rule", new RuleOneOutOfEight());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleOneOutOfEight());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

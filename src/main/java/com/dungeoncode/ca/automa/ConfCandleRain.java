@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the CANDLE-RAIN cellular automaton, simulating candles being extinguished by
  * random raindrops with an exponential decay pattern. The grid is initialized with a random distribution of active
@@ -57,9 +59,9 @@ public class ConfCandleRain extends AbstractConfiguration<BooleanCell, BooleanSt
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
-        config.put("grid", grid);
-        config.put("rule", new RuleCandleRain());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleCandleRain());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

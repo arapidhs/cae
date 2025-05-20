@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitHistogram;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the SAFE-PASS cellular automaton, simulating particle conservation by allowing
  * tokens to fall downward in columns and pile up above a baseline to form a histogram. The grid is initialized with a
@@ -57,9 +59,9 @@ public class ConfSafePass extends AbstractConfiguration<BooleanCell, BooleanStat
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitHistogram());
-        config.put("grid", grid);
-        config.put("rule", new RuleSafePass());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleSafePass());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

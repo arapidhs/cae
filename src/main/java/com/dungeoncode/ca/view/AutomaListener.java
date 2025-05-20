@@ -26,12 +26,12 @@ import java.util.Random;
  * @param <C> the type of cells in the automaton, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
-public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extends MouseAdapter {
+public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends MouseAdapter {
 
     /**
      * Logger for recording mouse interaction events and errors.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ViewMouseListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AutomaListener.class);
 
     /**
      * The control view managing the automaton and terminal display.
@@ -51,7 +51,7 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
      *
      * @param automaController the control view managing the automaton and terminal display
      */
-    public ViewMouseListener(AutomaController<C, S> automaController) {
+    public AutomaListener(AutomaController<C, S> automaController) {
         this.automaController = automaController;
 
         int width = automaController.getWidth();

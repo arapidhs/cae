@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the TRIANGLES cellular automaton, where a cell's next state is the logical
  * OR of a subset of its von Neumann neighborhood (north, west, center, east), causing a single active cell
@@ -55,9 +57,9 @@ public class ConfTriangles extends AbstractConfiguration<BooleanCell, BooleanSta
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(1));
-        config.put("grid", grid);
-        config.put("rule", new RuleTriangles());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleTriangles());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

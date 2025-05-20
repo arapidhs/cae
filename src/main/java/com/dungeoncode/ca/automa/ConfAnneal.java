@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the ANNEAL cellular automaton, a variation of MAJORITY where a cell becomes
  * active if it has exactly 4 or 6 or more live cells in its 3x3 Moore neighborhood (including the center), and
@@ -57,9 +59,9 @@ public class ConfAnneal extends AbstractConfiguration<BooleanCell, BooleanState>
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
-        config.put("grid", grid);
-        config.put("rule", new RuleAnneal());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleAnneal());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }

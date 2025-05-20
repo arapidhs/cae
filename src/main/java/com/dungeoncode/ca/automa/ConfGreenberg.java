@@ -11,6 +11,8 @@ import com.dungeoncode.ca.core.impl.init.InitRandomFiring;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dungeoncode.ca.core.Constants.*;
+
 /**
  * Configures an {@link Automa} to run the GREENBERG cellular automaton, combining the DIAMONDS rule with a READY
  * inhibitor in a second-order dynamics system, producing diamond-shaped wave fronts with hollow interiors. The grid
@@ -58,9 +60,9 @@ public class ConfGreenberg extends AbstractConfiguration<BrainCell, BrainState> 
     public void configure(Automa<BrainCell, BrainState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         Grid<BrainCell, BrainState> grid = new Grid<>(width, height, new InitRandomFiring(10));
-        config.put("grid", grid);
-        config.put("rule", new RuleGreenberg());
-        config.put("intervalMillis", intervalMillis);
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULE, new RuleGreenberg());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automa.configure(config);
     }
 }
