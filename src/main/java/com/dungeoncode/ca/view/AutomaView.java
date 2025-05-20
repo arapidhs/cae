@@ -30,9 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.googlecode.lanterna.gui2.Window.Hint.*;
 
@@ -59,7 +57,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
      * @param configurations the list of available automata configurations
      */
     public AutomaView(List<Configuration<C, S>> configurations) {
-        this.configurations=configurations;
+        this.configurations = configurations;
         this.selected = -1;
     }
 
@@ -126,7 +124,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         });
 
         final BasicWindow window = new BasicWindow("Cellular Automata Simulator");
-        window.setHints(List.of(FULL_SCREEN,FIT_TERMINAL_WINDOW));
+        window.setHints(List.of(FULL_SCREEN, FIT_TERMINAL_WINDOW));
 
         // === Root Layout ===
         Panel rootPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
@@ -172,7 +170,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
             setDetailsBoxText(selectedConf, detailsBox);
         });
 
-        if(selected>-1){
+        if (selected > -1) {
             Configuration<C, S> selectedConf = configurations.get(selected);
             configList.setSelectedIndex(selected);
             setDetailsBoxText(selectedConf, detailsBox);
@@ -207,26 +205,6 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Sets the text content of the details box with formatted information about the selected configuration.
-     * The method formats the configuration's name, description, and citation with proper text wrapping
-     * and spacing for display in a text box with a width of 38 characters.
-     *
-     * @param selectedConf the selected configuration to display details for
-     * @param detailsBox  the text box to display the formatted details in
-     */
-    private void setDetailsBoxText(Configuration<C, S> selectedConf, TextBox detailsBox) {
-        String name = selectedConf.getName();
-        String description = selectedConf.getDescription();
-        String citation = selectedConf.getCitation() == null ? "" : selectedConf.getCitation();
-
-        String formatted = formatWithWrapping(name, 38) + "\n\n"
-                + formatWithWrapping(description, 38) + "\n\n"
-                + formatWithWrapping(citation, 38);
-
-        detailsBox.setText(formatted);
-    }
-
-    /**
      * Shows confirmation dialog before exiting.
      */
     private void confirmExit(WindowBasedTextGUI textGUI) {
@@ -250,30 +228,23 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Word-wraps text manually for use in narrow Lanterna widgets.
+     * Sets the text content of the details box with formatted information about the selected configuration.
+     * The method formats the configuration's name, description, and citation with proper text wrapping
+     * and spacing for display in a text box with a width of 38 characters.
+     *
+     * @param selectedConf the selected configuration to display details for
+     * @param detailsBox   the text box to display the formatted details in
      */
-    private String formatWithWrapping(String text, int maxWidth) {
-        if (text == null || text.isEmpty()) return "";
+    private void setDetailsBoxText(Configuration<C, S> selectedConf, TextBox detailsBox) {
+        String name = selectedConf.getName();
+        String description = selectedConf.getDescription();
+        String citation = selectedConf.getCitation() == null ? "" : selectedConf.getCitation();
 
-        StringBuilder result = new StringBuilder();
-        String[] words = text.split("\\s+");
-        StringBuilder line = new StringBuilder();
+        String formatted = formatWithWrapping(name, 38) + "\n\n"
+                + formatWithWrapping(description, 38) + "\n\n"
+                + formatWithWrapping(citation, 38);
 
-        for (String word : words) {
-            if (line.length() + word.length() + 1 <= maxWidth) {
-                if (!line.isEmpty()) line.append(" ");
-                line.append(word);
-            } else {
-                result.append(line).append("\n");
-                line = new StringBuilder(word);
-            }
-        }
-
-        if (!line.isEmpty()) {
-            result.append(line);
-        }
-
-        return result.toString();
+        detailsBox.setText(formatted);
     }
 
     /**
@@ -354,7 +325,6 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         return sb.toString();
     }
 
-
     /**
      * Fully exits the application and cleans up terminal state.
      */
@@ -367,6 +337,33 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
             System.exit(1);
         }
         System.exit(0);
+    }
+
+    /**
+     * Word-wraps text manually for use in narrow Lanterna widgets.
+     */
+    private String formatWithWrapping(String text, int maxWidth) {
+        if (text == null || text.isEmpty()) return "";
+
+        StringBuilder result = new StringBuilder();
+        String[] words = text.split("\\s+");
+        StringBuilder line = new StringBuilder();
+
+        for (String word : words) {
+            if (line.length() + word.length() + 1 <= maxWidth) {
+                if (!line.isEmpty()) line.append(" ");
+                line.append(word);
+            } else {
+                result.append(line).append("\n");
+                line = new StringBuilder(word);
+            }
+        }
+
+        if (!line.isEmpty()) {
+            result.append(line);
+        }
+
+        return result.toString();
     }
 
     public Configuration<C, S> getSelectedConfiguration() {
@@ -398,34 +395,34 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         });
 
         final BasicWindow window = new BasicWindow();
-        window.setFixedSize(new TerminalSize(width,height));
-        window.setHints(List.of(NO_DECORATIONS,NO_POST_RENDERING,CENTERED,FULL_SCREEN));
+        window.setFixedSize(new TerminalSize(width, height));
+        window.setHints(List.of(NO_DECORATIONS, NO_POST_RENDERING, CENTERED, FULL_SCREEN));
 
         final BasicWindow window2 = new BasicWindow("Window 2");
-        window2.setHints(List.of(NO_POST_RENDERING,FIXED_POSITION));
-        window2.setFixedSize(new TerminalSize(width/4,height/4));
-        window2.setPosition(new TerminalPosition(50,10));
+        window2.setHints(List.of(NO_POST_RENDERING, FIXED_POSITION));
+        window2.setFixedSize(new TerminalSize(width / 4, height / 4));
+        window2.setPosition(new TerminalPosition(50, 10));
 
         final BasicWindow window3 = new BasicWindow("Window 3");
-        window3.setFixedSize(new TerminalSize(width/3,height/3));
-        window3.setPosition(new TerminalPosition(50,15));;
+        window3.setFixedSize(new TerminalSize(width / 3, height / 3));
+        window3.setPosition(new TerminalPosition(50, 15));
         // window.setHints(List.of(NO_DECORATIONS,NO_POST_RENDERING,CENTERED,FULL_SCREEN));
 
         Panel rootPanel = new Panel(new AbsoluteLayout());
         rootPanel.setFillColorOverride(TextColor.ANSI.BLUE);
-        rootPanel.setPosition(new TerminalPosition(10,10));
-        rootPanel.setSize(new TerminalSize(width/2,height/2));
-        rootPanel.setPreferredSize(new TerminalSize(width/2,height/2));
+        rootPanel.setPosition(new TerminalPosition(10, 10));
+        rootPanel.setSize(new TerminalSize(width / 2, height / 2));
+        rootPanel.setPreferredSize(new TerminalSize(width / 2, height / 2));
         Panel topPanel = new Panel();
-        topPanel.setPosition(new TerminalPosition(2,2));
-        topPanel.setSize(new TerminalSize(35,3));
+        topPanel.setPosition(new TerminalPosition(2, 2));
+        topPanel.setSize(new TerminalSize(35, 3));
         topPanel.setFillColorOverride(TextColor.ANSI.MAGENTA);
         Panel centerPanel = new Panel();
 
-        centerPanel.setSize(new TerminalSize(width,height));
-        centerPanel.setPosition(new TerminalPosition(10,10));
-        centerPanel.setPosition(new TerminalPosition(5,5));
-        centerPanel.setPreferredSize(new TerminalSize(width,height));
+        centerPanel.setSize(new TerminalSize(width, height));
+        centerPanel.setPosition(new TerminalPosition(10, 10));
+        centerPanel.setPosition(new TerminalPosition(5, 5));
+        centerPanel.setPreferredSize(new TerminalSize(width, height));
         centerPanel.setFillColorOverride(TextColor.ANSI.BLUE);
         MenuBar menubar = new MenuBar();
 
@@ -452,8 +449,8 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         topPanel.addComponent(menubar);
         rootPanel.addComponent(topPanel);
         Border centerPanel1 = centerPanel.withBorder(Borders.singleLine("Center Panel"));
-        centerPanel1.setPosition(new TerminalPosition(5,5));
-        centerPanel1.setSize(new TerminalSize(30,8));
+        centerPanel1.setPosition(new TerminalPosition(5, 5));
+        centerPanel1.setSize(new TerminalSize(30, 8));
         rootPanel.addComponent(centerPanel1);
 
         // === Configuration List ===

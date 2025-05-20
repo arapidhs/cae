@@ -20,7 +20,7 @@ public class BooleanCell extends AbstractCell<BooleanState> {
 
     public BooleanCell(int x, int y, BooleanState state) {
         super(x, y);
-        this.state=state;
+        this.state = state;
     }
 
     /**
@@ -45,7 +45,11 @@ public class BooleanCell extends AbstractCell<BooleanState> {
 
     @Override
     public void copyState(BooleanState source) {
-        this.state.set(source.getValue(),source.isEcho(), source.getLiveSum(), source.getTimer());
+        this.state.set(source.getValue(), source.isEcho(), source.getLiveSum(), source.getTimer());
+    }
+
+    public void setState(boolean value, boolean echo) {
+        this.state.set(value, echo, 0);
     }
 
 }

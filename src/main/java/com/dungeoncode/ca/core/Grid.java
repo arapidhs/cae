@@ -14,23 +14,19 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
      * The 2D array storing cells, indexed as [row][column] in row-major order.
      */
     private final C[][] grid;
-
-    private S[][] nextStates;
-
     /**
      * The number of columns (x-axis) in the grid.
      */
     private final int width;
-
     /**
      * The number of rows (y-axis) in the grid.
      */
     private final int height;
-
     /**
      * The initializer used to populate the grid with cells, or null if no initialization is performed.
      */
     private final GridInitializer<C, S> initializer;
+    private S[][] nextStates;
 
     /**
      * Constructs a new grid with the specified width, height, and initializer. The grid is initialized using the
@@ -61,8 +57,8 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
     /**
      * Sets the state of the cell at the specified coordinates.
      *
-     * @param x     the x-coordinate (column), zero-based
-     * @param y     the y-coordinate (row), zero-based
+     * @param x the x-coordinate (column), zero-based
+     * @param y the y-coordinate (row), zero-based
      * @throws IllegalArgumentException if the coordinates are out of bounds
      * @throws IllegalStateException    if the cell at (x, y) is null
      */

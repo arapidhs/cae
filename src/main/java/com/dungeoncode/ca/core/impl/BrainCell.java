@@ -51,6 +51,10 @@ public class BrainCell extends AbstractCell<BrainState> {
 
     @Override
     public void copyState(BrainState state) {
-        this.state.set(state.getValue(),state.getEcho());
+        this.state.set(state.getValue(), state.getEcho());
+    }
+
+    public void setState(BrainState.BrainStateValue value, BrainState.BrainStateValue echo) {
+        this.state.set(value, echo);
     }
 }

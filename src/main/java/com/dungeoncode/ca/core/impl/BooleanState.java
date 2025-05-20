@@ -40,16 +40,6 @@ public class BooleanState implements CellState<Boolean> {
     }
 
     /**
-     * Constructs a new boolean state with the specified value, echo flag, and zero live sum and timer.
-     *
-     * @param value the boolean value ({@code true} for active, {@code false} for inactive)
-     * @param echo  {@code true} to enable echo effect, {@code false} otherwise
-     */
-    public BooleanState(boolean value, boolean echo) {
-        this(value, echo, 0, 0);
-    }
-
-    /**
      * Constructs a new boolean state with the specified value, echo flag, live sum, and timer.
      *
      * @param value   the boolean value ({@code true} for active, {@code false} for inactive)
@@ -62,6 +52,16 @@ public class BooleanState implements CellState<Boolean> {
         this.echo = echo;
         this.liveSum = liveSum;
         this.timer = timer;
+    }
+
+    /**
+     * Constructs a new boolean state with the specified value, echo flag, and zero live sum and timer.
+     *
+     * @param value the boolean value ({@code true} for active, {@code false} for inactive)
+     * @param echo  {@code true} to enable echo effect, {@code false} otherwise
+     */
+    public BooleanState(boolean value, boolean echo) {
+        this(value, echo, 0, 0);
     }
 
     /**

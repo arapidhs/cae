@@ -3,7 +3,6 @@ package com.dungeoncode.ca.view.render;
 import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.view.StateRenderer;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 import org.slf4j.Logger;
@@ -63,7 +62,6 @@ public class GridRenderer<C extends Cell<S>, S extends CellState<?>> implements 
     @Override
     public void accept(Grid<C, S> grid) {
         try {
-            screen.clear();
             for (int y = 0; y < grid.getHeight(); y++) {
                 for (int x = 0; x < grid.getWidth(); x++) {
                     C cell = grid.getCell(x, y);

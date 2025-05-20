@@ -4,7 +4,10 @@ import com.dungeoncode.ca.automa.*;
 import com.dungeoncode.ca.core.*;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
-import com.dungeoncode.ca.view.render.*;
+import com.dungeoncode.ca.view.render.GridRenderer;
+import com.dungeoncode.ca.view.render.RendererBoolean;
+import com.dungeoncode.ca.view.render.RendererBrain;
+import com.dungeoncode.ca.view.render.StateRenderer;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -55,67 +58,33 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     @SuppressWarnings("rawtypes")
     private static final Map<String, StateRenderer> CELL_RENDERER;
 
-    /**
-     * Maps configuration class names to a boolean indicating if they use boolean states.
-     */
-    private static final Map<String, Boolean> IS_CONFIGURATION_BOOLEAN;
-
     static {
-        BooleanStateRenderer booleanRenderer = new BooleanStateRenderer();
-        BooleanEchoStateRenderer booleanEchoRenderer = new BooleanEchoStateRenderer();
-        LiveSumStateRenderer liveSumStateRenderer = new LiveSumStateRenderer(LiveSumStateRenderer.Palette.DEFAULT);
-        PulseWeaverStateRenderer pulseWeaverStateRenderer = new PulseWeaverStateRenderer();
-        BrainStateRenderer brainStateRenderer = new BrainStateRenderer();
+        RendererBoolean rendererBoolean = new RendererBoolean(RendererBoolean.Palette.DEFAULT);
+        RendererBrain rendererBrain = new RendererBrain();
 
         CELL_RENDERER = new HashMap<>();
-        CELL_RENDERER.put(InkspotConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(GameOfLifeConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(GameOfLifeWithEchoConfiguration.class.getName(), booleanEchoRenderer);
-        CELL_RENDERER.put(GameOfLifeWithTracingConfiguration.class.getName(), booleanEchoRenderer);
-        CELL_RENDERER.put(HGlassConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(ParityConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(SquaresConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(DiamondsConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(TrianglesConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(OneOutOfEightConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(LichensConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(LichensWithDeathConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(MajorityConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(AnnealConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(BanksConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(BriansBrainConfiguration.class.getName(), brainStateRenderer);
-        CELL_RENDERER.put(GreenbergConfiguration.class.getName(), brainStateRenderer);
-        CELL_RENDERER.put(ParityFlipConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(TimeTunnelConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(CandleRainConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(RandomAnnealConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(SafePassConfiguration.class.getName(), liveSumStateRenderer);
-        CELL_RENDERER.put(TubeWormsConfiguration.class.getName(), booleanRenderer);
-        CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
-
-        IS_CONFIGURATION_BOOLEAN = new HashMap<>();
-        IS_CONFIGURATION_BOOLEAN.put(InkspotConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(GameOfLifeConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(GameOfLifeWithEchoConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(GameOfLifeWithTracingConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(HGlassConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(ParityConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(SquaresConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(DiamondsConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(TrianglesConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(OneOutOfEightConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(LichensConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(LichensWithDeathConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(MajorityConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(MajorityConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(AnnealConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(BanksConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(ParityFlipConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(TimeTunnelConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(CandleRainConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(RandomAnnealConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(TubeWormsConfiguration.class.getName(), true);
-        IS_CONFIGURATION_BOOLEAN.put(SafePassConfiguration.class.getName(), true);
+        CELL_RENDERER.put(ConfInkspot.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfGameOfLife.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfHglass.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfParity.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfSquares.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfDiamonds.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfTriangles.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfOneOutOfEight.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfLichens.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfLichensWithDeath.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfMajority.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfAnneal.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfBanks.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfBriansBrain.class.getName(), rendererBrain);
+        CELL_RENDERER.put(ConfGreenberg.class.getName(), rendererBrain);
+        CELL_RENDERER.put(ConfParityFlip.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfTimeTunnel.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfCandleRain.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfRandomAnneal.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfSafePass.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfTubeWorms.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfNaiveDiffusion.class.getName(), rendererBoolean);
 
     }
 
@@ -181,7 +150,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     /**
      * The renderer for displaying the grid's boolean states.
      */
-    private GridRenderer<C,S> renderer;
+    private GridRenderer<C, S> renderer;
 
     /**
      * Constructs a new control view with the specified terminal dimensions, cell font size, and configuration.
@@ -249,8 +218,19 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                 configureAutoma();
             } else {
                 renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
-                automa.setGridConsumer((GridRenderer<C, S>) renderer);
+                automa.setGridConsumer(renderer);
             }
+
+            Terminal terminal = screen.getTerminal();
+            if (terminal instanceof SwingTerminalFrame swingTerminalFrame) {
+                if (automa.getGrid().getCell(0, 0) instanceof BooleanCell) {
+                    ViewMouseListener<C, S> viewMouseListener = new ViewMouseListener<>(this);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(viewMouseListener);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(viewMouseListener);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseWheelListener(viewMouseListener);
+                }
+            }
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize AutomaController: " + e.getMessage(), e);
         }
@@ -290,7 +270,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         }
         configuration.configure(automa, width, height, intervalMillis);
         renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
-        automa.setGridConsumer((GridRenderer<C, S>) renderer);
+        automa.setGridConsumer(renderer);
     }
 
     /**
@@ -325,14 +305,6 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             swingTerminalFrame.setResizable(false);
             swingTerminalFrame.setLocationRelativeTo(null);
             swingTerminalFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-            if (IS_CONFIGURATION_BOOLEAN.containsKey(configuration.getClass().getName())
-                    && IS_CONFIGURATION_BOOLEAN.get(configuration.getClass().getName())) {
-                ViewMouseListener<C, S> viewMouseListener = new ViewMouseListener<>(this);
-                swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(viewMouseListener);
-                swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(viewMouseListener);
-                swingTerminalFrame.getContentPane().getComponent(0).addMouseWheelListener(viewMouseListener);
-            }
         }
         screen = new TerminalScreen(terminal);
         screen.setCursorPosition(null);
@@ -383,17 +355,27 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                             quit = true;
                         }
                         case ArrowLeft -> {
-                            if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
+                            boolean wasRunning = automa.isRunning();
+                            if (automa.isRunning()) {
                                 automa.stop();
-                                ((LiveSumStateRenderer) renderer.getStateRenderer()).previousPalette();
+                            }
+                            ((RendererBoolean) renderer.getStateRenderer()).previousPalette();
+                            renderer.accept(automa.getGrid());
+                            if (wasRunning) {
                                 automa.start();
                             }
                         }
                         case ArrowRight -> {
-                            if (renderer.getStateRenderer() instanceof LiveSumStateRenderer) {
-                                automa.stop();
-                                ((LiveSumStateRenderer) renderer.getStateRenderer()).nextPalette();
-                                automa.start();
+                            if (renderer.getStateRenderer() instanceof RendererBoolean) {
+                                boolean wasRunning = automa.isRunning();
+                                if (automa.isRunning()) {
+                                    automa.stop();
+                                }
+                                ((RendererBoolean) renderer.getStateRenderer()).nextPalette();
+                                renderer.accept(automa.getGrid());
+                                if (wasRunning) {
+                                    automa.start();
+                                }
                             }
                         }
                         case PageDown -> startNextAutoma();
@@ -423,6 +405,8 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                         }
                         case 'r', 'R' -> {
                             automa.stop();
+                            getTextGraphics().fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), TextCharacter.fromCharacter(' ', TextColor.ANSI.BLACK, TextColor.ANSI.BLACK, SGR.REVERSE)[0]);
+                            screen.refresh();
                             automa.getGrid().initialize();
                             automa.resume();
                         }
@@ -470,7 +454,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                                 automa.stop();
                             }
                             automa.step();
-                            renderer.accept((Grid<C, S>) automa.getGrid());
+                            renderer.accept(automa.getGrid());
                             TerminalPosition topLeft = new TerminalPosition(width - 3, 0);
                             TerminalSize size = new TerminalSize(3, 3);
                             TextCharacter textCharacter = TextCharacter.fromCharacter(' ', TextColor.ANSI.BLUE, null, SGR.REVERSE, SGR.BLINK)[0];
@@ -744,8 +728,8 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
      * @throws IOException if an error occurs during image capture or file writing
      */
     public void saveScreenToImage() throws IOException {
-        boolean wasRunning=automa.isRunning();
-        if(automa.isRunning()){
+        boolean wasRunning = automa.isRunning();
+        if (automa.isRunning()) {
             automa.stop();
         }
         if (screen != null && screen.getTerminal() instanceof SwingTerminalFrame swingTerminalFrame) {
@@ -788,7 +772,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             getTextGraphics().drawLine(0, height / 2, width, height / 2,
                     TextCharacter.fromString(" ", TextColor.ANSI.GREEN_BRIGHT, null, SGR.REVERSE)[0]);
             screen.refresh(Screen.RefreshType.DELTA);
-            if(wasRunning){
+            if (wasRunning) {
                 automa.start();
             } else {
                 renderer.accept(automa.getGrid());
@@ -845,7 +829,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
      *
      * @return the {@link GridRenderer} for boolean states
      */
-    public GridRenderer<C,S> getRenderer() {
+    public GridRenderer<C, S> getRenderer() {
         return renderer;
     }
 

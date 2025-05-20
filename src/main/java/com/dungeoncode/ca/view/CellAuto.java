@@ -48,30 +48,28 @@ public class CellAuto {
         try {
             // Initialize available configurations
             configurations = new ArrayList<>();
-            configurations.add(new InkspotConfiguration());
-            configurations.add(new GameOfLifeConfiguration());
-            configurations.add(new GameOfLifeWithEchoConfiguration());
-            configurations.add(new GameOfLifeWithTracingConfiguration());
-            configurations.add(new HGlassConfiguration());
-            configurations.add(new ParityConfiguration());
-            configurations.add(new SquaresConfiguration());
-            configurations.add(new DiamondsConfiguration());
-            configurations.add(new TrianglesConfiguration());
-            configurations.add(new OneOutOfEightConfiguration());
-            configurations.add(new LichensConfiguration());
-            configurations.add(new LichensWithDeathConfiguration());
-            configurations.add(new MajorityConfiguration());
-            configurations.add(new AnnealConfiguration());
-            configurations.add(new BanksConfiguration());
-            configurations.add(new BriansBrainConfiguration());
-            configurations.add(new GreenbergConfiguration());
-            configurations.add(new ParityFlipConfiguration());
-            configurations.add(new TimeTunnelConfiguration());
-            configurations.add(new CandleRainConfiguration());
-            configurations.add(new RandomAnnealConfiguration());
-            configurations.add(new SafePassConfiguration());
-            configurations.add(new TubeWormsConfiguration());
-            configurations.add(new PulseWeaverConfiguration());
+            configurations.add(new ConfInkspot());
+            configurations.add(new ConfGameOfLife());
+            configurations.add(new ConfHglass());
+            configurations.add(new ConfParity());
+            configurations.add(new ConfSquares());
+            configurations.add(new ConfDiamonds());
+            configurations.add(new ConfTriangles());
+            configurations.add(new ConfOneOutOfEight());
+            configurations.add(new ConfLichens());
+            configurations.add(new ConfLichensWithDeath());
+            configurations.add(new ConfMajority());
+            configurations.add(new ConfAnneal());
+            configurations.add(new ConfBanks());
+            configurations.add(new ConfBriansBrain());
+            configurations.add(new ConfGreenberg());
+            configurations.add(new ConfParityFlip());
+            configurations.add(new ConfTimeTunnel());
+            configurations.add(new ConfCandleRain());
+            configurations.add(new ConfRandomAnneal());
+            configurations.add(new ConfSafePass());
+            configurations.add(new ConfTubeWorms());
+            configurations.add(new ConfNaiveDiffusion());
 
             // Sort the list by configuration name
             configurations.sort(Comparator.comparing(Configuration::getName));

@@ -13,19 +13,9 @@ import com.dungeoncode.ca.core.CellState;
 public class BrainState implements CellState<BrainState.BrainStateValue> {
 
     /**
-     * Enum defining the possible states of a BRIAN'S-BRAIN cell.
-     */
-    public enum BrainStateValue {
-        READY,
-        FIRING,
-        REFRACTORY
-    }
-
-    /**
      * The state value of the cell (Ready, Firing, or Refractory).
      */
     private BrainStateValue value;
-
     /**
      * The previous state value of the cell, used for second-order dynamics (echo mechanism).
      */
@@ -40,24 +30,24 @@ public class BrainState implements CellState<BrainState.BrainStateValue> {
         this(value, BrainStateValue.READY);
     }
 
-    public BrainState() {
-        this(null,null);
-    }
-
     /**
      * Constructs a new BRIAN'S-BRAIN state with the specified value and echo.
      *
      * @param value the state value ({@link BrainStateValue})
-     * @param echo the previous state value ({@link BrainStateValue}) for second-order dynamics
+     * @param echo  the previous state value ({@link BrainStateValue}) for second-order dynamics
      */
     public BrainState(BrainStateValue value, BrainStateValue echo) {
         this.value = value;
         this.echo = echo;
     }
 
+    public BrainState() {
+        this(null, null);
+    }
+
     public void set(BrainStateValue value, BrainStateValue echo) {
-        this.value=value;
-        this.echo=echo;
+        this.value = value;
+        this.echo = echo;
     }
 
     /**
@@ -77,5 +67,14 @@ public class BrainState implements CellState<BrainState.BrainStateValue> {
      */
     public BrainStateValue getEcho() {
         return echo;
+    }
+
+    /**
+     * Enum defining the possible states of a BRIAN'S-BRAIN cell.
+     */
+    public enum BrainStateValue {
+        READY,
+        FIRING,
+        REFRACTORY
     }
 }

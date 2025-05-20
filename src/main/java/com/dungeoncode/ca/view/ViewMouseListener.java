@@ -1,12 +1,12 @@
 package com.dungeoncode.ca.view;
 
+import com.dungeoncode.ca.core.Automa;
 import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.impl.BooleanCell;
-import com.dungeoncode.ca.core.impl.BooleanState;
+import com.dungeoncode.ca.view.render.CellCharacter;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.screen.Screen;
 import org.slf4j.Logger;
@@ -43,12 +43,8 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
      */
     private int button;
 
-    /**
-     * Multiplier for calculating the radius of the affected grid area, adjusted by mouse wheel.
-     */
-    private double radiusMultiplier;
-
     private int radius;
+    private long lastScrollTime;
 
     /**
      * Constructs a new mouse listener for the specified control view.
@@ -57,15 +53,10 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
      */
     public ViewMouseListener(AutomaController<C, S> automaController) {
         this.automaController = automaController;
-        this.radiusMultiplier = 0.05; // Initial radius multiplier
-        calculateRadius();
-    }
 
-    private void calculateRadius() {
-        // Calculate radius based on grid size and multiplier
         int width = automaController.getWidth();
         int height = automaController.getHeight();
-        radius = (int) Math.max(1, Math.min(width, height) * radiusMultiplier);
+        radius = (int) (Math.min(width, height) * 0.1);
     }
 
     /**
@@ -104,28 +95,63 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
      */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if (e.getWheelRotation() == -1) {
-            radiusMultiplier += 0.01; // Increase radius for upward scroll
-        } else {
-            radiusMultiplier -= 0.01; // Decrease radius for downward scroll
+
+        if ( lastScrollTime==0){
+            lastScrollTime=e.getWhen();
+            return;
         }
-        calculateRadius();
+        long now = e.getWhen();
+        if ( now-lastScrollTime < 20 ){
+            lastScrollTime=now;
+            return;
+        } else {
+            lastScrollTime = now;
+        }
 
-        if (automaController.getAutoma().isRunning()) {
-            try {
-                // Convert pixel coordinates to terminal grid coordinates
-                int col = e.getX() / automaController.getCellFontSize();
-                int row = e.getY() / automaController.getCellFontSize();
-
-                automaController.getTextGraphics().drawRectangle(
-                        new TerminalPosition(col - radius, row - radius),
-                        new TerminalSize(2 * radius, 2 * radius),
-                        TextCharacter.fromCharacter('-', TextColor.ANSI.WHITE, null)[0]
-                );
-                automaController.getScreen().refresh(Screen.RefreshType.DELTA);
-            } catch (Exception ex) {
-                throw new RuntimeException("Failed to draw radius outline: " + ex.getMessage(), ex);
+        int dr;
+        if (e.getWheelRotation() == -1) {
+            dr = 3; // Increase radius for upward scroll
+        } else {
+            dr = -3; // Decrease radius for downward scroll
+        }
+        updateRadius(dr);
+        try {
+            Automa<C, S> automa = automaController.getAutoma();
+            boolean wasRunning = automa.isRunning();
+            if (automa.isRunning()) {
+                automa.stop();
             }
+            // Convert pixel coordinates to terminal grid coordinates
+            int col = e.getX() / automaController.getCellFontSize();
+            int row = e.getY() / automaController.getCellFontSize();
+
+            automaController.getTextGraphics().drawRectangle(
+                    new TerminalPosition(col - radius, row - radius),
+                    new TerminalSize(2 * radius, 2 * radius),
+                    CellCharacter.fromColor(TextColor.ANSI.WHITE));
+            automaController.getScreen().refresh(Screen.RefreshType.DELTA);
+
+            if (wasRunning) {
+                automa.start();
+            } else {
+                automaController.getRenderer().accept(automaController.getAutoma().getGrid());
+            }
+
+
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to draw radius outline: " + ex.getMessage(), ex);
+        }
+
+    }
+
+    private void updateRadius(int dr) {
+        int width = automaController.getWidth();
+        int height = automaController.getHeight();
+        radius += dr;
+        if (dr > 0) {
+            radius = Math.min(radius, (width + height) / 8);
+        } else {
+            radius = Math.max(radius, 0);
         }
     }
 
@@ -158,7 +184,7 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
 
         // If the grid is not a grid of Boolean Cells, return.
         C cl = automaController.getAutoma().getGrid().getCell(0, 0);
-        if(!(cl instanceof  BooleanCell)){
+        if (!(cl instanceof BooleanCell)) {
             return;
         }
 
@@ -166,40 +192,48 @@ public class ViewMouseListener<C extends Cell<S>, S extends CellState<?>> extend
         int width = automaController.getWidth();
         int height = automaController.getHeight();
 
-        // Iterate over a square area around the center
-        for (int dy = -radius; dy <= radius; dy++) {
-            for (int dx = -radius; dx <= radius; dx++) {
-                double distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance <= radius) { // Only affect cells within circular radius
-                    // Wrap coordinates to handle grid edges
-                    int nx = (col + dx + width) % width;
-                    int ny = (row + dy + height) % height;
-                    if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                        BooleanCell cell = (BooleanCell) automaController.getAutoma().getGrid().getCell(nx, ny);
-                        if (cell != null) {
-                            try {
-                                if (button == 1) {
-                                    // Left button: set random state with distance-based probability
-                                    Random rnd = new Random();
-                                    double prob = Math.exp(-distance / radius); // Gaussian-like decay
-                                    boolean b = rnd.nextDouble() < prob;
-                                    cell.setState(new BooleanState(b, false));
-                                } else {
-                                    // Middle button activates, right button deactivates
-                                    cell.setState(new BooleanState(button == 2, false));
-                                }
-                            } catch (Exception ex) {
-                                LOGGER.error("Error updating cell at ({}, {}): {}", nx, ny, ex.getMessage());
-                            }
+        if (radius > 0) {
+            // Iterate over a square area around the center
+            for (int dy = -radius; dy <= radius; dy++) {
+                for (int dx = -radius; dx <= radius; dx++) {
+                    double distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance <= radius) { // Only affect cells within circular radius
+                        // Wrap coordinates to handle grid edges
+                        int nx = (col + dx + width) % width;
+                        int ny = (row + dy + height) % height;
+                        if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                            updateCell(button, nx, ny, distance);
                         }
                     }
                 }
             }
+        } else {
+            updateCell(button, col, row, 0);
         }
 
         // Update display if automaton is paused
         if (!automaController.getAutoma().isRunning()) {
             automaController.getRenderer().accept(automaController.getAutoma().getGrid());
+        }
+    }
+
+    private void updateCell(int button, int nx, int ny, double distance) {
+        BooleanCell cell = (BooleanCell) automaController.getAutoma().getGrid().getCell(nx, ny);
+        if (cell != null) {
+            try {
+                if (button == 1) {
+                    // Left button: set random state with distance-based probability
+                    Random rnd = new Random();
+                    double prob = Math.exp(-distance / radius); // Gaussian-like decay
+                    boolean b = rnd.nextDouble() < prob;
+                    cell.setState(b, false);
+                } else {
+                    // Middle button activates, right button deactivates
+                    cell.setState(button == 2, false);
+                }
+            } catch (Exception ex) {
+                LOGGER.error("Error updating cell at ({}, {}): {}", nx, ny, ex.getMessage());
+            }
         }
     }
 }
