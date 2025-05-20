@@ -3,6 +3,7 @@ package com.dungeoncode.ca.view.render;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.SGR;
 
 /**
  * Renders a {@link BooleanState} for a cellular automaton using Lanterna text characters, applying colors
@@ -21,6 +22,8 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
      */
     private Palette palette;
 
+    private boolean inverted = false;
+
     /**
      * Constructs a renderer with the default ANSI color palette.
      */
@@ -35,6 +38,22 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
      */
     public RendererBoolean(Palette palette) {
         this.palette = palette;
+    }
+
+    /**
+     * Toggles the color inversion state.
+     */
+    public void toggleInversion() {
+        inverted = !inverted;
+    }
+
+    /**
+     * Sets the color inversion state.
+     *
+     * @param inverted true to invert colors, false for normal colors
+     */
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
     }
 
     /**
@@ -80,7 +99,35 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
         } else {
             color = palette.inactiveNoEcho;
         }
+
+        // Invert the color if needed
+        if (inverted) {
+            color = invertColor(color);
+        }
+
         return CellCharacter.fromColor(color);
+    }
+
+    /**
+     * Inverts a TextColor by swapping light and dark colors.
+     * For RGB colors, inverts each component (255 - value).
+     *
+     * @param color the color to invert
+     * @return the inverted color
+     */
+    private TextColor invertColor(TextColor color) {
+        if (color == TextColor.ANSI.BLACK) return TextColor.ANSI.WHITE_BRIGHT;
+        if (color == TextColor.ANSI.WHITE) return TextColor.ANSI.BLACK_BRIGHT;
+        if (color == TextColor.ANSI.BLACK_BRIGHT) return TextColor.ANSI.WHITE;
+        if (color == TextColor.ANSI.WHITE_BRIGHT) return TextColor.ANSI.BLACK;
+        
+        // For RGB colors
+        if (color instanceof TextColor.RGB) {
+            TextColor.RGB rgb = (TextColor.RGB) color;
+            return new TextColor.RGB(255 - rgb.getRed(), 255 - rgb.getGreen(), 255 - rgb.getBlue());
+        }
+        
+        return color; // Return original if no inversion rule exists
     }
 
     public void previousPalette() {
