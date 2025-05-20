@@ -56,4 +56,9 @@ public class PulseWeaverCell extends AbstractCell<PulseWeaverState> {
         this.state=state;
     }
 
+    @Override
+    public void copyState(PulseWeaverState source) {
+        this.state.set(source.getValue(), source.isPersistent());
+    }
+
 }

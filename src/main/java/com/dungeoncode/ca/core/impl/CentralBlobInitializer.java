@@ -15,7 +15,7 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class CentralBlobInitializer implements GridInitializer<BooleanCell, BooleanState> {
+public class CentralBlobInitializer extends NextStatesBooleanInitializer {
 
     /**
      * The horizontal offset from the grid's center, defining half the width of the random region.
@@ -49,6 +49,7 @@ public class CentralBlobInitializer implements GridInitializer<BooleanCell, Bool
      */
     @Override
     public void initializeGrid(Grid<BooleanCell, BooleanState> grid) {
+        super.initializeGrid(grid);
         int width = grid.getWidth();
         int height = grid.getHeight();
         int centerX = width / 2;

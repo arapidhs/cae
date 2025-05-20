@@ -44,6 +44,7 @@ public class AnnealRule extends BooleanNeighborCountRule {
         boolean isActive = liveNeighbors == 4 || liveNeighbors >= 6;
 
         boolean echo=cell.getState().getValue();
-        return new BooleanState(isActive,echo,liveNeighbors);
+        grid.getNextStates()[y][x].set(isActive,echo,liveNeighbors);
+        return grid.getNextStates()[y][x];
     }
 }

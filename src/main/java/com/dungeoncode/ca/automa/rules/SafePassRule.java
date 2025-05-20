@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.Rule;
 import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanNeighborCountRule;
@@ -69,7 +68,8 @@ public class SafePassRule extends BooleanNeighborCountRule {
         }
 
         // Echo remains unchanged (plane 1 is static)
-        return new BooleanState(newValue, currentEcho,liveSum);
+        grid.getNextStates()[y][x].set(newValue,currentEcho,liveSum);
+        return grid.getNextStates()[y][x];
     }
 
     @Override

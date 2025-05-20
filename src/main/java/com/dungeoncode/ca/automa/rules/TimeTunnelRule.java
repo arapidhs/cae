@@ -70,8 +70,8 @@ public class TimeTunnelRule implements Rule<BooleanCell, BooleanState> {
         // XOR the decision table result with the previous state (echo)
         boolean newState = decision ^ currentState.isEcho();
 
-        // Modeling, Chapter 6, Section 6.2, p. 51. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001
-        return new BooleanState(newState, currentState.getValue(),liveSum);
+        grid.getNextStates()[y][x].set(newState, currentState.getValue(),liveSum);
+        return grid.getNextStates()[y][x];
     }
 
     @Override

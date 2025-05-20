@@ -33,6 +33,8 @@ public class CandleRainRule implements Rule<BooleanCell, BooleanState> {
      */
     @Override
     public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+        int x = cell.getPosition().getX();
+        int y = cell.getPosition().getY();
         BooleanState currentState = cell.getState();
 
         // Generate raindrop with probability 1/32 (1/2^5)
@@ -42,7 +44,8 @@ public class CandleRainRule implements Rule<BooleanCell, BooleanState> {
         // CANDLE-RAIN for state (value): blow out candle if raindrop is present, otherwise retain state
         boolean newValue = currentState.getValue() && !raindrop;
 
-        return new BooleanState(newValue, echo);
+        grid.getNextStates()[y][x].set(newValue,echo,0);
+        return grid.getNextStates()[y][x];
     }
 
     @Override

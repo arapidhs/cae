@@ -15,6 +15,8 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
      */
     private final C[][] grid;
 
+    private S[][] nextStates;
+
     /**
      * The number of columns (x-axis) in the grid.
      */
@@ -53,12 +55,6 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
     public void initialize() {
         if (initializer != null) {
             initializer.initializeGrid(this);
-        } else {
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    grid[y][x] = null;
-                }
-            }
         }
     }
 
@@ -67,19 +63,19 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
      *
      * @param x     the x-coordinate (column), zero-based
      * @param y     the y-coordinate (row), zero-based
-     * @param state the new state to set, of type {@code S}
      * @throws IllegalArgumentException if the coordinates are out of bounds
      * @throws IllegalStateException    if the cell at (x, y) is null
      */
-    public void setCellState(int x, int y, S state) {
+    public void copyCellState(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             throw new IllegalArgumentException("Coordinates out of bounds: (" + x + ", " + y + ")");
         }
         C cell = grid[y][x];
+        S state = nextStates[y][x];
         if (cell == null) {
             throw new IllegalStateException("Cannot set state: cell at (" + x + ", " + y + ") is null");
         }
-        cell.setState(state);
+        cell.copyState(state);
     }
 
     /**
@@ -128,5 +124,13 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
      */
     public int getHeight() {
         return height;
+    }
+
+    public S[][] getNextStates() {
+        return nextStates;
+    }
+
+    public void setNextStates(S[][] nextStates) {
+        this.nextStates = nextStates;
     }
 }

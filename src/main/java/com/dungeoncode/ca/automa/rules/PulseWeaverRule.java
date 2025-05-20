@@ -65,23 +65,30 @@ public class PulseWeaverRule implements Rule<PulseWeaverCell, PulseWeaverState> 
         return switch (currentState.getValue()) {
             case DORMANT -> {
                 if (chargedCount >= 2 && chargedCount <= 4 || (chargedCount == 1 && random.nextDouble() < 0.1)) {
-                    yield new PulseWeaverState(PulseWeaverState.PulseState.CHARGED);
+                    grid.getNextStates()[y][x].set(PulseWeaverState.PulseState.CHARGED,false);
+                    yield grid.getNextStates()[y][x];
                 }
-                yield currentState;
+                grid.getNextStates()[y][x].set(currentState.getValue(),currentState.isPersistent());
+                yield grid.getNextStates()[y][x];
             }
             case CHARGED -> {
                 if (chargedCount >= 5 && random.nextDouble() < 0.05) {
-                    yield currentState;
+                    grid.getNextStates()[y][x].set(currentState.getValue(),currentState.isPersistent());
+                    yield grid.getNextStates()[y][x];
                 }
-                yield new PulseWeaverState(PulseWeaverState.PulseState.FADING);
+                grid.getNextStates()[y][x].set(PulseWeaverState.PulseState.FADING,false);
+                yield grid.getNextStates()[y][x];
             }
             case FADING -> {
                 if (chargedCount >= (currentState.isPersistent() ? 4 : 2)) {
-                    yield new PulseWeaverState(PulseWeaverState.PulseState.CHARGED);
+                    grid.getNextStates()[y][x].set(PulseWeaverState.PulseState.CHARGED,false);
+                    yield grid.getNextStates()[y][x];
                 } else if (((chargedCount >= 1 && chargedCount <= 3) && currentState.isPersistent()) || random.nextDouble() < 0.1) {
-                    yield new PulseWeaverState(PulseWeaverState.PulseState.FADING, currentState.isPersistent());
+                    grid.getNextStates()[y][x].set(PulseWeaverState.PulseState.FADING,currentState.isPersistent());
+                    yield grid.getNextStates()[y][x];
                 }
-                yield new PulseWeaverState(PulseWeaverState.PulseState.DORMANT);
+                grid.getNextStates()[y][x].set(PulseWeaverState.PulseState.DORMANT,false);
+                yield grid.getNextStates()[y][x];
             }
         };
     }

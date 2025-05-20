@@ -14,7 +14,7 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class PrimevalSoupBooleanInitializer implements GridInitializer<BooleanCell, BooleanState> {
+public class PrimevalSoupBooleanInitializer extends NextStatesBooleanInitializer {
 
     /**
      * Initializes the specified grid by assigning each cell a random boolean state (live or dead).
@@ -25,6 +25,7 @@ public class PrimevalSoupBooleanInitializer implements GridInitializer<BooleanCe
      */
     @Override
     public void initializeGrid(Grid<BooleanCell, BooleanState> grid) {
+        super.initializeGrid(grid);
         Random rnd = new Random();
         for (int y = 0; y < grid.getHeight(); y++) {
             for (int x = 0; x < grid.getWidth(); x++) {

@@ -77,6 +77,8 @@ public class DiamondsRule extends BooleanNeighborCountRule {
 
         boolean echo=cell.getState().getValue();
         int liveCount= countLiveVonNeumannNeighbors(grid,x,y);
-        return new BooleanState(isActive,echo,liveCount);
+
+        grid.getNextStates()[y][x].set(isActive,echo,liveCount);
+        return grid.getNextStates()[y][x];
     }
 }

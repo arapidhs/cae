@@ -36,19 +36,20 @@ public class LichensWithDeathRule extends BooleanNeighborCountRule {
         boolean currentState = cell.getState().getValue();
 
         // Count live neighbors in the Moore neighborhood (excluding the center)
-        int liveNeighbors = countLiveMooreNeighbors(grid, x, y);
+        int liveCount = countLiveMooreNeighbors(grid, x, y);
 
         // Apply the decision table: activate for 3, 7, or 8 live neighbors, deactivate for 4, otherwise retain state
         boolean newState;
-        if (liveNeighbors == 3 || liveNeighbors == 7 || liveNeighbors == 8) {
+        if (liveCount == 3 || liveCount == 7 || liveCount == 8) {
             newState = true; // Turn on
-        } else if (liveNeighbors == 4) {
+        } else if (liveCount == 4) {
             newState = false; // Turn off (death mechanism)
         } else {
             newState = currentState; // Retain current state
         }
 
         boolean echo=cell.getState().getValue();
-        return new BooleanState(newState,echo,liveNeighbors);
+        grid.getNextStates()[y][x].set(newState,echo,liveCount);
+        return grid.getNextStates()[y][x];
     }
 }

@@ -102,10 +102,11 @@ public class HGlassRule implements Rule<BooleanCell, BooleanState> {
         if (center) index |= 0b00001;
 
         // Compute the sum of live (true) states
-        int liveSum = (center ? 1 : 0) + (north ? 1 : 0) + (south ? 1 : 0) + (west ? 1 : 0) + (east ? 1 : 0);
+        int liveCount = (center ? 1 : 0) + (north ? 1 : 0) + (south ? 1 : 0) + (west ? 1 : 0) + (east ? 1 : 0);
 
         // Look up the new state in the rule table
-        return new BooleanState(RULE_TABLE[index],cell.getState().getValue(),liveSum);
+        grid.getNextStates()[y][x].set(RULE_TABLE[index],cell.getState().getValue(),liveCount);
+        return grid.getNextStates()[y][x];
     }
 
     @Override

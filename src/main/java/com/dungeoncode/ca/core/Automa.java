@@ -29,8 +29,6 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
      */
     private Grid<C, S> grid;
 
-    private S[][] newStates;
-
     /**
      * The rule applied to update cell states.
      */
@@ -77,7 +75,6 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
      */
     public void configure(Map<String, Object> config) {
         this.grid = (Grid<C, S>) config.get(CONF_GRID);
-        this.newStates = (S[][]) new CellState[grid.getWidth()][grid.getHeight()];
         this.rule = (Rule<C, S>) config.get(CONF_RULE);
         this.intervalMillis = Long.parseLong(String.valueOf(config.get(CONF_INTERVAL_MILLIS)));
     }
@@ -126,15 +123,14 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
                 C cell = grid.getCell(x, y);
-                S newState = rule.apply(grid, cell);
-                newStates[x][y] = newState;
+                rule.apply(grid, cell);
             }
         }
 
         // Copy newGrid back to grid
         for (int y = 0; y < grid.getHeight(); y++) {
             for (int x = 0; x < grid.getWidth(); x++) {
-                grid.setCellState(x, y, newStates[x][y]);
+                grid.copyCellState(x, y);
             }
         }
     }

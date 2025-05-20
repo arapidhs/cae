@@ -12,7 +12,7 @@ import com.dungeoncode.ca.core.GridInitializer;
  * @see BooleanCell
  * @see BooleanState
  */
-public class CentralSquareInitializer implements GridInitializer<BooleanCell, BooleanState> {
+public class CentralSquareInitializer extends NextStatesBooleanInitializer {
 
     /**
      * The half-side length offset from the grid's center, defining the size of the active square region.
@@ -39,6 +39,7 @@ public class CentralSquareInitializer implements GridInitializer<BooleanCell, Bo
      */
     @Override
     public void initializeGrid(Grid<BooleanCell, BooleanState> grid) {
+        super.initializeGrid(grid);
         int width = grid.getWidth();
         int height = grid.getHeight();
         int centerX = width / 2;

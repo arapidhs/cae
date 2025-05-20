@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.core.impl;
 
 import com.dungeoncode.ca.core.AbstractCell;
-import com.dungeoncode.ca.core.CellState;
 
 /**
  * A cell in the BRIAN'S-BRAIN cellular automaton, holding a {@link BrainState} that represents its state (Ready,
@@ -48,5 +47,10 @@ public class BrainCell extends AbstractCell<BrainState> {
     @Override
     public void setState(BrainState state) {
         this.state = state;
+    }
+
+    @Override
+    public void copyState(BrainState state) {
+        this.state.set(state.getValue(),state.getEcho());
     }
 }

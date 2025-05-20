@@ -32,7 +32,7 @@ public class PulseWeaverRandomInitializer implements GridInitializer<PulseWeaver
     public void initializeGrid(Grid<PulseWeaverCell, PulseWeaverState> grid) {
         int width = grid.getWidth();
         int height = grid.getHeight();
-
+        grid.setNextStates( new PulseWeaverState[height][width]);
         int centerX = width / 2;
         int centerY = height / 2;
 
@@ -44,6 +44,9 @@ public class PulseWeaverRandomInitializer implements GridInitializer<PulseWeaver
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+
+                grid.getNextStates()[y][x] = new PulseWeaverState();
+
                 PulseWeaverState state;
                 boolean isActive = x >= startX && x < endX && y >= startY && y < endY;
                 if(isActive) {

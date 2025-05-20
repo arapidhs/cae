@@ -41,9 +41,14 @@ public class RandomFiringInitializer implements GridInitializer<BrainCell, Brain
         int width = grid.getWidth();
         int height = grid.getHeight();
 
+        grid.setNextStates( new BrainState[height][width]);
+
         // Set all cells to Ready state initially
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+
+                grid.getNextStates()[y][x] = new BrainState();
+
                 grid.setCell(x, y, new BrainCell(x, y, new BrainState(BrainState.BrainStateValue.READY)));
             }
         }

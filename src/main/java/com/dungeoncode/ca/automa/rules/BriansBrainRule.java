@@ -59,17 +59,21 @@ public class BriansBrainRule implements Rule<BrainCell, BrainState> {
             case READY -> {
                 // Ready cell fires if exactly two neighbors are Firing
                 if (firingCount == 2) {
-                    yield new BrainState(BrainState.BrainStateValue.FIRING, echo);
+                    grid.getNextStates()[y][x].set(BrainState.BrainStateValue.FIRING,echo);
+                    yield grid.getNextStates()[y][x];
                 }
-                yield currentState;
+                grid.getNextStates()[y][x].set(currentState.getValue(),currentState.getEcho());
+                yield grid.getNextStates()[y][x];
             }
             case FIRING -> {
                 // Firing cell always becomes Refractory
-                yield new BrainState(BrainState.BrainStateValue.REFRACTORY, echo);
+                grid.getNextStates()[y][x].set(BrainState.BrainStateValue.REFRACTORY,currentState.getEcho());
+                yield grid.getNextStates()[y][x];
             }
             case REFRACTORY -> {
                 // Refractory cell always returns to Ready
-                yield new BrainState(BrainState.BrainStateValue.READY, echo);
+                grid.getNextStates()[y][x].set(BrainState.BrainStateValue.READY,currentState.getEcho());
+                yield grid.getNextStates()[y][x];
             }
         };
     }

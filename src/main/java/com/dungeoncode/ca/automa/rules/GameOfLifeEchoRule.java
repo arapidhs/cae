@@ -64,6 +64,7 @@ public class GameOfLifeEchoRule extends BooleanNeighborCountRule {
         } else {
             newEcho = cell.getState().getValue();
         }
-        return new BooleanState(newAlive, newEcho,liveCount);
+        grid.getNextStates()[y][x].set(newAlive,newEcho,liveCount);
+        return grid.getNextStates()[y][x];
     }
 }

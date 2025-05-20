@@ -35,13 +35,14 @@ public class LichensRule extends BooleanNeighborCountRule {
         boolean currentState = cell.getState().getValue();
 
         // Count live neighbors in the Moore neighborhood (excluding the center)
-        int liveNeighbors = countLiveMooreNeighbors(grid, x, y);
+        int liveCount = countLiveMooreNeighbors(grid, x, y);
 
         // Apply the decision table: activate if exactly 3, 7, or 8 live neighbors, otherwise retain state
-        boolean isActive = liveNeighbors == 3 || liveNeighbors == 7 || liveNeighbors == 8;
+        boolean isActive = liveCount == 3 || liveCount == 7 || liveCount == 8;
 
 
         boolean echo=cell.getState().getValue();
-        return new BooleanState(isActive || currentState,echo,liveNeighbors);
+        grid.getNextStates()[y][x].set(isActive || currentState,echo,liveCount);
+        return grid.getNextStates()[y][x];
     }
 }

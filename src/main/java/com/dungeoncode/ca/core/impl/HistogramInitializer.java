@@ -15,7 +15,7 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class HistogramInitializer implements GridInitializer<BooleanCell, BooleanState> {
+public class HistogramInitializer extends NextStatesBooleanInitializer {
 
     /**
      * Initializes the specified grid by assigning each cell a random state (value) with a 50% chance of being active
@@ -26,6 +26,7 @@ public class HistogramInitializer implements GridInitializer<BooleanCell, Boolea
      */
     @Override
     public void initializeGrid(Grid<BooleanCell, BooleanState> grid) {
+        super.initializeGrid(grid);
         Random rnd = new Random();
         int width = grid.getWidth();
         int height = grid.getHeight();

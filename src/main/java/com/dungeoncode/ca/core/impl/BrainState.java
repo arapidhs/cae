@@ -24,12 +24,12 @@ public class BrainState implements CellState<BrainState.BrainStateValue> {
     /**
      * The state value of the cell (Ready, Firing, or Refractory).
      */
-    private final BrainStateValue value;
+    private BrainStateValue value;
 
     /**
      * The previous state value of the cell, used for second-order dynamics (echo mechanism).
      */
-    private final BrainStateValue echo;
+    private BrainStateValue echo;
 
     /**
      * Constructs a new BRIAN'S-BRAIN state with the specified value and a default echo of READY.
@@ -38,6 +38,10 @@ public class BrainState implements CellState<BrainState.BrainStateValue> {
      */
     public BrainState(BrainStateValue value) {
         this(value, BrainStateValue.READY);
+    }
+
+    public BrainState() {
+        this(null,null);
     }
 
     /**
@@ -49,6 +53,11 @@ public class BrainState implements CellState<BrainState.BrainStateValue> {
     public BrainState(BrainStateValue value, BrainStateValue echo) {
         this.value = value;
         this.echo = echo;
+    }
+
+    public void set(BrainStateValue value, BrainStateValue echo) {
+        this.value=value;
+        this.echo=echo;
     }
 
     /**

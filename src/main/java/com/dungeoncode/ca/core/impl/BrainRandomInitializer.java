@@ -31,9 +31,12 @@ public class BrainRandomInitializer implements GridInitializer<BrainCell, BrainS
     public void initializeGrid(Grid<BrainCell, BrainState> grid) {
         int width = grid.getWidth();
         int height = grid.getHeight();
-
+        grid.setNextStates( new BrainState[height][width]);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+
+                grid.getNextStates()[y][x] = new BrainState();
+
                 // Randomly assign Ready, Firing, or Refractory state
                 double rand = random.nextDouble();
                 BrainState state;

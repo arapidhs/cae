@@ -99,8 +99,8 @@ public class GreenbergRule implements Rule<BrainCell, BrainState> {
                 nextEcho = previousState;
             }
         }
-
-        return new BrainState(nextValue, nextEcho);
+        grid.getNextStates()[y][x].set(nextValue,nextEcho);
+        return grid.getNextStates()[y][x];
     }
 
     @Override

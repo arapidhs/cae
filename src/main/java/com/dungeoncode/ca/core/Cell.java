@@ -28,4 +28,6 @@ public interface Cell<T extends CellState<?>> {
      * @param state the new state to set, of type {@code T}
      */
     void setState(T state);
+
+    void copyState(T state);
 }

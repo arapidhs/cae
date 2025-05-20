@@ -57,6 +57,10 @@ public class BooleanState implements CellState<Boolean> {
         this.liveSum = liveSum;
     }
 
+    public BooleanState() {
+        this(false,false,0);
+    }
+
     /**
      * Returns the boolean value of this state.
      *
@@ -94,4 +98,9 @@ public class BooleanState implements CellState<Boolean> {
         this.echo=v;
     }
 
+    public void set(boolean value, boolean echo, int liveSum) {
+        this.value=value;
+        this.echo=echo;
+        this.liveSum=liveSum;
+    }
 }

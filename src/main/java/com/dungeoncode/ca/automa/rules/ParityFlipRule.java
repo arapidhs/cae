@@ -31,14 +31,16 @@ public class ParityFlipRule extends ParityRule {
      */
     @Override
     public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
-
+        int x = cell.getPosition().getX();
+        int y = cell.getPosition().getY();
         BooleanState parityCell = super.apply(grid, cell);
         boolean parity = parityCell.getValue();
 
         // XOR the PARITY result with the previous state (echo)
         BooleanState currentState = cell.getState();
         boolean newState = parity ^ currentState.isEcho();
-        return new BooleanState(newState, currentState.getValue(), parityCell.getLiveSum());
+        grid.getNextStates()[y][x].set(newState, currentState.getValue(), parityCell.getLiveSum());
+        return grid.getNextStates()[y][x];
     }
 
 }

@@ -46,7 +46,8 @@ public class ParityRule implements Rule<BooleanCell, BooleanState> {
 
         // Compute parity using XOR (odd number of true values yields true)
         boolean newState = center ^ north ^ south ^ west ^ east;
-        return new BooleanState(newState,cell.getState().getValue(),liveSum);
+        grid.getNextStates()[y][x].set(newState,cell.getState().getValue(),liveSum);
+        return grid.getNextStates()[y][x];
     }
 
     @Override

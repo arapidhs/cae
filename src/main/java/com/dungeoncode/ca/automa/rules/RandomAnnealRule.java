@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.Rule;
 import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanNeighborCountRule;
@@ -75,7 +74,8 @@ public class RandomAnnealRule extends BooleanNeighborCountRule {
         }
 
         // Echo tracks the previous state
-        return new BooleanState(newValue, currentState.getValue(),liveSum);
+        grid.getNextStates()[y][x].set(newValue, currentState.getValue(),liveSum);
+        return grid.getNextStates()[y][x];
     }
 
     @Override

@@ -23,12 +23,12 @@ public class PulseWeaverState implements CellState<PulseWeaverState.PulseState> 
     /**
      * The state value of the cell (Dormant, Charged, or Fading).
      */
-    private final PulseState value;
+    private PulseState value;
 
     /**
      * Indicates whether the cell is in a persistent Fading state, used for stochastic behavior.
      */
-    private final boolean isPersistent;
+    private boolean persistent;
 
     /**
      * Constructs a new Pulse Weaver state with the specified value and no persistence.
@@ -47,7 +47,11 @@ public class PulseWeaverState implements CellState<PulseWeaverState.PulseState> 
      */
     public PulseWeaverState(PulseState value, boolean isPersistent) {
         this.value = value;
-        this.isPersistent = isPersistent;
+        this.persistent = isPersistent;
+    }
+
+    public PulseWeaverState() {
+        this(null, false);
     }
 
     /**
@@ -60,12 +64,18 @@ public class PulseWeaverState implements CellState<PulseWeaverState.PulseState> 
         return value;
     }
 
+    public void set(PulseState value, boolean persistent) {
+        this.value=value;
+        this.persistent =persistent;
+    }
+
+
     /**
      * Returns whether the Fading state is persistent.
      *
      * @return {@code true} if the Fading state is persistent, {@code false} otherwise
      */
     public boolean isPersistent() {
-        return isPersistent;
+        return persistent;
     }
 }

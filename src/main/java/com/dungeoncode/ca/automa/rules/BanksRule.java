@@ -72,6 +72,7 @@ public class BanksRule extends BooleanNeighborCountRule {
             return new BooleanState(true, echo, liveNeighbors); // Corner configuration: erase corner (cell becomes inactive)
         }
 
-        return new BooleanState(currentState, echo, liveNeighbors);
+        grid.getNextStates()[y][x].set(currentState,echo,liveNeighbors);
+        return grid.getNextStates()[y][x];
     }
 }
