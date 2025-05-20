@@ -69,6 +69,7 @@ public class CellAuto {
             configurations.add(new TimeTunnelConfiguration());
             configurations.add(new CandleRainConfiguration());
             configurations.add(new RandomAnnealConfiguration());
+            configurations.add(new SafePassConfiguration());
             configurations.add(new PulseWeaverConfiguration());
 
             // Sort the list by configuration name
