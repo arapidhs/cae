@@ -72,6 +72,7 @@ public class CellAuto {
             configurations.add(new ConfHistogram());
             configurations.add(new ConfTubeWorms());
             configurations.add(new ConfNaiveDiffusion());
+            configurations.add(new ConfNaiveDiffusionWithHandshake());
 
             // Sort the list by configuration name
             configurations.sort(Comparator.comparing((Configuration c) -> c.getPage())

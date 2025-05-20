@@ -8,11 +8,11 @@ import com.dungeoncode.ca.core.impl.BooleanState;
 import java.util.Random;
 
 /**
- * Implements the NAIVE-DIFFUSION rule for a cellular automaton, modeling diffusion of particles by randomly copying the
- * state of a neighboring cell in one of four directions (north, south, east, west). Optionally splits the grid into a 3x3
- * subgrid (9 subgrids), inhibiting movement across subgrid boundaries if enabled, simulating isolated regions. This rule
- * produces a diffusion pattern that breaks up into tongues of fire, as described in Chapter 9, Section 9.4 of
- * <i>Cellular Automata Machines: A New Environment for Modeling</i>.
+ * Implements the NAIVE-DIFFUSION rule for a cellular automaton, modeling diffusion of particles by either copying the
+ * state of a neighboring cell or using a handshake protocol to move particles in one of four directions (north, south,
+ * east, west). Optionally splits the grid into a 3x3 subgrid (9 subgrids), inhibiting movement across subgrid boundaries
+ * if enabled, simulating isolated regions. This rule produces a diffusion pattern that breaks up into tongues of fire,
+ * as described in Chapter 9, Section 9.4 of <i>Cellular Automata Machines: A New Environment for Modeling</i>.
  *
  * @see RuleBooleanNeighborCount
  * @see BooleanCell
@@ -22,29 +22,34 @@ public class RuleNaiveDiffusion extends RuleBooleanNeighborCount {
 
     private final Random random = new Random();
     private final boolean useGrid;
+    private final boolean useHandshake;
     private final int subgridCountPerAxis = 3; // 3x3 subgrid (9 subgrids total)
 
     /**
-     * Constructs a new NAIVE-DIFFUSION rule with grid splitting disabled by default.
+     * Constructs a new NAIVE-DIFFUSION rule with grid splitting and handshake disabled by default.
      */
     public RuleNaiveDiffusion() {
-        this(false);
+        this(false, false);
     }
 
     /**
-     * Constructs a new NAIVE-DIFFUSION rule with the specified grid splitting option.
+     * Constructs a new NAIVE-DIFFUSION rule with the specified grid splitting and handshake options.
      *
-     * @param useGrid if true, splits the grid into a 3x3 subgrid and inhibits movement across boundaries
+     * @param useGrid     if true, splits the grid into a 3x3 subgrid and inhibits movement across boundaries
+     * @param useHandshake if true, uses a handshake protocol for particle movement instead of copying neighbor states
      */
-    public RuleNaiveDiffusion(boolean useGrid) {
+    public RuleNaiveDiffusion(boolean useGrid, boolean useHandshake) {
         this.useGrid = useGrid;
+        this.useHandshake = useHandshake;
     }
 
     /**
-     * Applies the NAIVE-DIFFUSION rule to compute the new state of a given cell at position (x, y). Randomly selects a
-     * direction (north, south, east, west) and copies the state (value) of the neighboring cell in that direction,
-     * unless movement is inhibited by a subgrid boundary (if enabled). If inhibited, the cell retains its current state.
-     * The new state is set in the nextStates array for (x, y). Echo tracks the previous state for second-order dynamics.
+     * Applies the NAIVE-DIFFUSION rule to compute the new state of a given cell at position (x, y). If handshake is
+     * disabled, randomly selects a direction (north, south, east, west) and copies the state (value) of the neighboring
+     * cell in that direction, unless movement is inhibited by a subgrid boundary (if enabled). If handshake is enabled,
+     * an active cell gives its state (becoming inactive) to an empty neighbor, and an inactive cell takes a state
+     * (becoming active) from a neighbor with a particle, respecting subgrid boundaries. The new state is set in the
+     * nextStates array for (x, y). Echo tracks the previous state for second-order dynamics.
      *
      * @param grid the {@link Grid} containing the cell and its neighbors
      * @param cell the {@link BooleanCell} whose state is to be updated
@@ -92,9 +97,45 @@ public class RuleNaiveDiffusion extends RuleBooleanNeighborCount {
         boolean canMove = !useGrid ||
                 (x / subgridWidth == nx / subgridWidth && y / subgridHeight == ny / subgridHeight);
 
-        // If movement is inhibited, retain current state; otherwise, copy the target state
-        boolean newValue = canMove ? targetValue : currentValue;
+        boolean newValue = currentValue;
         boolean newEcho = currentValue;
+
+        if (canMove ){
+            if (useHandshake){
+                boolean canTake = !currentValue && targetValue;
+                boolean canGive = currentValue && !targetValue;
+                if (canTake){
+                    newValue=true;
+                } else if (canGive){
+                    newValue = false;
+                }
+            } else {
+                newValue = targetValue;
+            }
+        }
+
+
+//        // Determine new state based on mode (handshake or naive diffusion)
+//        boolean newValue;
+//        boolean newEcho = currentValue;
+//        if (useHandshake) {
+//            // Handshake protocol: give or take
+//            newValue = currentValue;
+//            if (currentValue) { // Active: attempt to give
+//                if (!targetValue && canMove) {
+//                    newValue = false; // Give to neighbor (current cell becomes inactive)
+//                }
+//            } else { // Inactive: attempt to take
+//                if (targetValue && canMove) {
+//                    newValue = true; // Take from neighbor (current cell becomes active)
+//                }
+//            }
+//        } else {
+//            // Naive diffusion: copy the target state if movement is allowed
+//            newValue = canMove ? targetValue : currentValue;
+//        }
+
+
 
         // Update next states for the current cell
         grid.getNextStates()[y][x].set(newValue, newEcho, liveSum);
