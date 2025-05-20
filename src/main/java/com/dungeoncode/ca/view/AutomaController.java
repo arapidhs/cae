@@ -90,6 +90,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(CandleRainConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(RandomAnnealConfiguration.class.getName(), liveSumStateRenderer);
         CELL_RENDERER.put(SafePassConfiguration.class.getName(), liveSumStateRenderer);
+        CELL_RENDERER.put(TubeWormsConfiguration.class.getName(), booleanRenderer);
         CELL_RENDERER.put(PulseWeaverConfiguration.class.getName(), pulseWeaverStateRenderer);
 
         IS_CONFIGURATION_BOOLEAN = new HashMap<>();
@@ -113,6 +114,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         IS_CONFIGURATION_BOOLEAN.put(TimeTunnelConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(CandleRainConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(RandomAnnealConfiguration.class.getName(), true);
+        IS_CONFIGURATION_BOOLEAN.put(TubeWormsConfiguration.class.getName(), true);
         IS_CONFIGURATION_BOOLEAN.put(SafePassConfiguration.class.getName(), true);
 
     }

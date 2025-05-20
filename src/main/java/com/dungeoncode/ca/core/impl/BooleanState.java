@@ -4,9 +4,9 @@ import com.dungeoncode.ca.core.CellState;
 
 /**
  * Represents a boolean state for a cell in a cellular automaton, indicating an active ({@code true}) or inactive
- * ({@code false}) state, with an optional echo flag for tracking state history and a live sum for neighborhood
- * activity. Implements {@link CellState} with a boolean value and supports configurations requiring temporal
- * state visualization or neighbor-based rendering.
+ * ({@code false}) state, with fields for tracking state history (echo), neighborhood activity (live sum), and a timer
+ * for countdown mechanisms. Implements {@link CellState} with a boolean value and supports configurations requiring
+ * temporal state tracking, neighbor-based rendering, or timed dynamics.
  */
 public class BooleanState implements CellState<Boolean> {
 
@@ -16,7 +16,7 @@ public class BooleanState implements CellState<Boolean> {
     private boolean value;
 
     /**
-     * Indicates whether the state includes an echo effect for visualization.
+     * Tracks the previous state value for second-order dynamics.
      */
     private boolean echo;
 
@@ -26,39 +26,49 @@ public class BooleanState implements CellState<Boolean> {
     private int liveSum;
 
     /**
-     * Constructs a new boolean state with the specified value, no echo effect, and zero live sum.
+     * A timer for countdown mechanisms, such as retraction cycles in rules like TUBE-WORMS (0 = idle, >0 = counting down).
+     */
+    private int timer;
+
+    /**
+     * Constructs a new boolean state with the specified value, no echo effect, and zero live sum and timer.
      *
      * @param value the boolean value ({@code true} for active, {@code false} for inactive)
      */
     public BooleanState(boolean value) {
-        this(value, false, 0);
+        this(value, false, 0, 0);
     }
 
     /**
-     * Constructs a new boolean state with the specified value, echo flag, and zero live sum.
+     * Constructs a new boolean state with the specified value, echo flag, and zero live sum and timer.
      *
      * @param value the boolean value ({@code true} for active, {@code false} for inactive)
      * @param echo  {@code true} to enable echo effect, {@code false} otherwise
      */
     public BooleanState(boolean value, boolean echo) {
-        this(value, echo, 0);
+        this(value, echo, 0, 0);
     }
 
     /**
-     * Constructs a new boolean state with the specified value, echo flag, and live sum.
+     * Constructs a new boolean state with the specified value, echo flag, live sum, and timer.
      *
      * @param value   the boolean value ({@code true} for active, {@code false} for inactive)
      * @param echo    {@code true} to enable echo effect, {@code false} otherwise
      * @param liveSum the number of live cells in the neighborhood
+     * @param timer   the timer value for countdown mechanisms (0 = idle, >0 = counting down)
      */
-    public BooleanState(boolean value, boolean echo, final int liveSum) {
+    public BooleanState(boolean value, boolean echo, final int liveSum, final int timer) {
         this.value = value;
         this.echo = echo;
         this.liveSum = liveSum;
+        this.timer = timer;
     }
 
+    /**
+     * Constructs a new boolean state with default values: inactive, no echo, zero live sum, and zero timer.
+     */
     public BooleanState() {
-        this(false,false,0);
+        this(false, false, 0, 0);
     }
 
     /**
@@ -90,17 +100,50 @@ public class BooleanState implements CellState<Boolean> {
     }
 
     /**
-     * Swap the values of value and echo.
+     * Returns the timer value for countdown mechanisms.
+     *
+     * @return the timer value (0 = idle, >0 = counting down)
      */
-    public void swapEcho() {
-        boolean v=value;
-        this.value=this.echo;
-        this.echo=v;
+    public int getTimer() {
+        return timer;
     }
 
-    public void set(boolean value, boolean echo, int liveSum) {
-        this.value=value;
-        this.echo=echo;
-        this.liveSum=liveSum;
+    /**
+     * Swaps the values of the state (value) and echo fields.
+     */
+    public void swapEcho() {
+        boolean v = value;
+        this.value = this.echo;
+        this.echo = v;
     }
+
+    /**
+     * Sets the state, echo, live sum, and timer to the specified values.
+     *
+     * @param value   the new boolean value ({@code true} for active, {@code false} for inactive)
+     * @param echo    the new echo value ({@code true} to enable echo, {@code false} otherwise)
+     * @param liveSum the new number of live cells in the neighborhood
+     * @param timer   the new timer value (0 = idle, >0 = counting down)
+     */
+    public void set(boolean value, boolean echo, int liveSum, int timer) {
+        this.value = value;
+        this.echo = echo;
+        this.liveSum = liveSum;
+        this.timer = timer;
+    }
+
+    /**
+     * Sets the state, echo, live sum, and timer to the specified values.
+     *
+     * @param value   the new boolean value ({@code true} for active, {@code false} for inactive)
+     * @param echo    the new echo value ({@code true} to enable echo, {@code false} otherwise)
+     * @param liveSum the new number of live cells in the neighborhood
+     */
+    public void set(boolean value, boolean echo, int liveSum) {
+        this.value = value;
+        this.echo = echo;
+        this.liveSum = liveSum;
+        this.timer = 0;
+    }
+
 }

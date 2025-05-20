@@ -68,6 +68,7 @@ public class TrianglesRule extends BooleanNeighborCountRule {
 
         boolean echo=cell.getState().getValue();
         int liveCount= countLiveMooreNeighbors(grid,x,y);
-        return new BooleanState(isActive,echo,liveCount);
+        grid.getNextStates()[y][x].set(isActive,echo,liveCount);
+        return grid.getNextStates()[y][x];
     }
 }

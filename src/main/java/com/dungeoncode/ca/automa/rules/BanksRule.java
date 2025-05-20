@@ -51,6 +51,7 @@ public class BanksRule extends BooleanNeighborCountRule {
         boolean southState = grid.getCell(nxSouth, nySouth).getState().getValue();
 
         // Handle the case of exactly 2 live neighbors: check for corner or straight line
+        boolean nextState = currentState;
         if (liveNeighbors == 2) {
             // Check west and east neighbors
             int nxWest = (x - 1 + width) % width;
@@ -63,16 +64,16 @@ public class BanksRule extends BooleanNeighborCountRule {
             // Check if the two live neighbors form a corner (at 90°) or a straight line
             if (currentState) {
                 if (northState && southState || eastState && westState) {
-                    return new BooleanState(true, echo, liveNeighbors); // Straight line (e.g., north-south or west-east): fill pocket (cell becomes active)
+                    nextState = true; // Straight line (e.g., north-south or west-east): fill pocket (cell becomes active)
                 } else {
-                    return new BooleanState(false, echo, liveNeighbors); // Straight line (e.g., north-south or west-east): fill pocket (cell becomes active)
+                    nextState = false; // Straight line (e.g., north-south or west-east): fill pocket (cell becomes active)
                 }
             }
         } else if (liveNeighbors > 2) {
-            return new BooleanState(true, echo, liveNeighbors); // Corner configuration: erase corner (cell becomes inactive)
+            nextState = true; // Corner configuration: erase corner (cell becomes inactive)
         }
 
-        grid.getNextStates()[y][x].set(currentState,echo,liveNeighbors);
+        grid.getNextStates()[y][x].set(nextState,echo,liveNeighbors);
         return grid.getNextStates()[y][x];
     }
 }
