@@ -4,7 +4,6 @@ import com.dungeoncode.ca.automa.*;
 import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.Configuration;
-import com.dungeoncode.ca.core.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public class CellAuto {
             configurations.add(new ConfHistogram());
             configurations.add(new ConfTubeWorms());
             configurations.add(new ConfNaiveDiffusion());
-            configurations.add(new ConfNaiveDiffusionWithHandshake());
+            configurations.add(new ConfHandshakeDiffusion());
 
             // Sort the list by configuration name
             configurations.sort(Comparator.comparing((Configuration c) -> c.getPage())

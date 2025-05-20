@@ -23,14 +23,14 @@ import static com.dungeoncode.ca.core.Constants.*;
  * @see RuleNaiveDiffusion
  * @see InitDisk
  */
-public class ConfNaiveDiffusionWithHandshake extends AbstractConfiguration<BooleanCell, BooleanState> {
+public class ConfHandshakeDiffusion extends AbstractConfiguration<BooleanCell, BooleanState> {
 
     /**
      * Constructs a new NAIVE-DIFFUSION configuration with a handshake protocol, including metadata for name,
      * description, and citation. The configuration is named "Naive Diffusion with Handshake," described as a cellular
      * automaton modeling particle diffusion with handshaking, and cites the book by Toffoli and Margolus.
      */
-    public ConfNaiveDiffusionWithHandshake() {
+    public ConfHandshakeDiffusion() {
         super(
                 "Naive Diffusion with Handshake",
                 "A cellular automaton modeling diffusion of particles with a handshake protocol, where the state (value) " +

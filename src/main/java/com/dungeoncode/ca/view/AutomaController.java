@@ -85,7 +85,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfHistogram.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfTubeWorms.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfNaiveDiffusion.class.getName(), rendererBoolean);
-        CELL_RENDERER.put(ConfNaiveDiffusionWithHandshake.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfHandshakeDiffusion.class.getName(), rendererBoolean);
 
     }
 
