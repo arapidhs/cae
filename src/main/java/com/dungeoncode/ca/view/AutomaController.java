@@ -357,33 +357,20 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                         case F1 -> {
                             if(automa.getGrid().getCell(0,0) instanceof BooleanCell) {
                                 ((RendererBoolean) renderer.getStateRenderer()).toggleInversion();
+                                renderer.accept(automa.getGrid());
                             }
                         }
                         case ArrowLeft -> {
-                            if(automa.getGrid().getCell(0,0) instanceof BooleanCell) {
-                                boolean wasRunning = automa.isRunning();
-                                if (automa.isRunning()) {
-                                    automa.stop();
-                                }
+                            if (renderer.getStateRenderer() instanceof RendererBoolean) {
                                 ((RendererBoolean) renderer.getStateRenderer()).previousPalette();
                                 renderer.accept(automa.getGrid());
-                                if (wasRunning) {
-                                    automa.start();
-                                }
                             }
                         }
                         case ArrowRight -> {
                             if(automa.getGrid().getCell(0,0) instanceof BooleanCell) {
                                 if (renderer.getStateRenderer() instanceof RendererBoolean) {
-                                    boolean wasRunning = automa.isRunning();
-                                    if (automa.isRunning()) {
-                                        automa.stop();
-                                    }
                                     ((RendererBoolean) renderer.getStateRenderer()).nextPalette();
                                     renderer.accept(automa.getGrid());
-                                    if (wasRunning) {
-                                        automa.start();
-                                    }
                                 }
                             }
                         }

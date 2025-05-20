@@ -7,6 +7,7 @@ import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
+import com.dungeoncode.ca.core.impl.init.InitSpots;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class ConfTriangles extends AbstractConfiguration<BooleanCell, BooleanSta
     @Override
     public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
-        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(1));
+        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitSpots(10));
         config.put(CONF_GRID, grid);
         config.put(CONF_RULE, new RuleTriangles());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
