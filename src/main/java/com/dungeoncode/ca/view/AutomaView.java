@@ -44,7 +44,7 @@ import static com.googlecode.lanterna.gui2.Window.Hint.*;
  */
 public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
 
-    private final int width = 80;
+    private final int width = 140;
     private final int height = 40;
     private final int fontSize = 24;
 
