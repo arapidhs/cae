@@ -75,7 +75,7 @@ public class ConfTubeWorms extends AbstractConfiguration<BooleanCell, BooleanSta
                     // Random worm state (50% active/out) and random timer (0-3)
                     boolean value = random.nextBoolean();
                     int timer = random.nextInt(3); // 0 to 3
-                    gridToInit.setCell(x, y, new BooleanCell(x, y, new BooleanState(timer == 0, false, 0, timer)));
+                    gridToInit.setCell(x, y, new BooleanCell(x, y, new BooleanState(timer == 0, false, 0, timer,0)));
                 }
             }
         });

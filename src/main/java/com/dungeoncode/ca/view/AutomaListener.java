@@ -226,10 +226,10 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
                     Random rnd = new Random();
                     double prob = Math.exp(-distance / radius); // Gaussian-like decay
                     boolean b = rnd.nextDouble() < prob;
-                    cell.setState(b, false);
+                    cell.setState(b, false,0);
                 } else {
                     // Middle button activates, right button deactivates
-                    cell.setState(button == 2, false);
+                    cell.setState(button == 2, false,0);
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error updating cell at ({}, {}): {}", nx, ny, ex.getMessage());

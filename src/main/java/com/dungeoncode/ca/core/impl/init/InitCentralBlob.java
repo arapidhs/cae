@@ -68,9 +68,9 @@ public class InitCentralBlob extends InitNextStatesBoolean {
                 boolean isActive = x >= startX && x < endX && y >= startY && y < endY;
                 isActive = isActive && rnd.nextBoolean();
                 if (grid.getCell(x, y) == null) {
-                    grid.setCell(x, y, new BooleanCell(x, y, isActive, false));
+                    grid.setCell(x, y, new BooleanCell(x, y, isActive, false,0));
                 } else {
-                    grid.getCell(x, y).setState(isActive, false);
+                    grid.getCell(x, y).setState(isActive, false,0);
                 }
             }
         }

@@ -114,29 +114,6 @@ public class RuleNaiveDiffusion extends RuleBooleanNeighborCount {
             }
         }
 
-
-//        // Determine new state based on mode (handshake or naive diffusion)
-//        boolean newValue;
-//        boolean newEcho = currentValue;
-//        if (useHandshake) {
-//            // Handshake protocol: give or take
-//            newValue = currentValue;
-//            if (currentValue) { // Active: attempt to give
-//                if (!targetValue && canMove) {
-//                    newValue = false; // Give to neighbor (current cell becomes inactive)
-//                }
-//            } else { // Inactive: attempt to take
-//                if (targetValue && canMove) {
-//                    newValue = true; // Take from neighbor (current cell becomes active)
-//                }
-//            }
-//        } else {
-//            // Naive diffusion: copy the target state if movement is allowed
-//            newValue = canMove ? targetValue : currentValue;
-//        }
-
-
-
         // Update next states for the current cell
         grid.getNextStates()[y][x].set(newValue, newEcho, liveSum);
         return grid.getNextStates()[y][x];

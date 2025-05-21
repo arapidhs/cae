@@ -4,10 +4,7 @@ import com.dungeoncode.ca.automa.*;
 import com.dungeoncode.ca.core.*;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
-import com.dungeoncode.ca.view.render.GridRenderer;
-import com.dungeoncode.ca.view.render.RendererBoolean;
-import com.dungeoncode.ca.view.render.RendererBrain;
-import com.dungeoncode.ca.view.render.StateRenderer;
+import com.dungeoncode.ca.view.render.*;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -35,6 +32,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.googlecode.lanterna.input.KeyType.Character;
+import static java.lang.Enum.valueOf;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
@@ -60,6 +58,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
 
     static {
         RendererBoolean rendererBoolean = new RendererBoolean(RendererBoolean.Palette.DEFAULT);
+        RendererBooleanId rendererBooleanId = new RendererBooleanId();
         RendererBrain rendererBrain = new RendererBrain();
 
         CELL_RENDERER = new HashMap<>();
@@ -86,6 +85,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfTubeWorms.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfNaiveDiffusion.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfHandshakeDiffusion.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfGeneticDrift.class.getName(), rendererBooleanId);
 
     }
 
@@ -152,6 +152,11 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
      * The renderer for displaying the grid's boolean states.
      */
     private GridRenderer<C, S> renderer;
+
+    /**
+     * Tracks whether the automa is restarting due to user control input.
+     */
+    private boolean automaRestarting;
 
     /**
      * Constructs a new control view with the specified terminal dimensions, cell font size, and configuration.
@@ -356,7 +361,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                             quit = true;
                         }
                         case F1 -> {
-                            if(automa.getGrid().getCell(0,0) instanceof BooleanCell) {
+                            if (renderer.getStateRenderer() instanceof RendererBoolean) {
                                 ((RendererBoolean) renderer.getStateRenderer()).toggleInversion();
                                 renderer.accept(automa.getGrid());
                             }
@@ -401,11 +406,11 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                             }
                         }
                         case 'r', 'R' -> {
-                            automa.stop();
-                            getTextGraphics().fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), TextCharacter.fromCharacter(' ', TextColor.ANSI.BLACK, TextColor.ANSI.BLACK, SGR.REVERSE)[0]);
-                            screen.refresh();
-                            automa.getGrid().initialize();
-                            automa.resume();
+                            if ( !automaRestarting ) {
+                                automaRestarting=true;
+                                automa.getGrid().initialize();
+                                automaRestarting=false;
+                            }
                         }
                         case 'i', 'I' -> {
                             showConfigurationDetails = true;

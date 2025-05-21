@@ -47,9 +47,9 @@ public class InitSpots extends InitNextStatesBoolean {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (grid.getCell(x, y) == null) {
-                    grid.setCell(x, y, new BooleanCell(x, y, false, false));
+                    grid.setCell(x, y, new BooleanCell(x, y, false, false,0));
                 } else {
-                    grid.getCell(x, y).setState(false, false);
+                    grid.getCell(x, y).setState(false, false,0);
                 }
             }
         }
@@ -59,7 +59,7 @@ public class InitSpots extends InitNextStatesBoolean {
         for (int i = 0; i < spotCount; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
-            grid.getCell(x, y).setState(true, false);
+            grid.getCell(x, y).setState(true, false,0);
         }
     }
 }

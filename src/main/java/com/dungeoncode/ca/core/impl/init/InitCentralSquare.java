@@ -63,9 +63,9 @@ public class InitCentralSquare extends InitNextStatesBoolean {
                 boolean isActive = x >= startX && x < endX && y >= startY && y < endY;
                 boolean echo = withEcho && isActive;
                 if (grid.getCell(x, y) == null) {
-                    grid.setCell(x, y, new BooleanCell(x, y, isActive, echo));
+                    grid.setCell(x, y, new BooleanCell(x, y, isActive, echo,0));
                 } else {
-                    grid.getCell(x, y).setState(isActive, echo);
+                    grid.getCell(x, y).setState(isActive, echo,0);
                 }
             }
         }

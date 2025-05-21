@@ -52,9 +52,9 @@ public class InitDisk extends InitNextStatesBoolean {
                 double distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
                 boolean isActive = distance <= radius;
                 if (grid.getCell(x, y) == null) {
-                    grid.setCell(x, y, new BooleanCell(x, y, isActive, false));
+                    grid.setCell(x, y, new BooleanCell(x, y, isActive, false,0));
                 } else {
-                    grid.getCell(x, y).setState(isActive, false);
+                    grid.getCell(x, y).setState(isActive, false,0);
                 }
             }
         }

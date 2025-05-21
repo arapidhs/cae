@@ -188,6 +188,7 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
      * A new executor is created for future starts.
      */
     public void stop() {
+        isRunning = false;
         if (executor != null) {
             isRunning = false;
             executor.shutdown();

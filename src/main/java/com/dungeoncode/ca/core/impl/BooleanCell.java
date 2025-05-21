@@ -13,11 +13,27 @@ public class BooleanCell extends AbstractCell<BooleanState> {
      */
     private BooleanState state;
 
-    public BooleanCell(int x, int y, boolean state, boolean echo) {
+    /**
+     * Constructs a new cell at the specified position with the given state, echo, and id.
+     *
+     * @param x     the x-coordinate of the cell
+     * @param y     the y-coordinate of the cell
+     * @param state the boolean value ({@code true} for active, {@code false} for inactive)
+     * @param echo  {@code true} to enable echo effect, {@code false} otherwise
+     * @param id    the identifier for the state (0 = none, >0 = specific category)
+     */
+    public BooleanCell(int x, int y, boolean state, boolean echo, int id) {
         super(x, y);
-        this.state = new BooleanState(state, echo);
+        this.state = new BooleanState(state, echo, 0, 0, id);
     }
 
+    /**
+     * Constructs a new cell at the specified position with the given state.
+     *
+     * @param x     the x-coordinate of the cell
+     * @param y     the y-coordinate of the cell
+     * @param state the {@link BooleanState} to set
+     */
     public BooleanCell(int x, int y, BooleanState state) {
         super(x, y);
         this.state = state;
@@ -43,13 +59,24 @@ public class BooleanCell extends AbstractCell<BooleanState> {
         this.state = state;
     }
 
+    /**
+     * Copies the state from the source, including value, echo, live sum, timer, and id.
+     *
+     * @param source the source {@link BooleanState} to copy from
+     */
     @Override
     public void copyState(BooleanState source) {
-        this.state.set(source.getValue(), source.isEcho(), source.getLiveSum(), source.getTimer());
+        this.state.set(source.getValue(), source.isEcho(), source.getLiveSum(), source.getTimer(), source.getId());
     }
 
-    public void setState(boolean value, boolean echo) {
-        this.state.set(value, echo, 0);
+    /**
+     * Sets the state, echo, and id, with zero live sum and timer.
+     *
+     * @param value the new boolean value ({@code true} for active, {@code false} for inactive)
+     * @param echo  the new echo value ({@code true} to enable echo, {@code false} otherwise)
+     * @param id    the new identifier (0 = none, >0 = specific category)
+     */
+    public void setState(boolean value, boolean echo, int id) {
+        this.state.set(value, echo, 0, 0, id);
     }
-
 }
