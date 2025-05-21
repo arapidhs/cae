@@ -15,7 +15,7 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class InitSpots extends InitNextStatesBoolean {
+public class InitSpots extends InitIntermediateStatesBoolean {
 
     /**
      * The number of active spots to place randomly on the grid.
@@ -28,6 +28,7 @@ public class InitSpots extends InitNextStatesBoolean {
      * @param spotCount the number of active spots to place, must be non-negative
      */
     public InitSpots(int spotCount) {
+        super(9);
         this.spotCount = spotCount;
     }
 

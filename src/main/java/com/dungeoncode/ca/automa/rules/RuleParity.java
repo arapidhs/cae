@@ -74,8 +74,8 @@ public class RuleParity extends AbstractRule<BooleanCell, BooleanState> {
 
         // Compute parity using XOR (odd number of true values yields true)
         boolean newState = center ^ north ^ south ^ west ^ east;
-        grid.getNextStates()[y][x].set(newState, cell.getState().getValue(), liveSum);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(newState, cell.getState().getValue(), liveSum);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

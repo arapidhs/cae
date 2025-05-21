@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleGreenberg;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BrainCell;
 import com.dungeoncode.ca.core.impl.BrainState;
 import com.dungeoncode.ca.core.impl.init.InitRandomFiring;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitRandomFiring;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the GREENBERG cellular automaton, combining the DIAMONDS rule with a READY
+ * Configures an {@link Automaton} to run the GREENBERG cellular automaton, combining the DIAMONDS rule with a READY
  * inhibitor in a second-order dynamics system, producing diamond-shaped wave fronts with hollow interiors. The grid
  * is initialized with a sparse distribution of Firing cells (10 cells) among mostly Ready cells. This configuration
  * is inspired by the GREENBERG rule, studied by Greenberg and Hastings, described in Chapter 6, Section 6.1 of
@@ -62,18 +62,18 @@ public class ConfGreenberg extends AbstractConfiguration<BrainCell, BrainState> 
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the GREENBERG automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the GREENBERG automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitRandomFiring}
 //     * with a sparse distribution of 10 Firing cells among mostly Ready cells, and applies the {@link RuleGreenberg}
 //     * for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BrainCell, BrainState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BrainCell, BrainState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BrainCell, BrainState> grid = new Grid<>(width, height, new InitRandomFiring(10));
 //        config.put(CONF_GRID, grid);

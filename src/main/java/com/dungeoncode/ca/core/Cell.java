@@ -1,7 +1,7 @@
 package com.dungeoncode.ca.core;
 
 /**
- * Represents a cell in a cellular automaton grid, holding a position and a state.
+ * Defines a cell in a cellular automaton grid, encapsulating its position and state.
  * The cell's state is of type {@code T}, which extends {@link CellState}.
  *
  * @param <T> the type of the cell's state, extending {@link CellState}
@@ -18,7 +18,7 @@ public interface Cell<T extends CellState<?>> {
     /**
      * Returns the current state of this cell.
      *
-     * @return the state of the cell, of type {@code T}
+     * @return the cell's state, of type {@code T}
      */
     T getState();
 
@@ -29,5 +29,10 @@ public interface Cell<T extends CellState<?>> {
      */
     void setState(T state);
 
+    /**
+     * Copies the specified state into this cell, updating its state.
+     *
+     * @param state the state to copy, of type {@code T}
+     */
     void copyState(T state);
 }

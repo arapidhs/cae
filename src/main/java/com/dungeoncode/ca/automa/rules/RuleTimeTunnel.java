@@ -93,8 +93,8 @@ public class RuleTimeTunnel extends AbstractRule<BooleanCell, BooleanState> {
         // XOR the decision table result with the previous state (echo)
         boolean newState = decision ^ currentState.isEcho();
 
-        grid.getNextStates()[y][x].set(newState, currentState.getValue(), liveSum);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(newState, currentState.getValue(), liveSum);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

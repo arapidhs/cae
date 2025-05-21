@@ -75,8 +75,8 @@ public class RuleLichensWithDeath extends RuleBooleanNeighborCount {
         }
 
         boolean echo = cell.getState().getValue();
-        grid.getNextStates()[y][x].set(newState, echo, liveCount);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(newState, echo, liveCount);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

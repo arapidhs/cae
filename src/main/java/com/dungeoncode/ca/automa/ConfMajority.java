@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleMajority;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the MAJORITY cellular automaton, where a cell adopts the state of the
+ * Configures an {@link Automaton} to run the MAJORITY cellular automaton, where a cell adopts the state of the
  * majority in its 3x3 Moore neighborhood (including the center), becoming active if 5 or more cells are active,
  * and inactive otherwise, producing interpenetrating domains. The grid is initialized with a random distribution
  * of active and inactive cells (50% probability). This configuration is inspired by the MAJORITY rule described
@@ -59,18 +59,18 @@ public class ConfMajority extends AbstractConfiguration<BooleanCell, BooleanStat
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the MAJORITY automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the MAJORITY automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitRandomBoolean}
 //     * with a random distribution of active and inactive cells (50% probability), and applies the
 //     * {@link RuleMajority} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
 //        config.put(CONF_GRID, grid);

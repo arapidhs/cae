@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleLichensWithDeath;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitCentralBlob;
@@ -11,7 +11,7 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the LICHENS-WITH-DEATH cellular automaton, where a cell becomes active if
+ * Configures an {@link Automaton} to run the LICHENS-WITH-DEATH cellular automaton, where a cell becomes active if
  * it has exactly 3, 7, or 8 live neighbors, becomes inactive if it has exactly 4 live neighbors, and remains
  * unchanged otherwise, in its Moore neighborhood, producing a complex, unpredictable pattern. The grid is
  * initialized with a small 5x5 central region of random state cells, simulating a seed. This configuration is inspired
@@ -63,17 +63,17 @@ public class ConfLichensWithDeath extends AbstractConfiguration<BooleanCell, Boo
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the LICHENS-WITH-DEATH automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the LICHENS-WITH-DEATH automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitCentralSquare}
 //     * with a 5x5 central region of random state cells, and applies the {@link RuleLichensWithDeath} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralBlob(2, 2));
 //        config.put(CONF_GRID, grid);

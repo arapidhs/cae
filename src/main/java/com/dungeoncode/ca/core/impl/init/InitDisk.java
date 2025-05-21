@@ -15,7 +15,7 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public class InitDisk extends InitNextStatesBoolean {
+public class InitDisk extends InitIntermediateStatesBoolean {
 
     /**
      * The radius of the disk-shaped region, measured from the grid's center.
@@ -28,6 +28,7 @@ public class InitDisk extends InitNextStatesBoolean {
      * @param radius the radius of the disk, must be non-negative
      */
     public InitDisk(int radius) {
+        super(6);
         this.radius = radius;
     }
 

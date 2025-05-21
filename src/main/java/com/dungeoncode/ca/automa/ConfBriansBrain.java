@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleBriansBrain;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BrainCell;
 import com.dungeoncode.ca.core.impl.BrainState;
 import com.dungeoncode.ca.core.impl.init.InitBrainRandom;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitBrainRandom;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the BRIAN'S-BRAIN cellular automaton, where cells transition between Ready,
+ * Configures an {@link Automaton} to run the BRIAN'S-BRAIN cellular automaton, where cells transition between Ready,
  * Firing, and Refractory states, producing dynamic, neural firing-like patterns. The grid is initialized with a
  * random distribution of Ready (70%), Firing (15%), and Refractory (15%) states. This configuration is inspired by
  * the BRIAN'S-BRAIN rule, suggested by Brian Silverman, described in Chapter 6, Section 6.1 of <i>Cellular Automata
@@ -62,18 +62,18 @@ public class ConfBriansBrain extends AbstractConfiguration<BrainCell, BrainState
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the BRIAN'S-BRAIN automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the BRIAN'S-BRAIN automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitBrainRandom}
 //     * with a random distribution of Ready, Firing, and Refractory states, and applies the {@link RuleBriansBrain}
 //     * for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BrainCell, BrainState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BrainCell, BrainState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BrainCell, BrainState> grid = new Grid<>(width, height, new InitBrainRandom());
 //        config.put(CONF_GRID, grid);

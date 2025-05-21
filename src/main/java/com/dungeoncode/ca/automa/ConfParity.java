@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleParity;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
@@ -11,7 +11,7 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the Parity cellular automaton, where a cell's next state is determined
+ * Configures an {@link Automaton} to run the Parity cellular automaton, where a cell's next state is determined
  * by the parity (odd or even count) of live cells in its von Neumann neighborhood (center, north, south, west,
  * east). The grid is initialized with a random distribution of live and dead cells, simulating a "primeval soup."
  * This configuration is inspired by the Parity rule described in Chapter 4, Section 4.2 of
@@ -57,17 +57,17 @@ public class ConfParity extends AbstractConfiguration<BooleanCell, BooleanState>
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the Parity automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the Parity automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitRandomBoolean}
 //     * with a random distribution of live and dead cells, and applies the {@link RuleParity} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(8));
 //        config.put(CONF_GRID, grid);

@@ -1,43 +1,89 @@
 package com.dungeoncode.ca.core;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
- * Represents a citation or reference for a cellular automaton configuration.
- * Stores information about authors, publication details, and location within the source.
+ * Represents a citation for a cellular automaton rule or configuration, storing details about authors, publication, and source location.
+ * Supports formatting citations for books, papers, or online resources, and JSON serialization/deserialization via Jackson.
  */
 public class Citation {
+    /**
+     * The list of authors for the cited work.
+     */
     private final List<String> authors;
+
+    /**
+     * The map of citation details, including title, subtitle, section, and subsection.
+     */
     private final Map<String, String> details;
+
+    /**
+     * The page number in the cited work.
+     */
     private final int page;
+
+    /**
+     * The publication year of the cited work.
+     */
     private final int year;
+
+    /**
+     * The place of publication.
+     */
     private final String place;
+
+    /**
+     * The publisher of the cited work.
+     */
     private final String publisher;
+
+    /**
+     * The URL referencing the cited work, if applicable.
+     */
     private final String url;
+
+    /**
+     * The DOI (Digital Object Identifier) of the cited work, if applicable.
+     */
     private final String doi;
 
     /**
-     * Constructs a new Citation with the specified details.
+     * Constructs a new citation with the specified details.
      *
-     * @param title      The title of the work
-     * @param subtitle   Optional subtitle of the work
-     * @param section    The section number or name
-     * @param subsection The subsection number or name
-     * @param page       The page number
-     * @param year       The publication year
-     * @param place      The place of publication
-     * @param publisher  The publisher of the work
-     * @param url        Optional URL reference
-     * @param doi        Optional DOI reference
-     * @param authors    Variable number of author names
+     * @param title      the title of the work, must not be null
+     * @param subtitle   the subtitle of the work, or null if none
+     * @param section    the section number or name, or null if none
+     * @param subsection the subsection number or name, or null if none
+     * @param page       the page number in the work
+     * @param year       the publication year
+     * @param place      the place of publication, or null if none
+     * @param publisher  the publisher of the work, or null if none
+     * @param url        the URL referencing the work, or null if none
+     * @param doi        the DOI of the work, or null if none
+     * @param authors    the list of author names, or null if unspecified
+     * @throws NullPointerException if title is null
      */
-    public Citation(String title, String subtitle,
-                    String section, String subsection, int page, int year,
-                    String place, String publisher, String url, String doi,
-                    String... authors) {
-        this.authors = (authors == null || authors.length == 0)
+    @JsonCreator
+    public Citation(
+            @JsonProperty("title") @Nonnull String title,
+            @JsonProperty("subtitle") @Nullable String subtitle,
+            @JsonProperty("section") @Nullable String section,
+            @JsonProperty("subsection") @Nullable String subsection,
+            @JsonProperty("page") int page,
+            @JsonProperty("year") int year,
+            @JsonProperty("place") @Nullable String place,
+            @JsonProperty("publisher") @Nullable String publisher,
+            @JsonProperty("url") @Nullable String url,
+            @JsonProperty("doi") @Nullable String doi,
+            @JsonProperty("authors") @Nullable List<String> authors) {
+        this.authors = (authors == null || authors.isEmpty())
                 ? Collections.emptyList()
-                : Arrays.asList(authors);
+                : authors;
         this.page = page;
         this.year = year;
         this.place = place;
@@ -46,43 +92,43 @@ public class Citation {
         this.doi = doi;
 
         this.details = new HashMap<>();
-        this.details.put(Constants.CITATION_TITLE, title);
+        this.details.put(Constants.CITATION_TITLE, Objects.requireNonNull(title, "Title cannot be null"));
         this.details.put(Constants.CITATION_SUBTITLE, subtitle);
         this.details.put(Constants.CITATION_SECTION, section);
         this.details.put(Constants.CITATION_SUBSECTION, subsection);
     }
 
     /**
-     * Returns the list of authors.
+     * Returns the list of authors for the cited work.
      *
-     * @return List of author names
+     * @return an unmodifiable list of author names
      */
     public List<String> getAuthors() {
         return authors;
     }
 
     /**
-     * Returns the citation details map.
+     * Returns the map of citation details.
      *
-     * @return Map containing title, subtitle, section, and subsection
+     * @return an unmodifiable map containing title, subtitle, section, and subsection
      */
     public Map<String, String> getDetails() {
-        return details;
+        return Collections.unmodifiableMap(details);
     }
 
     /**
-     * Returns the page number.
+     * Returns the page number in the cited work.
      *
-     * @return The page number
+     * @return the page number
      */
     public int getPage() {
         return page;
     }
 
     /**
-     * Returns the publication year.
+     * Returns the publication year of the cited work.
      *
-     * @return The year
+     * @return the year
      */
     public int getYear() {
         return year;
@@ -91,43 +137,43 @@ public class Citation {
     /**
      * Returns the place of publication.
      *
-     * @return The place
+     * @return the place, or null if not specified
      */
     public String getPlace() {
         return place;
     }
 
     /**
-     * Returns the publisher.
+     * Returns the publisher of the cited work.
      *
-     * @return The publisher
+     * @return the publisher, or null if not specified
      */
     public String getPublisher() {
         return publisher;
     }
 
     /**
-     * Returns the URL reference.
+     * Returns the URL referencing the cited work.
      *
-     * @return The URL
+     * @return the URL, or null if not specified
      */
     public String getUrl() {
         return url;
     }
 
     /**
-     * Returns the DOI reference.
+     * Returns the DOI of the cited work.
      *
-     * @return The DOI
+     * @return the DOI, or null if not specified
      */
     public String getDoi() {
         return doi;
     }
 
     /**
-     * Returns a formatted string representation of the citation.
+     * Returns a formatted string representation of the citation, following a standard citation style.
      *
-     * @return Formatted citation string
+     * @return the formatted citation string
      */
     @Override
     public String toString() {
@@ -135,8 +181,7 @@ public class Citation {
 
         // Add authors
         if (!authors.isEmpty()) {
-            sb.append(String.join(", ", authors));
-            sb.append(". ");
+            sb.append(String.join(", ", authors)).append(". ");
         }
 
         // Add title and subtitle

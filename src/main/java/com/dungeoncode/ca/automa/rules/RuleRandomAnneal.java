@@ -95,8 +95,8 @@ public class RuleRandomAnneal extends RuleBooleanNeighborCount {
         }
 
         // Echo tracks the previous state
-        grid.getNextStates()[y][x].set(newValue, currentState.getValue(), liveSum);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(newValue, currentState.getValue(), liveSum);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

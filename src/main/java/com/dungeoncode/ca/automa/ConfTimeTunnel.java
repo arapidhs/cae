@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleTimeTunnel;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the TIME-TUNNEL cellular automaton, a second-order reversible rule where the
+ * Configures an {@link Automaton} to run the TIME-TUNNEL cellular automaton, a second-order reversible rule where the
  * cell's state is updated by summing the von Neumann neighborhood, applying a decision table, and XORing with the
  * previous state, producing turbulent wave patterns. The grid is initialized with a centered 6x6 square of active
  * cells, with all other cells inactive, using {@link InitCentralSquare}. This configuration is inspired by the
@@ -60,17 +60,17 @@ public class ConfTimeTunnel extends AbstractConfiguration<BooleanCell, BooleanSt
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the TIME-TUNNEL automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the TIME-TUNNEL automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitCentralSquare}
 //     * with a centered 6x6 square of active cells, and applies the {@link RuleTimeTunnel} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        boolean withEcho = true;
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(3, withEcho));

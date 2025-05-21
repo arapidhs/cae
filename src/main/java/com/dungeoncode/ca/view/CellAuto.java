@@ -8,47 +8,38 @@ import com.dungeoncode.ca.core.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Main entry point for the Cellular Automata application. Initializes the terminal environment,
- * manages configuration selection, and launches the simulation view. Uses a loop to repeatedly
- * display the configuration selection screen until the application is terminated.
+ * manages configuration selection, and launches simulations. Repeatedly displays the configuration
+ * selection screen until the application terminates.
  */
-@SuppressWarnings("rawtypes")
 public class CellAuto {
 
-    /**
-     * Logger for recording application events and errors.
-     */
+    /** Logger for application events and errors. */
     private static final Logger LOGGER = LoggerFactory.getLogger(CellAuto.class);
 
-    /**
-     * The view for selecting automaton configurations.
-     */
-    static AutomaView automaView;
+    /** The view for selecting automaton configurations. */
+    private static AutomaView automaView;
 
-    /**
-     * Flag indicating whether the application is running.
-     */
+    /** Flag indicating whether the application is running. */
     static boolean running;
 
-    static List<Configuration> configurations;
-
     /**
-     * Starts the Cellular Automata application. Initializes a list of available configurations,
+     * Starts the Cellular Automata application. Initializes the configuration repository,
      * creates a selection view, and enters a loop to display the selection screen and launch
-     * simulations until the application is terminated.
+     * simulations until termination.
      *
      * @param args command-line arguments (not used)
-     * @throws RuntimeException if an error occurs during initialization or execution
+     * @throws RuntimeException if initialization or execution fails
      */
+    @SuppressWarnings("rawtypes")
     public static void main(String[] args) {
         try {
-
             Repository repository = new Repository<>();
-            // Initialize available configurations
-            // configurations = new ArrayList<>();
             repository.addConfiguration(new ConfInkspot());
             repository.addConfiguration(new ConfGameOfLife());
             repository.addConfiguration(new ConfHglass());
@@ -73,32 +64,35 @@ public class CellAuto {
             repository.addConfiguration(new ConfHandshakeDiffusion());
             repository.addConfiguration(new ConfGeneticDrift());
 
-            running = true; // Set application running state
+            running = true;
             automaView = new AutomaView(repository);
             while (running) {
-                setup(repository); // Run configuration selection and simulation
+                setup(repository);
             }
         } catch (Exception e) {
             LOGGER.error("Application error: {}", e.getMessage(), e);
-            System.exit(1); // Exit with error status
+            System.exit(1);
         }
     }
 
     /**
-     * Sets up the configuration selection view and launches the simulation if a configuration
-     * is selected. Exits the application if no configuration is chosen.
+     * Displays the configuration selection view and launches the simulation for the selected
+     * configuration. Exits the application if no configuration is chosen.
+     *
+     * @param repository the {@link Repository} of configurations, must not be null
+     * @throws NullPointerException if repository is null
      */
-    private static void setup(Repository repository) {
-        automaView.setup(); // Display configuration selection view
+    @SuppressWarnings("rawtypes")
+    private static void setup(@Nonnull Repository repository) {
+        Objects.requireNonNull(repository, "Repository cannot be null");
+        automaView.setup();
         if (automaView.getSelectedConfId() > -1) {
-            // Launch simulation with selected configuration
             Configuration conf = automaView.getSelectedConfiguration();
             AutomaController<Cell<CellState<?>>, CellState<?>> automaController =
                     new AutomaController<>(960, 960, 4, repository.getConfigurations(), conf);
             automaController.run();
         } else {
-            System.exit(0); // Exit if no configuration is selected
+            System.exit(0);
         }
     }
-
 }

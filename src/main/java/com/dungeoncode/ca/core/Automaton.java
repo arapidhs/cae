@@ -13,30 +13,30 @@ import java.util.function.Consumer;
 import static com.dungeoncode.ca.core.Constants.*;
 
 /**
- * Represents a cellular automaton that manages a grid of cells and applies rules to update their states periodically.
- * The automaton supports configuration, execution control (start, pause, resume, stop), and rendering through a consumer.
+ * Manages a cellular automaton, handling a grid of cells and applying rules to update their states periodically.
+ * Supports configuration, execution control (start, resume, stop), and rendering via a consumer.
  *
  * @param <C> the type of cells in the grid, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
-public class Automa<C extends Cell<S>, S extends CellState<?>> {
+public class Automaton<C extends Cell<S>, S extends CellState<?>> {
     /**
      * Logger for recording automaton events and errors.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Automa.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Automaton.class);
 
     /**
-     * The primary grid holding the current state of cells.
+     * The grid holding the current state of cells.
      */
     private Grid<C, S> grid;
 
     /**
-     * The rule applied to update cell states.
+     * The list of rules applied to update cell states.
      */
     private List<Rule<C, S>> rules;
 
     /**
-     * The consumer responsible for rendering or processing the grid.
+     * The consumer for rendering or processing the grid after each step.
      */
     private Consumer<Grid<C, S>> gridConsumer;
 
@@ -58,21 +58,20 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
     /**
      * Constructs a new automaton with a single-threaded executor for periodic updates.
      */
-    public Automa() {
+    public Automaton() {
         this.executor = Executors.newSingleThreadScheduledExecutor();
     }
 
     /**
-     * Configures the automaton with the specified settings.
-     * Retrieves the grid, rule, and interval from the configuration map.
+     * Configures the automaton with settings from the provided map.
      *
-     * @param config a map containing configuration settings:
+     * @param config a map containing:
      *               <ul>
-     *                 <li>"grid": the {@link Grid} to use</li>
-     *                 <li>"rule": the {@link Rule} for state updates</li>
-     *                 <li>"intervalMillis": the interval in milliseconds (as a String)</li>
+     *                 <li>{@code CONF_GRID}: the {@link Grid} to use</li>
+     *                 <li>{@code CONF_RULES}: the list of {@link Rule} objects for state updates</li>
+     *                 <li>{@code CONF_INTERVAL_MILLIS}: the interval in milliseconds (as a String or Long)</li>
      *               </ul>
-     * @throws NumberFormatException if "intervalMillis" is not a valid long
+     * @throws NumberFormatException if {@code CONF_INTERVAL_MILLIS} is not a valid long
      */
     public void configure(Map<String, Object> config) {
         this.grid = (Grid<C, S>) config.get(CONF_GRID);
@@ -114,14 +113,11 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Executes a single step of the automaton, updating cell states based on the configured rule.
-     * The current grid is copied to a secondary grid, rules are applied to update states, and the
-     * updated states are copied back to the primary grid.
+     * Executes a single step of the automaton, applying all configured rules to update cell states.
+     * Rules are applied sequentially to each cell, and updated states are copied back to the grid.
      */
     public void step() {
-
         for (Rule<C, S> rule : rules) {
-            // Apply rules to update newGrid
             for (int x = 0; x < grid.getWidth(); x++) {
                 for (int y = 0; y < grid.getHeight(); y++) {
                     C cell = grid.getCell(x, y);
@@ -129,8 +125,6 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
                 }
             }
         }
-
-        // Copy newGrid back to grid
         for (int y = 0; y < grid.getHeight(); y++) {
             for (int x = 0; x < grid.getWidth(); x++) {
                 grid.copyCellState(x, y);
@@ -139,7 +133,7 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Sets the consumer responsible for rendering or processing the grid after each step.
+     * Sets the consumer for rendering or processing the grid after each step.
      *
      * @param gridConsumer the consumer to process the grid, or null to disable rendering
      */
@@ -156,17 +150,26 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
         return isRunning;
     }
 
+    /**
+     * Returns the grid used by the automaton.
+     *
+     * @return the current {@link Grid}
+     */
     public Grid<C, S> getGrid() {
         return grid;
     }
 
+    /**
+     * Returns the interval between automaton steps.
+     *
+     * @return the interval in milliseconds
+     */
     public long getIntervalMillis() {
         return intervalMillis;
     }
 
     /**
-     * Sets the interval between automaton steps.
-     * If the automaton is running, it is paused, updated, and resumed with the new interval.
+     * Sets the interval between automaton steps. If running, the automaton is stopped, updated, and resumed.
      *
      * @param newIntervalMillis the new interval in milliseconds
      * @throws IllegalArgumentException if the interval is not positive
@@ -187,11 +190,10 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Stops the automaton, shutting down the executor and halting all updates.
+     * Stops the automaton, shutting down the executor and halting updates.
      * A new executor is created for future starts.
      */
     public void stop() {
-        isRunning = false;
         if (executor != null) {
             isRunning = false;
             executor.shutdown();

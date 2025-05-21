@@ -59,8 +59,8 @@ public class RuleCandleRain extends AbstractRule<BooleanCell, BooleanState> {
         // CANDLE-RAIN for state (value): blow out candle if raindrop is present, otherwise retain state
         boolean newValue = currentState.getValue() && !raindrop;
 
-        grid.getNextStates()[y][x].set(newValue, echo, 0);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(newValue, echo, 0);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

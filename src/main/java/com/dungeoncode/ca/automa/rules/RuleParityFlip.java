@@ -43,8 +43,8 @@ public class RuleParityFlip extends RuleParity {
         // XOR the PARITY result with the previous state (echo)
         BooleanState currentState = cell.getState();
         boolean newState = parity ^ currentState.isEcho();
-        grid.getNextStates()[y][x].set(newState, currentState.getValue(), parityCell.getLiveSum());
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(newState, currentState.getValue(), parityCell.getLiveSum());
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

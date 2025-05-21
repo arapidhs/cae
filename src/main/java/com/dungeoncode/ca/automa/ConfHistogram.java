@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleSafePass;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitHistogram;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitHistogram;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the SAFE-PASS cellular automaton, simulating particle conservation by allowing
+ * Configures an {@link Automaton} to run the SAFE-PASS cellular automaton, simulating particle conservation by allowing
  * tokens to fall downward in columns and pile up above a baseline to form a histogram. The grid is initialized with a
  * random distribution of tokens (state value, 50% probability) and echo set to false, except for the bottom row where
  * state is active and echo is true (inhibition baseline), using {@link InitHistogram}. This configuration is
@@ -57,18 +57,18 @@ public class ConfHistogram extends AbstractConfiguration<BooleanCell, BooleanSta
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the SAFE-PASS automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the SAFE-PASS automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitHistogram}
 //     * with a random distribution of tokens (50% probability) in the state and a bottom-row baseline in the echo, and
 //     * applies the {@link RuleSafePass} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitHistogram());
 //        config.put(CONF_GRID, grid);

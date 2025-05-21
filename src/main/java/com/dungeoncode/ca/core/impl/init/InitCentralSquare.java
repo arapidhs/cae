@@ -14,7 +14,7 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public class InitCentralSquare extends InitNextStatesBoolean {
+public class InitCentralSquare extends InitIntermediateStatesBoolean {
 
     /**
      * The half-side length offset from the grid's center, defining the size of the active square region.
@@ -32,6 +32,7 @@ public class InitCentralSquare extends InitNextStatesBoolean {
      * @param halfSideLength the half-side length offset from the grid's center, must be non-negative
      */
     public InitCentralSquare(int halfSideLength, boolean withEcho) {
+        super(5);
         this.halfSideLength = halfSideLength;
         this.withEcho = withEcho;
     }

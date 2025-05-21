@@ -113,7 +113,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     /**
      * The automaton being controlled.
      */
-    private Automa<C, S> automa;
+    private Automaton<C, S> automaton;
     /**
      * The Lanterna terminal screen for rendering the grid or controls menu.
      */
@@ -152,7 +152,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     private GridRenderer<C, S> renderer;
 
     /**
-     * Tracks whether the automa is restarting due to user control input.
+     * Tracks whether the automaton is restarting due to user control input.
      */
     private boolean automaRestarting;
 
@@ -215,19 +215,19 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         try {
             setupScreen(true);
             if (resetAutoma) {
-                if (automa != null && automa.isRunning()) {
-                    automa.stop();
+                if (automaton != null && automaton.isRunning()) {
+                    automaton.stop();
                 }
-                automa = new Automa<>();
+                automaton = new Automaton<>();
                 configureAutoma();
             } else {
                 renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
-                automa.setGridConsumer(renderer);
+                automaton.setGridConsumer(renderer);
             }
 
             Terminal terminal = screen.getTerminal();
             if (terminal instanceof SwingTerminalFrame swingTerminalFrame) {
-                if (automa.getGrid().getCell(0, 0) instanceof BooleanCell) {
+                if (automaton.getGrid().getCell(0, 0) instanceof BooleanCell) {
                     AutomaListener<C, S> automaListener = new AutomaListener<>(this);
                     swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(automaListener);
                     swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(automaListener);
@@ -272,9 +272,9 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         if (intervalMillis <= 0) {
             intervalMillis = 100;
         }
-        configuration.configure(automa, width, height, intervalMillis);
+        configuration.configure(automaton, width, height, intervalMillis);
         renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
-        automa.setGridConsumer(renderer);
+        automaton.setGridConsumer(renderer);
     }
 
     /**
@@ -348,7 +348,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         boolean showControls = false;
         boolean showConfigurationDetails = false;
         boolean quit = false;
-        automa.start();
+        automaton.start();
         try {
             while (true) {
                 KeyStroke key = screen.readInput();
@@ -361,20 +361,20 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                         case F1 -> {
                             if (renderer.getStateRenderer() instanceof RendererBoolean) {
                                 ((RendererBoolean) renderer.getStateRenderer()).toggleInversion();
-                                renderer.accept(automa.getGrid());
+                                renderer.accept(automaton.getGrid());
                             }
                         }
                         case ArrowLeft -> {
                             if (renderer.getStateRenderer() instanceof RendererBoolean) {
                                 ((RendererBoolean) renderer.getStateRenderer()).previousPalette();
-                                renderer.accept(automa.getGrid());
+                                renderer.accept(automaton.getGrid());
                             }
                         }
                         case ArrowRight -> {
-                            if (automa.getGrid().getCell(0, 0) instanceof BooleanCell) {
+                            if (automaton.getGrid().getCell(0, 0) instanceof BooleanCell) {
                                 if (renderer.getStateRenderer() instanceof RendererBoolean) {
                                     ((RendererBoolean) renderer.getStateRenderer()).nextPalette();
-                                    renderer.accept(automa.getGrid());
+                                    renderer.accept(automaton.getGrid());
                                 }
                             }
                         }
@@ -390,8 +390,8 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                     switch (character) {
                         case 'q', 'Q' -> quit = true;
                         case 'p', 'P', ' ' -> {
-                            if (automa.isRunning()) {
-                                automa.stop();
+                            if (automaton.isRunning()) {
+                                automaton.stop();
                                 TerminalPosition topLeft = new TerminalPosition(width - 3, 0);
                                 TerminalSize size = new TerminalSize(3, 3);
                                 TextCharacter textCharacter = TextCharacter.fromCharacter(' ', TextColor.ANSI.RED, null, SGR.REVERSE, SGR.BLINK)[0];
@@ -399,7 +399,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                                 screen.refresh(Screen.RefreshType.DELTA);
                                 LOGGER.debug("Automaton stopped");
                             } else {
-                                automa.resume();
+                                automaton.resume();
                                 LOGGER.debug("Automaton resumed");
                             }
                         }
@@ -407,15 +407,15 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                             if (!automaRestarting) {
                                 automaRestarting = true;
 
-                                boolean wasRunning = automa.isRunning();
-                                if (automa.isRunning()) {
-                                    automa.stop();
+                                boolean wasRunning = automaton.isRunning();
+                                if (automaton.isRunning()) {
+                                    automaton.stop();
                                 }
-                                automa.getGrid().initialize();
+                                automaton.getGrid().initialize();
                                 if (wasRunning) {
-                                    automa.resume();
+                                    automaton.resume();
                                 } else {
-                                    renderer.accept(automa.getGrid());
+                                    renderer.accept(automaton.getGrid());
                                 }
                                 automaRestarting = false;
                             }
@@ -425,7 +425,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                         }
                         case '+' -> {
                             if (cellFontSize > 2) {
-                                automa.stop();
+                                automaton.stop();
                                 --cellFontSize;
                                 cellFontSize = Math.max(cellFontSize, 2);
                                 width = px / cellFontSize;
@@ -435,7 +435,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                         }
                         case '-' -> {
                             if (cellFontSize < 18) {
-                                automa.stop();
+                                automaton.stop();
                                 ++cellFontSize;
                                 cellFontSize = Math.min(cellFontSize, 18);
                                 width = px / cellFontSize;
@@ -444,27 +444,27 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                             }
                         }
                         case '<' -> {
-                            if (automa.isRunning()) {
-                                long intervalMillis = automa.getIntervalMillis();
+                            if (automaton.isRunning()) {
+                                long intervalMillis = automaton.getIntervalMillis();
                                 intervalMillis = (long) Math.min(2000, intervalMillis + intervalMillis * 0.25);
-                                automa.setIntervalMillis(intervalMillis);
+                                automaton.setIntervalMillis(intervalMillis);
                                 this.intervalMillis = intervalMillis;
                             }
                         }
                         case '>' -> {
-                            if (automa.isRunning()) {
-                                long intervalMillis = automa.getIntervalMillis();
+                            if (automaton.isRunning()) {
+                                long intervalMillis = automaton.getIntervalMillis();
                                 intervalMillis = (long) Math.max(20, intervalMillis - intervalMillis * 0.25);
-                                automa.setIntervalMillis(intervalMillis);
+                                automaton.setIntervalMillis(intervalMillis);
                                 this.intervalMillis = intervalMillis;
                             }
                         }
                         case 's' -> {
-                            if (automa.isRunning()) {
-                                automa.stop();
+                            if (automaton.isRunning()) {
+                                automaton.stop();
                             }
-                            automa.step();
-                            renderer.accept(automa.getGrid());
+                            automaton.step();
+                            renderer.accept(automaton.getGrid());
                             TerminalPosition topLeft = new TerminalPosition(width - 3, 0);
                             TerminalSize size = new TerminalSize(3, 3);
                             TextCharacter textCharacter = TextCharacter.fromCharacter(' ', TextColor.ANSI.BLUE, null, SGR.REVERSE, SGR.BLINK)[0];
@@ -472,12 +472,12 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                             screen.refresh(Screen.RefreshType.DELTA);
                         }
                         case 'w' -> {
-                            if (automa.getGrid().getCell(0, 0) instanceof BooleanCell) {
-                                boolean wasRunning = automa.isRunning();
-                                if (automa.isRunning()) {
-                                    automa.stop();
+                            if (automaton.getGrid().getCell(0, 0) instanceof BooleanCell) {
+                                boolean wasRunning = automaton.isRunning();
+                                if (automaton.isRunning()) {
+                                    automaton.stop();
                                 }
-                                Grid<BooleanCell, BooleanState> grid = (Grid<BooleanCell, BooleanState>) automa.getGrid();
+                                Grid<BooleanCell, BooleanState> grid = (Grid<BooleanCell, BooleanState>) automaton.getGrid();
                                 int width = grid.getWidth();
                                 int height = grid.getHeight();
                                 for (int y = 0; y < height; y++) {
@@ -488,7 +488,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                                 }
                                 renderer.accept((Grid<C, S>) grid);
                                 if (wasRunning) {
-                                    automa.start();
+                                    automaton.start();
                                 }
                             }
                         }
@@ -504,7 +504,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         } catch (IOException e) {
             LOGGER.error("Error reading input: {}", e.getMessage(), e);
         } finally {
-            automa.stop();
+            automaton.stop();
             closeTerminal();
         }
 
@@ -626,7 +626,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             // Show configuration details if one is selected
             if (configuration != null) {
                 // Display Name with emphasis
-                textGraphics.putString(leftStartCol, row++, "Automa: " + configuration.getClass().getName(), SGR.BOLD);
+                textGraphics.putString(leftStartCol, row++, "Automaton: " + configuration.getClass().getName(), SGR.BOLD);
                 row++;
 
 //                // Display Description with word wrapping
@@ -737,9 +737,9 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
      * @throws IOException if an error occurs during image capture or file writing
      */
     public void saveScreenToImage() throws IOException {
-        boolean wasRunning = automa.isRunning();
-        if (automa.isRunning()) {
-            automa.stop();
+        boolean wasRunning = automaton.isRunning();
+        if (automaton.isRunning()) {
+            automaton.stop();
         }
         if (screen != null && screen.getTerminal() instanceof SwingTerminalFrame swingTerminalFrame) {
             Component component = swingTerminalFrame.getContentPane().getComponent(0);
@@ -782,9 +782,9 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                     TextCharacter.fromString(" ", TextColor.ANSI.GREEN_BRIGHT, null, SGR.REVERSE)[0]);
             screen.refresh(Screen.RefreshType.DELTA);
             if (wasRunning) {
-                automa.start();
+                automaton.start();
             } else {
-                renderer.accept(automa.getGrid());
+                renderer.accept(automaton.getGrid());
             }
         } else {
             throw new IllegalStateException("Screen capture is only supported with SwingTerminalFrame");
@@ -798,9 +798,9 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     public void startNextAutoma() {
         int i = configurations.indexOf(configuration);
         this.configuration = (Configuration<C, S>) configurations.get((i + 1) % configurations.size());
-        automa.stop();
+        automaton.stop();
         configureAutoma();
-        automa.start();
+        automaton.start();
     }
 
     /**
@@ -810,18 +810,18 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     public void startPreviousAutoma() {
         int i = configurations.indexOf(configuration);
         this.configuration = (Configuration<C, S>) configurations.get((i - 1 + configurations.size()) % configurations.size());
-        automa.stop();
+        automaton.stop();
         configureAutoma();
-        automa.start();
+        automaton.start();
     }
 
     /**
      * Returns the automaton being controlled.
      *
-     * @return the {@link Automa}
+     * @return the {@link Automaton}
      */
-    public Automa<C, S> getAutoma() {
-        return automa;
+    public Automaton<C, S> getAutoma() {
+        return automaton;
     }
 
     /**

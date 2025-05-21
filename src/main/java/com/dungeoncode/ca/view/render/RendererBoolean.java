@@ -4,12 +4,14 @@ import com.dungeoncode.ca.core.impl.BooleanState;
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TextColor;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
- * Renders a {@link BooleanState} for a cellular automaton using Lanterna text characters, applying colors
- * from a selected palette based on the cell's state, echo flag, and live sum (number of live cells in the
- * neighborhood). Visualizes neighborhood activity and state transitions with a color gradient for cells
- * with live neighbors, distinct colors for active cells without live neighbors, and echo-based feedback
- * for inactive cells.
+ * Renders a {@link BooleanState} for a cellular automaton as a Lanterna {@link TextCharacter}, using colors from a
+ * selected {@link Palette} based on the cell's state, echo flag, and live sum (number of live neighbors).
+ * Visualizes neighborhood activity and state transitions with gradients for active cells with live neighbors,
+ * distinct colors for active cells without neighbors, and echo-based feedback for inactive cells.
  *
  * @see StateRenderer
  * @see BooleanState
@@ -21,6 +23,9 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
      */
     private Palette palette;
 
+    /**
+     * Whether to invert colors during rendering.
+     */
     private boolean inverted = false;
 
     /**
@@ -33,10 +38,11 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
     /**
      * Constructs a renderer with the specified color palette.
      *
-     * @param palette the {@link Palette} to use for rendering
+     * @param palette the {@link Palette} to use for rendering, must not be null
+     * @throws NullPointerException if palette is null
      */
-    public RendererBoolean(Palette palette) {
-        this.palette = palette;
+    public RendererBoolean(@Nonnull Palette palette) {
+        this.palette = Objects.requireNonNull(palette, "Palette cannot be null");
     }
 
     /**
@@ -56,27 +62,24 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
     }
 
     /**
-     * Renders the specified {@link BooleanState} as a Lanterna {@link TextCharacter}. Assigns a color from the
-     * selected palette based on the live sum (number of live cells in the neighborhood), boolean value (active
-     * or inactive), and echo flag (indicating recent state transitions):
+     * Renders the specified {@link BooleanState} as a Lanterna {@link TextCharacter} with a color from the selected
+     * palette based on:
      * <ul>
-     *   <li>Live sum 1: Sparse activity (e.g., blue).</li>
-     *   <li>Live sum 2: Low activity (e.g., cyan).</li>
-     *   <li>Live sum 3: Moderate activity (e.g., green).</li>
-     *   <li>Live sum 4: High activity (e.g., bright yellow).</li>
-     *   <li>Live sum 5–9: Dense activity (e.g., red).</li>
-     *   <li>Live sum outside 1–9: Default (e.g., bright white).</li>
-     *   <li>Live sum 0, active: Active with no live neighbors (e.g., green).</li>
-     *   <li>Live sum 0, inactive with echo: Recently died (e.g., blue).</li>
-     *   <li>Live sum 0, inactive without echo: Stayed dead (e.g., bright white).</li>
+     *   <li>Live sum 1–9: Gradient colors for active cells with neighbors (e.g., blue to red).</li>
+     *   <li>Live sum 0, active: Distinct color for active cells with no neighbors (e.g., green).</li>
+     *   <li>Live sum 0, inactive with echo: Color for recently inactive cells (e.g., blue).</li>
+     *   <li>Live sum 0, inactive without echo: Color for long-inactive cells (e.g., white).</li>
+     *   <li>Other cases: Default color (e.g., white).</li>
      * </ul>
-     * Returns a reverse-style text character with a space symbol.
+     * Returns a reverse-style text character with a space symbol. Colors may be inverted if enabled.
      *
-     * @param state the {@link BooleanState} to render
+     * @param state the {@link BooleanState} to render, must not be null
      * @return the rendered {@link TextCharacter}
+     * @throws NullPointerException if state is null
      */
     @Override
-    public TextCharacter render(BooleanState state) {
+    public TextCharacter render(@Nonnull BooleanState state) {
+        Objects.requireNonNull(state, "State cannot be null");
         TextColor color;
         if (state.getValue() && state.getLiveSum() > 0) {
             color = switch (state.getLiveSum()) {
@@ -99,7 +102,7 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
             color = palette.inactiveNoEcho;
         }
 
-        // Invert the color if needed
+        // Apply color inversion if enabled
         if (inverted) {
             color = invertColor(color);
         }
@@ -108,20 +111,49 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
     }
 
     /**
-     * Inverts a TextColor by swapping light and dark colors.
-     * For RGB colors, inverts each component (255 - value).
+     * Inverts the specified {@link TextColor}, swapping light and dark ANSI colors or inverting RGB components
+     * (255 - value) for custom colors.
      *
-     * @param color the color to invert
-     * @return the inverted color
+     * @param color the {@link TextColor} to invert, must not be null
+     * @return the inverted {@link TextColor}
+     * @throws NullPointerException if color is null
      */
-    private TextColor invertColor(TextColor color) {
-        if (color == TextColor.ANSI.BLACK) return TextColor.ANSI.WHITE_BRIGHT;
-        if (color == TextColor.ANSI.WHITE) return TextColor.ANSI.BLACK_BRIGHT;
-        if (color == TextColor.ANSI.BLACK_BRIGHT) return TextColor.ANSI.WHITE;
-        if (color == TextColor.ANSI.WHITE_BRIGHT) return TextColor.ANSI.BLACK;
-        return color;
+    private TextColor invertColor(@Nonnull TextColor color) {
+        Objects.requireNonNull(color, "Color cannot be null");
+        if (color instanceof TextColor.ANSI ansiColor) {
+            return switch (ansiColor) {
+                case BLACK -> TextColor.ANSI.WHITE_BRIGHT;
+                case WHITE -> TextColor.ANSI.BLACK_BRIGHT;
+                case BLACK_BRIGHT -> TextColor.ANSI.WHITE;
+                case WHITE_BRIGHT -> TextColor.ANSI.BLACK;
+                case RED -> TextColor.ANSI.CYAN_BRIGHT;
+                case CYAN -> TextColor.ANSI.RED_BRIGHT;
+                case GREEN -> TextColor.ANSI.MAGENTA_BRIGHT;
+                case MAGENTA -> TextColor.ANSI.GREEN_BRIGHT;
+                case BLUE -> TextColor.ANSI.YELLOW_BRIGHT;
+                case YELLOW -> TextColor.ANSI.BLUE_BRIGHT;
+                case RED_BRIGHT -> TextColor.ANSI.CYAN;
+                case CYAN_BRIGHT -> TextColor.ANSI.RED;
+                case GREEN_BRIGHT -> TextColor.ANSI.MAGENTA;
+                case MAGENTA_BRIGHT -> TextColor.ANSI.GREEN;
+                case BLUE_BRIGHT -> TextColor.ANSI.YELLOW;
+                case YELLOW_BRIGHT -> TextColor.ANSI.BLUE;
+                case DEFAULT -> TextColor.ANSI.DEFAULT;
+            };
+        }
+        if (color instanceof TextColor.RGB rgbColor) {
+            return new TextColor.RGB(
+                    255 - rgbColor.getRed(),
+                    255 - rgbColor.getGreen(),
+                    255 - rgbColor.getBlue()
+            );
+        }
+        return color; // Fallback for unsupported color types
     }
 
+    /**
+     * Selects the previous color palette in the {@link Palette} enum cycle.
+     */
     public void previousPalette() {
         Palette[] palettes = Palette.values();
         int currentIndex = palette.ordinal();
@@ -129,6 +161,9 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
         palette = palettes[prevIndex];
     }
 
+    /**
+     * Selects the next color palette in the {@link Palette} enum cycle.
+     */
     public void nextPalette() {
         Palette[] palettes = Palette.values();
         int currentIndex = palette.ordinal();
@@ -137,56 +172,56 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
     }
 
     /**
-     * Enum defining color palettes for rendering, mapping live sum values (1–9), active cells with no live
-     * neighbors, inactive cells with echo, inactive cells without echo, and default cases to specific colors.
+     * Defines color palettes for rendering, mapping live sums (1–9), active cells with no neighbors,
+     * inactive cells with/without echo, and default cases to specific {@link TextColor} values.
      */
     public enum Palette {
         DEFAULT(
                 "Default Black & White",
-                "A black & White ANSI color palette.",
-                TextColor.ANSI.WHITE_BRIGHT,                      // Active, Live sum 1
-                TextColor.ANSI.WHITE_BRIGHT,                      // Active, Live sum 2
-                TextColor.ANSI.WHITE_BRIGHT,                      // Active, Live sum 3
-                TextColor.ANSI.WHITE_BRIGHT,                      // Active, Live sum 4
-                TextColor.ANSI.WHITE_BRIGHT,                      // Active, Live sum 5
-                TextColor.ANSI.WHITE_BRIGHT,              // Active, Live sum 6
-                TextColor.ANSI.WHITE_BRIGHT,              // Active, Live sum 7
-                TextColor.ANSI.WHITE_BRIGHT,              // Active, Live sum 8
-                TextColor.ANSI.WHITE_BRIGHT,              // Active, Live sum 9
-                TextColor.ANSI.WHITE_BRIGHT,                      // Active, live sum 0
-                TextColor.ANSI.BLACK,              // Inactive with echo, live sum 0
-                TextColor.ANSI.BLACK,            // Inactive without echo, live sum 0
-                TextColor.ANSI.BLACK                       // Default
+                "Black and white ANSI palette for minimalistic visualization.",
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 1
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 2
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 3
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 4
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 5
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 6
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 7
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 8
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 9
+                TextColor.ANSI.WHITE_BRIGHT,  // Active, live sum 0
+                TextColor.ANSI.BLACK,         // Inactive with echo, live sum 0
+                TextColor.ANSI.BLACK,         // Inactive without echo, live sum 0
+                TextColor.ANSI.BLACK          // Default
         ),
         GREYSCALE(
                 "Greyscale",
-                "A greyscale color palette.",
-                TextColor.ANSI.WHITE,                      // Active, Live sum 1
-                TextColor.ANSI.WHITE,                      // Active, Live sum 2
-                new TextColor.RGB(212, 212, 212),         // Active, Live sum 3
-                new TextColor.RGB(212, 212, 212),         // Active, Live sum 4
-                new TextColor.RGB(212, 212, 212),         // Active, Live sum 5
-                TextColor.ANSI.WHITE_BRIGHT,              // Active, Live sum 6
-                TextColor.ANSI.WHITE_BRIGHT,              // Active, Live sum 7
-                TextColor.ANSI.WHITE_BRIGHT,              // Active, Live sum 8
-                TextColor.ANSI.WHITE_BRIGHT,              // Active, Live sum 9
-                TextColor.ANSI.WHITE,                      // Active, live sum 0
-                TextColor.ANSI.BLACK_BRIGHT,              // Inactive with echo, live sum 0
-                new TextColor.RGB(16, 16, 16),            // Inactive without echo, live sum 0
-                TextColor.ANSI.BLACK                       // Default
+                "Greyscale palette for subtle, monochromatic visualization.",
+                TextColor.ANSI.WHITE,         // Live sum 1
+                TextColor.ANSI.WHITE,         // Live sum 2
+                new TextColor.RGB(212, 212, 212),  // Live sum 3
+                new TextColor.RGB(212, 212, 212),  // Live sum 4
+                new TextColor.RGB(212, 212, 212),  // Live sum 5
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 6
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 7
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 8
+                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 9
+                TextColor.ANSI.WHITE,         // Active, live sum 0
+                TextColor.ANSI.BLACK_BRIGHT,  // Inactive with echo, live sum 0
+                new TextColor.RGB(16, 16, 16),     // Inactive without echo, live sum 0
+                TextColor.ANSI.BLACK          // Default
         ),
         ANSI(
-                "Default ANSI",
-                "A vibrant ANSI color palette with distinct hues (blue, cyan, green, yellow, red) for varying live neighbor counts, green for active cells with no live neighbors, blue for recently died cells, and bright white for stayed-dead cells or defaults. Ideal for standard, high-contrast visualization.",
-                TextColor.ANSI.BLUE,           // Active, Live sum 1
-                TextColor.ANSI.CYAN,          // Active, Live sum 2
-                TextColor.ANSI.GREEN,         // Active, Live sum 3
-                TextColor.ANSI.YELLOW_BRIGHT, // Active, Live sum 4
-                TextColor.ANSI.RED,           // Active, Live sum 5
-                TextColor.ANSI.RED,           // Active, Live sum 6
-                TextColor.ANSI.RED,           // Active, Live sum 7
-                TextColor.ANSI.RED,           // Active, Live sum 8
-                TextColor.ANSI.RED,           // Active, Live sum 9
+                "ANSI",
+                "Vibrant ANSI palette with blue, cyan, green, yellow, and red for live sums, green for active cells with no neighbors, blue for recently inactive cells, and white for long-inactive or default cells.",
+                TextColor.ANSI.BLUE,          // Live sum 1
+                TextColor.ANSI.CYAN,          // Live sum 2
+                TextColor.ANSI.GREEN,         // Live sum 3
+                TextColor.ANSI.YELLOW_BRIGHT, // Live sum 4
+                TextColor.ANSI.RED,           // Live sum 5
+                TextColor.ANSI.RED,           // Live sum 6
+                TextColor.ANSI.RED,           // Live sum 7
+                TextColor.ANSI.RED,           // Live sum 8
+                TextColor.ANSI.RED,           // Live sum 9
                 TextColor.ANSI.GREEN,         // Active, live sum 0
                 TextColor.ANSI.BLUE,          // Inactive with echo, live sum 0
                 TextColor.ANSI.WHITE_BRIGHT,  // Inactive without echo, live sum 0
@@ -194,73 +229,72 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
         ),
         BLUE_GRADIENT(
                 "Blue Gradient",
-                "A smooth gradient of blue shades, from darkest to lightest blue, for increasing live neighbor counts, with cyan for active cells with no live neighbors, darker blue for recently died cells, and dark blue for stayed-dead cells. Perfect for a cohesive, blue-toned visualization emphasizing neighborhood activity.",
-                new TextColor.RGB(0, 0, 51),      // Active, Live sum 1: Darkest blue
-                new TextColor.RGB(0, 25, 76),     // Active, Live sum 2: Very dark blue
-                new TextColor.RGB(0, 51, 102),    // Active, Live sum 3: Dark blue
-                new TextColor.RGB(0, 76, 127),    // Active, Live sum 4: Medium-dark blue
-                new TextColor.RGB(0, 102, 153),   // Active, Live sum 5: Medium blue
-                new TextColor.RGB(0, 127, 178),   // Active, Live sum 6: Medium-bright blue
-                new TextColor.RGB(0, 153, 204),   // Active, Live sum 7: Bright blue
-                new TextColor.RGB(25, 178, 229),  // Active, Live sum 8: Light blue
-                new TextColor.RGB(51, 204, 255),  // Active, Live sum 9: Lightest blue
-                new TextColor.RGB(0, 153, 204),   // Active, live sum 0: Cyan
-                new TextColor.RGB(0, 51, 153),    // Inactive with echo, live sum 0: Darker blue
-                new TextColor.RGB(0, 25, 76),     // Inactive without echo, live sum 0: Very dark blue
-                new TextColor.RGB(255, 255, 255)  // Default: White
+                "Gradient of blue shades from dark to light for live sums, cyan for active cells with no neighbors, darker blue for recently inactive cells, and dark blue for long-inactive cells.",
+                new TextColor.RGB(0, 0, 51),      // Live sum 1
+                new TextColor.RGB(0, 25, 76),     // Live sum 2
+                new TextColor.RGB(0, 51, 102),    // Live sum 3
+                new TextColor.RGB(0, 76, 127),    // Live sum 4
+                new TextColor.RGB(0, 102, 153),   // Live sum 5
+                new TextColor.RGB(0, 127, 178),   // Live sum 6
+                new TextColor.RGB(0, 153, 204),   // Live sum 7
+                new TextColor.RGB(25, 178, 229),  // Live sum 8
+                new TextColor.RGB(51, 204, 255),  // Live sum 9
+                new TextColor.RGB(0, 153, 204),   // Active, live sum 0
+                new TextColor.RGB(0, 51, 153),    // Inactive with echo, live sum 0
+                new TextColor.RGB(0, 25, 76),     // Inactive without echo, live sum 0
+                TextColor.ANSI.WHITE          // Default
         ),
         PURPLE_GRADIENT(
                 "Purple Gradient",
-                "A gradient of purple shades, from dark to light purple, for increasing live neighbor counts, with magenta for active cells with no live neighbors, deep purple for recently died cells, and darkest purple for stayed-dead cells. Ideal for a rich, vibrant visualization of dynamic patterns.",
-                new TextColor.RGB(51, 0, 102),    // Active, Live sum 1: Darkest purple
-                new TextColor.RGB(76, 25, 127),   // Active, Live sum 2: Dark purple
-                new TextColor.RGB(102, 51, 153),  // Active, Live sum 3: Medium-dark purple
-                new TextColor.RGB(127, 76, 178),  // Active, Live sum 4: Medium purple
-                new TextColor.RGB(153, 102, 204), // Active, Live sum 5: Medium-bright purple
-                new TextColor.RGB(178, 127, 229), // Active, Live sum 6: Bright purple
-                new TextColor.RGB(204, 153, 255), // Active, Live sum 7: Light purple
-                new TextColor.RGB(229, 178, 255), // Active, Live sum 8: Lighter purple
-                new TextColor.RGB(255, 204, 255), // Active, Live sum 9: Lightest purple
-                new TextColor.RGB(204, 0, 204),   // Active, live sum 0: Magenta
-                new TextColor.RGB(102, 0, 153),   // Inactive with echo, live sum 0: Deep purple
-                new TextColor.RGB(51, 0, 102),    // Inactive without echo, live sum 0: Darkest purple
-                new TextColor.RGB(255, 255, 255)  // Default: White
+                "Gradient of purple shades from dark to light for live sums, magenta for active cells with no neighbors, deep purple for recently inactive cells, and dark purple for long-inactive cells.",
+                new TextColor.RGB(51, 0, 102),    // Live sum 1
+                new TextColor.RGB(76, 25, 127),   // Live sum 2
+                new TextColor.RGB(102, 51, 153),  // Live sum 3
+                new TextColor.RGB(127, 76, 178),  // Live sum 4
+                new TextColor.RGB(153, 102, 204), // Live sum 5
+                new TextColor.RGB(178, 127, 229), // Live sum 6
+                new TextColor.RGB(204, 153, 255), // Live sum 7
+                new TextColor.RGB(229, 178, 255), // Live sum 8
+                new TextColor.RGB(255, 204, 255), // Live sum 9
+                new TextColor.RGB(204, 0, 204),   // Active, live sum 0
+                new TextColor.RGB(102, 0, 153),   // Inactive with echo, live sum 0
+                new TextColor.RGB(51, 0, 102),    // Inactive without echo, live sum 0
+                TextColor.ANSI.WHITE          // Default
         ),
         FIRE_GRADIENT(
                 "Fire Gradient",
-                "A fiery palette ranging from deep ember red to bright yellow for increasing live neighbor counts. Bright orange for active cells with no live neighbors, dark red for echoing inactive cells, and charcoal gray for inactive, stable dead cells. Useful for intense, heat-map-like visualization.",
-                new TextColor.RGB(51, 0, 0),       // Active, Live sum 1: Dark ember
-                new TextColor.RGB(102, 0, 0),      // Active, Live sum 2: Deep red
-                new TextColor.RGB(153, 0, 0),      // Active, Live sum 3: Red
-                new TextColor.RGB(204, 51, 0),     // Active, Live sum 4: Reddish orange
-                new TextColor.RGB(255, 102, 0),    // Active, Live sum 5: Orange
-                new TextColor.RGB(255, 153, 0),    // Active, Live sum 6: Bright orange
-                new TextColor.RGB(255, 178, 51),   // Active, Live sum 7: Soft yellow-orange
-                new TextColor.RGB(255, 204, 102),  // Active, Live sum 8: Light yellow-orange
-                new TextColor.RGB(255, 255, 153),  // Active, Live sum 9: Bright yellow
-                new TextColor.RGB(255, 128, 0),    // Active, live sum 0: Bright orange
-                new TextColor.RGB(128, 0, 0),      // Inactive with echo, live sum 0: Dark red
-                new TextColor.RGB(64, 64, 64),     // Inactive without echo, live sum 0: Charcoal gray
-                new TextColor.RGB(255, 255, 255)   // Default: White
+                "Fiery palette from deep red to yellow for live sums, bright orange for active cells with no neighbors, dark red for recently inactive cells, and charcoal gray for long-inactive cells.",
+                new TextColor.RGB(51, 0, 0),       // Live sum 1
+                new TextColor.RGB(102, 0, 0),      // Live sum 2
+                new TextColor.RGB(153, 0, 0),      // Live sum 3
+                new TextColor.RGB(204, 51, 0),     // Live sum 4
+                new TextColor.RGB(255, 102, 0),    // Live sum 5
+                new TextColor.RGB(255, 153, 0),    // Live sum 6
+                new TextColor.RGB(255, 178, 51),   // Live sum 7
+                new TextColor.RGB(255, 204, 102),  // Live sum 8
+                new TextColor.RGB(255, 255, 153),  // Live sum 9
+                new TextColor.RGB(255, 128, 0),    // Active, live sum 0
+                new TextColor.RGB(128, 0, 0),      // Inactive with echo, live sum 0
+                new TextColor.RGB(64, 64, 64),     // Inactive without echo, live sum 0
+                TextColor.ANSI.WHITE           // Default
         ),
         EARTH_TONES(
                 "Earth Tones",
-                "A natural palette using warm earth tones, from deep brown through amber to pale sand, for increasing live neighbor counts, with forest green for active cells with no live neighbors, terracotta for recently died cells, and dark soil color for stayed-dead cells. Perfect for a warm, organic visualization with a natural aesthetic.",
-                new TextColor.RGB(59, 31, 24),     // Active, Live sum 1: Deep brown
-                new TextColor.RGB(87, 46, 28),     // Active, Live sum 2: Rich brown
-                new TextColor.RGB(120, 60, 30),    // Active, Live sum 3: Medium brown
-                new TextColor.RGB(150, 82, 45),    // Active, Live sum 4: Terracotta
-                new TextColor.RGB(179, 106, 51),   // Active, Live sum 5: Bronze
-                new TextColor.RGB(204, 133, 63),   // Active, Live sum 6: Amber
-                new TextColor.RGB(224, 163, 97),   // Active, Live sum 7: Light amber
-                new TextColor.RGB(237, 195, 137),  // Active, Live sum 8: Sand
-                new TextColor.RGB(245, 222, 179),  // Active, Live sum 9: Pale sand
-                new TextColor.RGB(34, 102, 51),    // Active, live sum 0: Forest green
-                new TextColor.RGB(150, 82, 45),    // Inactive with echo, live sum 0: Terracotta
-                new TextColor.RGB(35, 18, 11),     // Inactive without echo, live sum 0: Dark soil
-                new TextColor.RGB(255, 255, 255)   // Default: White
+                "Earthy palette from deep brown to pale sand for live sums, forest green for active cells with no neighbors, terracotta for recently inactive cells, and dark soil for long-inactive cells.",
+                new TextColor.RGB(59, 31, 24),     // Live sum 1
+                new TextColor.RGB(87, 46, 28),     // Live sum 2
+                new TextColor.RGB(120, 60, 30),    // Live sum 3
+                new TextColor.RGB(150, 82, 45),    // Live sum 4
+                new TextColor.RGB(179, 106, 51),   // Live sum 5
+                new TextColor.RGB(204, 133, 63),   // Live sum 6
+                new TextColor.RGB(224, 163, 97),   // Live sum 7
+                new TextColor.RGB(237, 195, 137),  // Live sum 8
+                new TextColor.RGB(245, 222, 179),  // Live sum 9
+                new TextColor.RGB(34, 102, 51),    // Active, live sum 0
+                new TextColor.RGB(150, 82, 45),    // Inactive with echo, live sum 0
+                new TextColor.RGB(35, 18, 11),     // Inactive without echo, live sum 0
+                TextColor.ANSI.WHITE           // Default
         );
-
 
         /**
          * Color for live sum 1.
@@ -319,10 +353,29 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
          */
         private final String name;
         /**
-         * A short description of the palette's visual style and use case.
+         * A brief description of the palette's visual style.
          */
         private final String description;
 
+        /**
+         * Constructs a palette with the specified name, description, and colors for live sums (1–9), active/inactive states, and default cases.
+         *
+         * @param name            the user-friendly name
+         * @param description     the description of the palette's style
+         * @param liveSum1        color for live sum 1
+         * @param liveSum2        color for live sum 2
+         * @param liveSum3        color for live sum 3
+         * @param liveSum4        color for live sum 4
+         * @param liveSum5        color for live sum 5
+         * @param liveSum6        color for live sum 6
+         * @param liveSum7        color for live sum 7
+         * @param liveSum8        color for live sum 8
+         * @param liveSum9        color for live sum 9
+         * @param activeNoLiveSum color for active cells with live sum 0
+         * @param inactiveEcho    color for inactive cells with echo, live sum 0
+         * @param inactiveNoEcho  color for inactive cells without echo, live sum 0
+         * @param defaultColor    default color for unexpected cases
+         */
         Palette(String name, String description, TextColor liveSum1, TextColor liveSum2, TextColor liveSum3,
                 TextColor liveSum4, TextColor liveSum5, TextColor liveSum6, TextColor liveSum7, TextColor liveSum8,
                 TextColor liveSum9, TextColor activeNoLiveSum, TextColor inactiveEcho,
@@ -354,7 +407,7 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
         }
 
         /**
-         * Returns a short description of the palette's visual style and use case.
+         * Returns a brief description of the palette's visual style.
          *
          * @return the palette description
          */
@@ -362,5 +415,4 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
             return description;
         }
     }
-
 }

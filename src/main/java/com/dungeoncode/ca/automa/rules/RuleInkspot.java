@@ -63,8 +63,8 @@ public class RuleInkspot extends RuleBooleanNeighborCount {
 
         boolean echo = cell.getState().getValue();
         boolean isLive = cell.getState() != null && cell.getState().getValue();
-        grid.getNextStates()[y][x].set(liveCount == 3 || isLive, echo, liveCount);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(liveCount == 3 || isLive, echo, liveCount);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

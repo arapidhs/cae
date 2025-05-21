@@ -30,7 +30,7 @@ public class Controls {
         controls.add(new Control("r", "Restart simulation"));
         controls.add(new Control("PgDn", "Start next automa"));
         controls.add(new Control("PgUp", "Start previous automa"));
-        controls.add(new Control("i", "Show Automa Info"));
+        controls.add(new Control("i", "Show Automaton Info"));
         controls.add(new Control("s", "Step one tick"));
         controls.add(new Control("q", "Exit simulation"));
         controls.add(new Control(">", "Inc. speed"));

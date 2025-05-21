@@ -75,6 +75,11 @@ public class GridRenderer<C extends Cell<S>, S extends CellState<?>> implements 
         }
     }
 
+    /**
+     * Returns the state renderer responsible for provisioning the rendered character.
+     *
+     * @return the State renderer.
+     */
     public StateRenderer<S> getStateRenderer() {
         return stateRenderer;
     }

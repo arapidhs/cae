@@ -17,7 +17,7 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class InitCentralBlob extends InitNextStatesBoolean {
+public class InitCentralBlob extends InitIntermediateStatesBoolean {
 
     /**
      * The horizontal offset from the grid's center, defining half the width of the random region.
@@ -36,6 +36,7 @@ public class InitCentralBlob extends InitNextStatesBoolean {
      * @param dy the vertical offset from the grid's center, must be non-negative
      */
     public InitCentralBlob(int dx, int dy) {
+        super(4);
         this.dx = dx;
         this.dy = dy;
     }

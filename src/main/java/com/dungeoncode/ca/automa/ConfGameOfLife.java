@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleGameOfLife;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run Conway's Game of Life cellular automaton with an echoing mechanism,
+ * Configures an {@link Automaton} to run Conway's Game of Life cellular automaton with an echoing mechanism,
  * tracking state transitions to enhance visualization of dynamic patterns. Cells evolve based on standard
  * Game of Life rules, with an echo effect that records recent state changes to distinguish active and static
  * regions. The grid is initialized with a random distribution of live and dead cells, simulating a "primeval
@@ -61,18 +61,18 @@ public class ConfGameOfLife extends AbstractConfiguration<BooleanCell, BooleanSt
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the Game of Life with Echo
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the Game of Life with Echo
 //     * automaton. Creates a {@link Grid} with the given dimensions, initialized by
 //     * {@link InitRandomBoolean} with a random distribution of live and dead cells, and applies
 //     * the {@link RuleGameOfLife} to manage state updates and echo effects.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
 //        config.put(CONF_GRID, grid);

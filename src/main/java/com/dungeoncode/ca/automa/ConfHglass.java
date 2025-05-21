@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleHGlass;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the HGLASS cellular automaton, where cell states evolve based on a
+ * Configures an {@link Automaton} to run the HGLASS cellular automaton, where cell states evolve based on a
  * 32-bit lookup table using the states of the cell and its four orthogonal neighbors (east, west, south,
  * north). The grid is initialized with a random distribution of live and dead cells, simulating a "primeval
  * soup," and produces diverse behaviors, from chaotic growth to structured patterns, depending on initial
@@ -60,17 +60,17 @@ public class ConfHglass extends AbstractConfiguration<BooleanCell, BooleanState>
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the HGLASS automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the HGLASS automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitRandomBoolean}
 //     * with a random distribution of live and dead cells, and applies the {@link RuleHGlass} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
 //        config.put(CONF_GRID, grid);

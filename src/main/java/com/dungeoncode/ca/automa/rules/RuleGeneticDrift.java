@@ -109,8 +109,8 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
             }
         }
 
-        grid.getNextStates()[y][x].set(newValue, newEcho, liveSum, 0, newId);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(newValue, newEcho, liveSum, 0, newId);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

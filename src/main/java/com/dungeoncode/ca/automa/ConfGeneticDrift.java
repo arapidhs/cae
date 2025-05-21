@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleGeneticDrift;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static com.dungeoncode.ca.core.Constants.*;
 
 /**
- * Configures an Automa to run the GENETIC-DRIFT cellular automaton, modeling diffusion of genes with species IDs.
+ * Configures an Automaton to run the GENETIC-DRIFT cellular automaton, modeling diffusion of genes with species IDs.
  * Each cell copies or exchanges states with a random neighbor, restricted by species ID compatibility, producing
  * a mottled distribution of species. Initialized with a random distribution of active cells with species IDs.
  */
@@ -49,7 +49,7 @@ public class ConfGeneticDrift extends AbstractConfiguration<BooleanCell, Boolean
     }
 
     @Override
-    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+    public void configure(Automaton<BooleanCell, BooleanState> automaton, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         // Initialize with 4 species and 10% of grid as active cells
         InitRandomSpecies initRandomSpecies = new InitRandomSpecies(4, (width * height) / 40);
@@ -58,6 +58,6 @@ public class ConfGeneticDrift extends AbstractConfiguration<BooleanCell, Boolean
         config.put(CONF_GRID, grid);
         config.put(CONF_RULES, getRules());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
-        automa.configure(config);
+        automaton.configure(config);
     }
 }

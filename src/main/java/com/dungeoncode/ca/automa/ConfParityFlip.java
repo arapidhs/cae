@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleParityFlip;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitCentralSquare;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the PARITY-FLIP cellular automaton, a second-order dynamics version of the
+ * Configures an {@link Automaton} to run the PARITY-FLIP cellular automaton, a second-order dynamics version of the
  * PARITY rule where the result is XORed with the cell's previous state, producing complex, history-influenced patterns.
  * The grid is initialized with a centered 17x17 square of active cells, with all other cells inactive, using
  * {@link InitCentralSquare}. This configuration is inspired by the PARITY-FLIP rule described in Chapter 6,
@@ -58,17 +58,17 @@ public class ConfParityFlip extends AbstractConfiguration<BooleanCell, BooleanSt
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the PARITY-FLIP automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the PARITY-FLIP automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitCentralSquare}
 //     * with a centered 17x17 square of active cells, and applies the {@link RuleParityFlip} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitCentralSquare(8));
 //        config.put(CONF_GRID, grid);

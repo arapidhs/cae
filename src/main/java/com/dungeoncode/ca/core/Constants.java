@@ -50,4 +50,9 @@ public class Constants {
      * File name of configurations descriptors.
      */
     public static final String DESCRIPTORS_FILE_CONFS = "descriptors-confs.json";
+
+    /**
+     * File name of initializers descriptors.
+     */
+    public static final String DESCRIPTORS_FILE_INITS = "descriptors-inits.json";
 }

@@ -1,5 +1,6 @@
 package com.dungeoncode.ca.core.impl.init;
 
+import com.dungeoncode.ca.core.AbstractGridInitializer;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.GridInitializer;
 import com.dungeoncode.ca.core.impl.BrainCell;
@@ -16,7 +17,7 @@ import java.util.Random;
  * @see BrainCell
  * @see BrainState
  */
-public class InitRandomFiring implements GridInitializer<BrainCell, BrainState> {
+public class InitRandomFiring extends AbstractGridInitializer<BrainCell, BrainState> {
 
     /**
      * The number of cells to randomly set to the Firing state.
@@ -29,6 +30,7 @@ public class InitRandomFiring implements GridInitializer<BrainCell, BrainState> 
      * @param firingCellCount the number of cells to set to the Firing state, must be non-negative
      */
     public InitRandomFiring(int firingCellCount) {
+        super(7);
         this.firingCellCount = firingCellCount;
     }
 
@@ -43,13 +45,13 @@ public class InitRandomFiring implements GridInitializer<BrainCell, BrainState> 
         int width = grid.getWidth();
         int height = grid.getHeight();
 
-        grid.setNextStates(new BrainState[height][width]);
+        grid.setIntermediateStates(new BrainState[height][width]);
 
         // Set all cells to Ready state initially
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
 
-                grid.getNextStates()[y][x] = new BrainState();
+                grid.getIntermediateStates()[y][x] = new BrainState();
                 if (grid.getCell(x, y) == null) {
                     grid.setCell(x, y, new BrainCell(x, y, new BrainState(BrainState.BrainStateValue.READY, BrainState.BrainStateValue.READY)));
                 } else {

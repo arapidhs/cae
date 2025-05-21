@@ -16,7 +16,11 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class InitRandomBoolean extends InitNextStatesBoolean {
+public class InitRandomBoolean extends InitIntermediateStatesBoolean {
+
+    public InitRandomBoolean() {
+        super(3);
+    }
 
     /**
      * Initializes the specified grid by assigning each cell a random boolean state (live or dead).

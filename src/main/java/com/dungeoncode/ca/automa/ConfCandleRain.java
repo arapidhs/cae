@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleCandleRain;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the CANDLE-RAIN cellular automaton, simulating candles being extinguished by
+ * Configures an {@link Automaton} to run the CANDLE-RAIN cellular automaton, simulating candles being extinguished by
  * random raindrops with an exponential decay pattern. The grid is initialized with a random distribution of active
  * (lit) and inactive (blown out) candles in the state (50% probability) and a random pattern in the echo (50%
  * probability) using {@link InitRandomBoolean}. This configuration is inspired by the CANDLE-RAIN rule
@@ -53,18 +53,18 @@ public class ConfCandleRain extends AbstractConfiguration<BooleanCell, BooleanSt
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the CANDLE-RAIN automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the CANDLE-RAIN automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitRandomBoolean}
 //     * with a random distribution of active and inactive cells (50% probability) in both the state and echo, and
 //     * applies the {@link RuleCandleRain} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
 //        config.put(CONF_GRID, grid);

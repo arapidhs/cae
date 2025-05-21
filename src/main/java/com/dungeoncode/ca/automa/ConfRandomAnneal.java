@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleRandomAnneal;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
@@ -10,7 +10,7 @@ import com.dungeoncode.ca.core.impl.init.InitRandomBoolean;
 import java.util.List;
 
 /**
- * Configures an {@link Automa} to run the RAND-ANNEAL cellular automaton, a probabilistic modification of the 5MAJ
+ * Configures an {@link Automaton} to run the RAND-ANNEAL cellular automaton, a probabilistic modification of the 5MAJ
  * majority voting rule that introduces thermal noise to smooth domain boundaries. The grid is initialized with a
  * random distribution of active and inactive cells (50% probability) in both the state and echo using
  * {@link InitRandomBoolean}. This configuration is inspired by the RAND-ANNEAL rule described in
@@ -58,18 +58,18 @@ public class ConfRandomAnneal extends AbstractConfiguration<BooleanCell, Boolean
     }
 
 //    /**
-//     * Configures the specified {@link Automa} with a grid, rule, and interval for the RAND-ANNEAL automaton.
+//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the RAND-ANNEAL automaton.
 //     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitRandomBoolean}
 //     * with a random distribution of active and inactive cells (50% probability) in both the state and echo, and
 //     * applies the {@link RuleRandomAnneal} for state updates.
 //     *
-//     * @param automa         the {@link Automa} to configure
+//     * @param automa         the {@link Automaton} to configure
 //     * @param width          the width (number of columns) of the grid
 //     * @param height         the height (number of rows) of the grid
 //     * @param intervalMillis the interval in milliseconds between automaton steps
 //     */
 //    @Override
-//    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
 //        Map<String, Object> config = new HashMap<>();
 //        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
 //        config.put(CONF_GRID, grid);

@@ -139,8 +139,8 @@ public class RuleNaiveDiffusion extends RuleBooleanNeighborCount {
         }
 
         // Update next states for the current cell
-        grid.getNextStates()[y][x].set(newValue, newEcho, liveSum);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(newValue, newEcho, liveSum);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

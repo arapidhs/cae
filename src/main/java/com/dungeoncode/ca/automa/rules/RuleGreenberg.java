@@ -123,8 +123,8 @@ public class RuleGreenberg extends AbstractRule<BrainCell, BrainState> {
                 nextEcho = previousState;
             }
         }
-        grid.getNextStates()[y][x].set(nextValue, nextEcho);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(nextValue, nextEcho);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

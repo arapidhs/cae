@@ -2,7 +2,7 @@ package com.dungeoncode.ca.automa;
 
 import com.dungeoncode.ca.automa.rules.RuleNaiveDiffusion;
 import com.dungeoncode.ca.core.AbstractConfiguration;
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static com.dungeoncode.ca.core.Constants.*;
 
 /**
- * Configures an {@link Automa} to run the NAIVE-DIFFUSION cellular automaton, modeling diffusion of particles by
+ * Configures an {@link Automaton} to run the NAIVE-DIFFUSION cellular automaton, modeling diffusion of particles by
  * randomly copying the state of a neighboring cell in one of four directions (north, south, east, west). The grid is
  * initialized with a disk-shaped region of active cells (radius based on grid dimensions) using {@link InitDisk}.
  * This configuration produces a diffusion pattern that breaks up into tongues of fire, as described in Chapter 9,
@@ -65,17 +65,17 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
     }
 
     /**
-     * Configures the specified {@link Automa} with a grid, rule, and interval for the NAIVE-DIFFUSION automaton.
+     * Configures the specified {@link Automaton} with a grid, rule, and interval for the NAIVE-DIFFUSION automaton.
      * Creates a {@link Grid} with the given dimensions, initialized by {@link InitDisk} with a disk-shaped region of
      * active cells (radius based on grid dimensions), and applies the {@link RuleNaiveDiffusion} for state updates.
      *
-     * @param automa         the {@link Automa} to configure
+     * @param automaton      the {@link Automaton} to configure
      * @param width          the width (number of columns) of the grid
      * @param height         the height (number of rows) of the grid
      * @param intervalMillis the interval in milliseconds between automaton steps
      */
     @Override
-    public void configure(Automa<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
+    public void configure(Automaton<BooleanCell, BooleanState> automaton, int width, int height, long intervalMillis) {
         Map<String, Object> config = new HashMap<>();
         InitDisk initDisk = new InitDisk((width + height) / 8);
         setGridInitializer(initDisk);
@@ -83,6 +83,6 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
         config.put(CONF_GRID, grid);
         config.put(CONF_RULES, getRules());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
-        automa.configure(config);
+        automaton.configure(config);
     }
 }

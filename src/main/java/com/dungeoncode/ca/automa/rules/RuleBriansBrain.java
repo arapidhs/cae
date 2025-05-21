@@ -83,21 +83,21 @@ public class RuleBriansBrain extends AbstractRule<BrainCell, BrainState> {
             case READY -> {
                 // Ready cell fires if exactly two neighbors are Firing
                 if (firingCount == 2) {
-                    grid.getNextStates()[y][x].set(BrainState.BrainStateValue.FIRING, echo);
-                    yield grid.getNextStates()[y][x];
+                    grid.getIntermediateStates()[y][x].set(BrainState.BrainStateValue.FIRING, echo);
+                    yield grid.getIntermediateStates()[y][x];
                 }
-                grid.getNextStates()[y][x].set(currentState.getValue(), currentState.getEcho());
-                yield grid.getNextStates()[y][x];
+                grid.getIntermediateStates()[y][x].set(currentState.getValue(), currentState.getEcho());
+                yield grid.getIntermediateStates()[y][x];
             }
             case FIRING -> {
                 // Firing cell always becomes Refractory
-                grid.getNextStates()[y][x].set(BrainState.BrainStateValue.REFRACTORY, currentState.getEcho());
-                yield grid.getNextStates()[y][x];
+                grid.getIntermediateStates()[y][x].set(BrainState.BrainStateValue.REFRACTORY, currentState.getEcho());
+                yield grid.getIntermediateStates()[y][x];
             }
             case REFRACTORY -> {
                 // Refractory cell always returns to Ready
-                grid.getNextStates()[y][x].set(BrainState.BrainStateValue.READY, currentState.getEcho());
-                yield grid.getNextStates()[y][x];
+                grid.getIntermediateStates()[y][x].set(BrainState.BrainStateValue.READY, currentState.getEcho());
+                yield grid.getIntermediateStates()[y][x];
             }
         };
     }

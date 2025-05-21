@@ -67,8 +67,8 @@ public class RuleAnneal extends RuleBooleanNeighborCount {
         boolean isActive = liveNeighbors == 4 || liveNeighbors >= 6;
 
         boolean echo = cell.getState().getValue();
-        grid.getNextStates()[y][x].set(isActive, echo, liveNeighbors);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(isActive, echo, liveNeighbors);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }

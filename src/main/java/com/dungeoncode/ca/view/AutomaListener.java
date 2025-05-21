@@ -1,6 +1,6 @@
 package com.dungeoncode.ca.view;
 
-import com.dungeoncode.ca.core.Automa;
+import com.dungeoncode.ca.core.Automaton;
 import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.impl.BooleanCell;
@@ -12,29 +12,30 @@ import com.googlecode.lanterna.screen.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.Objects;
 import java.util.Random;
 
 /**
- * A mouse listener for handling user interactions with a cellular automaton grid in a terminal-based view.
- * Responds to mouse clicks, drags, and wheel movements to modify cell states in the automaton's grid.
- * Supports left-click for random state changes, middle-click to activate cells, right-click to deactivate cells,
- * and mouse wheel to adjust the radius of the affected area.
+ * Handles mouse interactions with a cellular automaton grid in a terminal-based view, responding to clicks, drags,
+ * and wheel movements to modify cell states. Supports left-click for random state changes, middle-click to activate
+ * cells, right-click to deactivate cells, and mouse wheel to adjust the affected area's radius.
  *
- * @param <C> the type of cells in the automaton, extending {@link Cell}
+ * @param <C> the type of cells, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
 public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends MouseAdapter {
 
     /**
-     * Logger for recording mouse interaction events and errors.
+     * Logger for mouse interaction events and errors.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AutomaListener.class);
 
     /**
-     * The control view managing the automaton and terminal display.
+     * The controller managing the automaton and terminal display.
      */
     private final AutomaController<C, S> automaController;
 
@@ -43,85 +44,83 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
      */
     private int button;
 
+    /**
+     * The radius of the affected grid area for mouse interactions.
+     */
     private int radius;
+
+    /**
+     * The timestamp of the last mouse wheel scroll event.
+     */
     private long lastScrollTime;
 
     /**
-     * Constructs a new mouse listener for the specified control view.
+     * Constructs a new mouse listener for the specified controller.
      *
-     * @param automaController the control view managing the automaton and terminal display
+     * @param automaController the {@link AutomaController} managing the automaton, must not be null
+     * @throws NullPointerException if automaController is null
      */
-    public AutomaListener(AutomaController<C, S> automaController) {
-        this.automaController = automaController;
-
+    public AutomaListener(@Nonnull AutomaController<C, S> automaController) {
+        this.automaController = Objects.requireNonNull(automaController, "Controller cannot be null");
         int width = automaController.getWidth();
         int height = automaController.getHeight();
-        radius = (int) (Math.min(width, height) * 0.1);
+        this.radius = (int) (Math.min(width, height) * 0.1);
     }
 
     /**
-     * Handles mouse click events by applying cell state changes at the clicked position.
+     * Handles mouse clicks by applying cell state changes at the clicked position.
      * Converts pixel coordinates to grid coordinates and updates cells based on the mouse button.
      *
-     * @param e the mouse event
+     * @param e the {@link MouseEvent}, must not be null
      */
     @Override
-    public void mouseClicked(MouseEvent e) {
-        // Convert pixel coordinates to terminal grid coordinates
+    public void mouseClicked(@Nonnull MouseEvent e) {
+        Objects.requireNonNull(e, "Mouse event cannot be null");
         int col = e.getX() / automaController.getCellFontSize();
         int row = e.getY() / automaController.getCellFontSize();
-        int button = e.getButton();
-
-        applyChanges(col, row, button); // Apply changes to the grid
+        applyChanges(col, row, e.getButton());
     }
 
     /**
      * Captures the mouse button pressed during a mouse event.
      *
-     * @param e the mouse event
+     * @param e the {@link MouseEvent}, must not be null
      */
     @Override
-    public void mousePressed(MouseEvent e) {
-        button = e.getButton(); // Store the pressed button
+    public void mousePressed(@Nonnull MouseEvent e) {
+        Objects.requireNonNull(e, "Mouse event cannot be null");
+        button = e.getButton();
     }
 
     /**
-     * Handles mouse wheel movements to adjust the radius of the affected grid area for mouse interactions.
-     * Increases the radius for upward scrolls and decreases it for downward scrolls, updating the radius
-     * and drawing a rectangular outline around the cursor position if the automaton is running.
+     * Handles mouse wheel movements to adjust the radius of the affected grid area.
+     * Increases radius for upward scrolls, decreases for downward scrolls, and draws a rectangular outline
+     * around the cursor if the automaton is running.
      *
-     * @param e the mouse wheel event
-     * @throws RuntimeException if an error occurs while drawing the radius outline
+     * @param e the {@link MouseWheelEvent}, must not be null
+     * @throws RuntimeException if drawing the radius outline fails
      */
     @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
+    public void mouseWheelMoved(@Nonnull MouseWheelEvent e) {
+        Objects.requireNonNull(e, "Mouse wheel event cannot be null");
 
-        if (lastScrollTime == 0) {
-            lastScrollTime = e.getWhen();
-            return;
-        }
         long now = e.getWhen();
-        if (now - lastScrollTime < 20) {
+        if (lastScrollTime == 0 || now - lastScrollTime >= 20) {
             lastScrollTime = now;
-            return;
         } else {
-            lastScrollTime = now;
+            return;
         }
 
-        int dr;
-        if (e.getWheelRotation() == -1) {
-            dr = 3; // Increase radius for upward scroll
-        } else {
-            dr = -3; // Decrease radius for downward scroll
-        }
+        int dr = e.getWheelRotation() == -1 ? 3 : -3; // Increase for up, decrease for down
         updateRadius(dr);
+
         try {
-            Automa<C, S> automa = automaController.getAutoma();
-            boolean wasRunning = automa.isRunning();
-            if (automa.isRunning()) {
-                automa.stop();
+            Automaton<C, S> automaton = automaController.getAutoma();
+            boolean wasRunning = automaton.isRunning();
+            if (wasRunning) {
+                automaton.stop();
             }
-            // Convert pixel coordinates to terminal grid coordinates
+
             int col = e.getX() / automaController.getCellFontSize();
             int row = e.getY() / automaController.getCellFontSize();
 
@@ -132,73 +131,64 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
             automaController.getScreen().refresh(Screen.RefreshType.DELTA);
 
             if (wasRunning) {
-                automa.start();
+                automaton.start();
             } else {
                 automaController.getRenderer().accept(automaController.getAutoma().getGrid());
             }
-
-
         } catch (Exception ex) {
             throw new RuntimeException("Failed to draw radius outline: " + ex.getMessage(), ex);
         }
-
     }
 
+    /**
+     * Updates the radius of the affected grid area, ensuring it stays within valid bounds.
+     *
+     * @param dr the radius change (positive to increase, negative to decrease)
+     */
     private void updateRadius(int dr) {
         int width = automaController.getWidth();
         int height = automaController.getHeight();
         radius += dr;
-        if (dr > 0) {
-            radius = Math.min(radius, (width + height) / 8);
-        } else {
-            radius = Math.max(radius, 0);
-        }
+        radius = Math.max(0, Math.min(radius, (width + height) / 8));
     }
 
     /**
-     * Handles mouse drag events by applying cell state changes at the dragged position.
+     * Handles mouse drags by applying cell state changes at the dragged position.
      * Converts pixel coordinates to grid coordinates and updates cells based on the mouse button.
      *
-     * @param e the mouse event
+     * @param e the {@link MouseEvent}, must not be null
      */
     @Override
-    public void mouseDragged(MouseEvent e) {
-        // Convert pixel coordinates to terminal grid coordinates
+    public void mouseDragged(@Nonnull MouseEvent e) {
+        Objects.requireNonNull(e, "Mouse event cannot be null");
         int col = e.getX() / automaController.getCellFontSize();
         int row = e.getY() / automaController.getCellFontSize();
-
-        applyChanges(col, row, button); // Apply changes to the grid
+        applyChanges(col, row, button);
     }
 
     /**
-     * Applies cell state changes to a circular area around the specified grid coordinates.
-     * Uses the mouse button to determine the state change: left-click sets random states with
-     * probability based on distance, middle-click activates cells, and right-click deactivates cells.
-     * Updates the grid display if the automaton is not running.
+     * Applies cell state changes to a circular area around the specified grid coordinates for {@link BooleanCell} grids.
+     * Left-click sets random states with distance-based probability, middle-click activates cells, right-click
+     * deactivates cells. Updates the display if the automaton is paused.
      *
      * @param col    the column coordinate in the grid
      * @param row    the row coordinate in the grid
      * @param button the mouse button (1 = left, 2 = middle, 3 = right)
      */
     private void applyChanges(int col, int row, int button) {
-
-        // If the grid is not a grid of Boolean Cells, return.
-        C cl = automaController.getAutoma().getGrid().getCell(0, 0);
-        if (!(cl instanceof BooleanCell)) {
+        C cell = automaController.getAutoma().getGrid().getCell(0, 0);
+        if (!(cell instanceof BooleanCell)) {
             return;
         }
 
-        // Calculate radius based on grid size and multiplier
         int width = automaController.getWidth();
         int height = automaController.getHeight();
 
         if (radius > 0) {
-            // Iterate over a square area around the center
             for (int dy = -radius; dy <= radius; dy++) {
                 for (int dx = -radius; dx <= radius; dx++) {
                     double distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance <= radius) { // Only affect cells within circular radius
-                        // Wrap coordinates to handle grid edges
+                    if (distance <= radius) {
                         int nx = (col + dx + width) % width;
                         int ny = (row + dy + height) % height;
                         if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
@@ -208,31 +198,40 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
                 }
             }
         } else {
-            updateCell(button, col, row, 0);
+            if (col >= 0 && col < width && row >= 0 && row < height) {
+                updateCell(button, col, row, 0);
+            }
         }
 
-        // Update display if automaton is paused
         if (!automaController.getAutoma().isRunning()) {
             automaController.getRenderer().accept(automaController.getAutoma().getGrid());
         }
     }
 
+    /**
+     * Updates the state of a {@link BooleanCell} at the specified coordinates based on the mouse button.
+     * Left-click sets a random state with probability decreasing with distance, middle-click activates,
+     * right-click deactivates.
+     *
+     * @param button   the mouse button (1 = left, 2 = middle, 3 = right)
+     * @param nx       the column coordinate
+     * @param ny       the row coordinate
+     * @param distance the distance from the center of the affected area
+     */
     private void updateCell(int button, int nx, int ny, double distance) {
         BooleanCell cell = (BooleanCell) automaController.getAutoma().getGrid().getCell(nx, ny);
         if (cell != null) {
             try {
                 if (button == 1) {
-                    // Left button: set random state with distance-based probability
                     Random rnd = new Random();
-                    double prob = Math.exp(-distance / radius); // Gaussian-like decay
-                    boolean b = rnd.nextDouble() < prob;
-                    cell.setState(b, false, 0);
+                    double prob = radius > 0 ? Math.exp(-distance / radius) : 0.5;
+                    boolean state = rnd.nextDouble() < prob;
+                    cell.setState(state, false, 0);
                 } else {
-                    // Middle button activates, right button deactivates
                     cell.setState(button == 2, false, 0);
                 }
             } catch (Exception ex) {
-                LOGGER.error("Error updating cell at ({}, {}): {}", nx, ny, ex.getMessage());
+                LOGGER.error("Error updating cell at ({}, {}): {}", nx, ny, ex.getMessage(), ex);
             }
         }
     }

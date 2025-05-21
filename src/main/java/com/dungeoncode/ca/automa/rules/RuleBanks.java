@@ -88,8 +88,8 @@ public class RuleBanks extends RuleBooleanNeighborCount {
             nextState = true; // Corner configuration: erase corner (cell becomes inactive)
         }
 
-        grid.getNextStates()[y][x].set(nextState, echo, liveNeighbors);
-        return grid.getNextStates()[y][x];
+        grid.getIntermediateStates()[y][x].set(nextState, echo, liveNeighbors);
+        return grid.getIntermediateStates()[y][x];
     }
 
 }
