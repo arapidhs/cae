@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -23,6 +22,27 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
     }
 
     public RuleGeneticDrift(boolean useGrid, boolean useHandshake) {
+        super(23);
+//        super(
+//                // Rule Type
+//                Tag.PROBABILISTIC,  // Due to random neighbor selection
+//
+//                // Neighborhood Type
+//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
+//
+//                // Operation Types
+//                Tag.HANDSHAKE,     // Particle diffusion behavior
+//                Tag.DIFFUSION,     // Particle diffusion behavior
+//                Tag.SPECIES,
+//
+//                // Behavior Types
+//                Tag.DYNAMIC,       // Changes over time
+//                Tag.STRUCTURED,    // Creates organized patterns of species
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
         this.useGrid = useGrid;
         this.useHandshake = useHandshake;
     }
@@ -46,10 +66,18 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
         int direction = random.nextInt(4);
         int dx = 0, dy = 0;
         switch (direction) {
-            case 0: dy = -1; break; // North
-            case 1: dy = 1; break; // South
-            case 2: dx = -1; break; // West
-            case 3: dx = 1; break; // East
+            case 0:
+                dy = -1;
+                break; // North
+            case 1:
+                dy = 1;
+                break; // South
+            case 2:
+                dx = -1;
+                break; // West
+            case 3:
+                dx = 1;
+                break; // East
         }
         int nx = (x + dx + width) % width;
         int ny = (y + dy + height) % height;
@@ -85,8 +113,4 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.PROBABILISTIC;
-    }
 }

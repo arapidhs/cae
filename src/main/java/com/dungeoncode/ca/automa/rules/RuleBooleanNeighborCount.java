@@ -1,8 +1,8 @@
 package com.dungeoncode.ca.automa.rules;
 
+import com.dungeoncode.ca.core.AbstractRule;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -15,7 +15,11 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public abstract class RuleBooleanNeighborCount implements Rule<BooleanCell, BooleanState> {
+public abstract class RuleBooleanNeighborCount extends AbstractRule<BooleanCell, BooleanState> implements Rule<BooleanCell, BooleanState> {
+
+    public RuleBooleanNeighborCount(int id) {
+        super(id);
+    }
 
     /**
      * Counts the number of 'live' ({@code true}) neighbors in the Moore neighborhood (3x3 grid, excluding the

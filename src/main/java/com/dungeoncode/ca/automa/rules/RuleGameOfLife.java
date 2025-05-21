@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -29,6 +28,22 @@ public class RuleGameOfLife extends RuleBooleanNeighborCount {
      * @param tracingEnabled {@code true} to enable persistent tracing, {@code false} for short-term echo
      */
     public RuleGameOfLife(boolean tracingEnabled) {
+        super((2));
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
+//                // Operation Types
+//                Tag.COUNTING,     // Counts live neighbors
+//
+//                // Behavior Types
+//                Tag.STABLE,       // Can produce stable patterns
+//                Tag.OSCILLATION,  // Can produce oscillating patterns
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC,
+//                Tag.FOUNDATIONAL
+//        );
         this.tracingEnabled = tracingEnabled;
     }
 
@@ -66,11 +81,6 @@ public class RuleGameOfLife extends RuleBooleanNeighborCount {
         }
         grid.getNextStates()[y][x].set(newAlive, newEcho, liveCount);
         return grid.getNextStates()[y][x];
-    }
-
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
     }
 
 }

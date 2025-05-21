@@ -1,8 +1,8 @@
 package com.dungeoncode.ca.automa.rules;
 
+import com.dungeoncode.ca.core.AbstractRule;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BrainCell;
 import com.dungeoncode.ca.core.impl.BrainState;
 
@@ -18,7 +18,31 @@ import com.dungeoncode.ca.core.impl.BrainState;
  * @see BrainCell
  * @see BrainState
  */
-public class RuleBriansBrain implements Rule<BrainCell, BrainState> {
+public class RuleBriansBrain extends AbstractRule<BrainCell, BrainState> {
+
+    public RuleBriansBrain() {
+        super(14);
+//        super(
+//                // Rule Type
+//                Tag.SECOND_ORDER,  // Uses multiple states (Ready, Firing, Refractory) with state transitions
+//
+//                // Neighborhood Type
+//                Tag.MOORE,        // Uses 8 surrounding cells (excluding center)
+//
+//                // Operation Types
+//                Tag.COUNTING,     // Counts firing neighbors
+//                Tag.STATE_MACHINE, // Implements a state machine with three distinct states and transitions
+//
+//                // Behavior Types
+//                Tag.WAVE,          // Creates wave-like patterns
+//                Tag.DYNAMIC,       // Fast-paced, changing patterns
+//                Tag.NEURAL,
+//
+//                // Source Type
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
 
     /**
      * Applies the BRIAN'S-BRAIN rule to compute the new state of a given cell in the grid. Uses the Moore
@@ -76,11 +100,6 @@ public class RuleBriansBrain implements Rule<BrainCell, BrainState> {
                 yield grid.getNextStates()[y][x];
             }
         };
-    }
-
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
     }
 
 }

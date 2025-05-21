@@ -48,9 +48,9 @@ public class InitHistogram extends InitNextStatesBoolean {
                     echo = false;
                 }
                 if (grid.getCell(x, y) == null) {
-                    grid.setCell(x, y, new BooleanCell(x, y, isActive, echo,0));
+                    grid.setCell(x, y, new BooleanCell(x, y, isActive, echo, 0));
                 } else {
-                    grid.getCell(x, y).setState(isActive, echo,0);
+                    grid.getCell(x, y).setState(isActive, echo, 0);
                 }
 
             }

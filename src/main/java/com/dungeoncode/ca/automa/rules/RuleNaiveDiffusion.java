@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -21,26 +20,51 @@ import java.util.Random;
 public class RuleNaiveDiffusion extends RuleBooleanNeighborCount {
 
     private final Random random = new Random();
-    private final boolean useGrid;
-    private final boolean useHandshake;
     private final int subgridCountPerAxis = 3; // 3x3 subgrid (9 subgrids total)
+    private boolean useGrid;
+    private boolean useHandshake;
+
+    /**
+     * Constructs a new NAIVE-DIFFUSION rule with the specified grid splitting and handshake options.
+     *
+     * @param useGrid      if true, splits the grid into a 3x3 subgrid and inhibits movement across boundaries
+     * @param useHandshake if true, uses a handshake protocol for particle movement instead of copying neighbor states
+     */
+    public RuleNaiveDiffusion(boolean useGrid, boolean useHandshake) {
+        this();
+        this.useGrid = useGrid;
+        this.useHandshake = useHandshake;
+    }
 
     /**
      * Constructs a new NAIVE-DIFFUSION rule with grid splitting and handshake disabled by default.
      */
     public RuleNaiveDiffusion() {
-        this(false, false);
-    }
+        super(22);
+//        super(
+//                // Rule Type
+//                Tag.PROBABILISTIC,  // Uses random neighbor selection
+//
+//                // Neighborhood Type
+//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
+//
+//                // Operation Types
+//                Tag.DIFFUSION,     // Particle diffusion behavior
+//                Tag.RANDOM,        // Uses random selection for movement
+//                Tag.HANDSHAKE,     // Optional handshake protocol for state exchange
+//                Tag.CONSERVATION,  // When handshake is enabled, preserves particle count
+//
+//                // Behavior Types
+//                Tag.DYNAMIC,       // Changes over time
+//                Tag.PATTERN_SHAPING,// Creates distinct patterns (tongues of fire)
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
 
-    /**
-     * Constructs a new NAIVE-DIFFUSION rule with the specified grid splitting and handshake options.
-     *
-     * @param useGrid     if true, splits the grid into a 3x3 subgrid and inhibits movement across boundaries
-     * @param useHandshake if true, uses a handshake protocol for particle movement instead of copying neighbor states
-     */
-    public RuleNaiveDiffusion(boolean useGrid, boolean useHandshake) {
-        this.useGrid = useGrid;
-        this.useHandshake = useHandshake;
+        this.useGrid = false;
+        this.useHandshake = false;
     }
 
     /**
@@ -100,13 +124,13 @@ public class RuleNaiveDiffusion extends RuleBooleanNeighborCount {
         boolean newValue = currentValue;
         boolean newEcho = currentValue;
 
-        if (canMove ){
-            if (useHandshake){
+        if (canMove) {
+            if (useHandshake) {
                 boolean canTake = !currentValue && targetValue;
                 boolean canGive = currentValue && !targetValue;
-                if (canTake){
-                    newValue=true;
-                } else if (canGive){
+                if (canTake) {
+                    newValue = true;
+                } else if (canGive) {
                     newValue = false;
                 }
             } else {
@@ -119,8 +143,4 @@ public class RuleNaiveDiffusion extends RuleBooleanNeighborCount {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.PROBABILISTIC;
-    }
 }

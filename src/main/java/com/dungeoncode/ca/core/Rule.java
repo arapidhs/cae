@@ -9,6 +9,14 @@ package com.dungeoncode.ca.core;
  */
 public interface Rule<C extends Cell<S>, S extends CellState<?>> {
 
+
+    /**
+     * Returns the unique identifier for this rule.
+     *
+     * @return the rule's identifier
+     */
+    int getId();
+
     /**
      * Applies the rule to compute the new state of a given cell in the grid.
      *
@@ -18,5 +26,4 @@ public interface Rule<C extends Cell<S>, S extends CellState<?>> {
      */
     S apply(Grid<C, S> grid, C cell);
 
-    RuleCategory getRuleCategory();
 }

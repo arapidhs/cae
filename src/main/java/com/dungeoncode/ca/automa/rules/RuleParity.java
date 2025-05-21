@@ -1,8 +1,8 @@
 package com.dungeoncode.ca.automa.rules;
 
+import com.dungeoncode.ca.core.AbstractRule;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -16,7 +16,35 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see Rule
  * @see BooleanState
  */
-public class RuleParity implements Rule<BooleanCell, BooleanState> {
+public class RuleParity extends AbstractRule<BooleanCell, BooleanState> {
+
+    public RuleParity() {
+        super(4);
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
+//
+//                // Neighborhood Type
+//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
+//
+//                // Operation Types
+//                Tag.LOGICAL,       // Uses XOR operations for parity
+//
+//                // Behavior Types
+//                Tag.STRUCTURED,    // Creates organized, self-replicating patterns
+//                Tag.FRACTAL,        // Creates self-similar patterns that repeat at different scales
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
+
+    public RuleParity(int id) {
+        super(id);
+    }
+
+    // .
 
     /**
      * Applies the Parity rule to a cell in the specified grid. Computes the next state by XORing the boolean
@@ -50,8 +78,4 @@ public class RuleParity implements Rule<BooleanCell, BooleanState> {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
-    }
 }

@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -17,6 +16,26 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  */
 public class RuleBanks extends RuleBooleanNeighborCount {
 
+    public RuleBanks() {
+        super(13);
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
+//
+//                // Neighborhood Type
+//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
+//
+//                // Operation Types
+//                Tag.COUNTING,      // Counts live neighbors
+//                Tag.LOGICAL,       // Uses logical operations for pattern shaping
+//                Tag.PATTERN_SHAPING, // Specifically designed for pattern modification
+//
+//                // Source Type
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
+
     /**
      * Applies the BANKS rule to compute the new state of a given cell in the grid. Uses the von Neumann
      * neighborhood (north, south, east, west, excluding the center) with the following transitions: if north and
@@ -29,7 +48,6 @@ public class RuleBanks extends RuleBooleanNeighborCount {
      * @param cell the {@link BooleanCell} whose state is to be updated
      * @return the new {@link BooleanState} of the cell
      */
-    @SuppressWarnings("ConstantValue")
     @Override
     public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
         int x = cell.getPosition().getX();
@@ -72,11 +90,6 @@ public class RuleBanks extends RuleBooleanNeighborCount {
 
         grid.getNextStates()[y][x].set(nextState, echo, liveNeighbors);
         return grid.getNextStates()[y][x];
-    }
-
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
     }
 
 }

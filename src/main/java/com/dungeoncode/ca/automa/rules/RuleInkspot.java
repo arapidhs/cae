@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -17,6 +16,36 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see <a href="https://doi.org/10.7551/mitpress/1763.001.0001">Toffoli, T., & Margolus, N. (1987). MIT Press.</a>
  */
 public class RuleInkspot extends RuleBooleanNeighborCount {
+
+    public RuleInkspot() {
+        super(1);
+
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
+//
+//                // Neighborhood Type
+//                Tag.MOORE,         // Uses 3x3 neighborhood including center
+//
+//                // Operation Types
+//                Tag.COUNTING,      // Counts exact number of neighbors
+//                Tag.SPREAD,
+//                Tag.LOGICAL,       // Uses logical OR operation
+//                Tag.LOGICAL_OR,    // Specifically uses logical OR operation
+//
+//                Tag.DETERMINISTIC,
+//
+//                // Behavior Types
+//                Tag.ORGANIC,       // New tag for rules that create organic patterns
+//                Tag.DYNAMIC,       // Changes over time
+//                Tag.PATTERN_SHAPING,       // Creates distinct patterns
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//
+//        );
+    }
 
     /**
      * Applies the Inkspot rule to compute the new state of a cell. The cell becomes black ({@code true}) if it has
@@ -36,11 +65,6 @@ public class RuleInkspot extends RuleBooleanNeighborCount {
         boolean isLive = cell.getState() != null && cell.getState().getValue();
         grid.getNextStates()[y][x].set(liveCount == 3 || isLive, echo, liveCount);
         return grid.getNextStates()[y][x];
-    }
-
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
     }
 
 }

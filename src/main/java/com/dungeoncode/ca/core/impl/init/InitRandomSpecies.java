@@ -24,7 +24,7 @@ public class InitRandomSpecies extends InitNextStatesBoolean {
     public void initializeGrid(Grid<BooleanCell, BooleanState> grid) {
         super.initializeGrid(grid);
 
-        if ( numSpecies > 4 ) {
+        if (numSpecies > 4) {
             throw new RuntimeException("Number of species cannot be higher than 4.");
         }
 

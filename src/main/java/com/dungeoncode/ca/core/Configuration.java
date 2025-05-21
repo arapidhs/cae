@@ -1,27 +1,24 @@
 package com.dungeoncode.ca.core;
 
-/**
- * Defines a configuration strategy for initializing and setting up an {@link Automa} in a cellular automaton.
- * Implementations provide metadata (name, description, citation) and configure the automaton with specific parameters.
- *
- * @param <C> the type of cells in the automaton, extending {@link Cell}
- * @param <S> the type of cell states, extending {@link CellState}
- */
+import java.util.List;
+
 public interface Configuration<C extends Cell<S>, S extends CellState<?>> {
 
-    /**
-     * Returns the name of this configuration.
-     *
-     * @return the configuration name
-     */
-    String getName();
+    int getId();
 
     /**
-     * Returns a description of this configuration.
+     * Returns the grid initializer for this configuration.
      *
-     * @return the configuration description
+     * @return the grid initializer
      */
-    String getDescription();
+    GridInitializer<C, S> getGridInitializer();
+
+    /**
+     * Returns the list of rules for this configuration.
+     *
+     * @return the list of rules
+     */
+    List<Rule<C, S>> getRules();
 
     /**
      * Configures the specified {@link Automa} with the given dimensions and interval.
@@ -32,17 +29,4 @@ public interface Configuration<C extends Cell<S>, S extends CellState<?>> {
      * @param intervalMillis the interval in milliseconds between automaton steps
      */
     void configure(Automa<C, S> automa, int width, int height, long intervalMillis);
-
-    /**
-     * Returns a citation or reference for this configuration, if applicable.
-     *
-     * @return the citation or an empty string if none
-     */
-    String getCitation();
-
-    /**
-     *  Returns the citation page if available, defaultsto 0.
-     * @return the citation's page if available, else 0.
-     */
-    int getPage();
 }

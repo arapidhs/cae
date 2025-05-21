@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -16,6 +15,31 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanState
  */
 public class RuleMajority extends RuleBooleanNeighborCount {
+
+    public RuleMajority() {
+        super(11);
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
+//
+//                // Neighborhood Type
+//                Tag.MOORE,         // Uses 3x3 neighborhood including center
+//
+//                // Operation Types
+//                Tag.COUNTING,      // Counts number of active neighbors
+//                Tag.VOTING,        // Uses majority voting mechanism
+//                Tag.LOGICAL,       // Uses logical operations for state transitions
+//
+//                // Behavior Types
+//                Tag.STRUCTURED,    // Creates organized domains
+//                Tag.STABLE,        // Forms stable boundaries
+//                Tag.DOMAIN,         // Creates distinct domains
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
 
     /**
      * Applies the MAJORITY rule to compute the new state of a given cell in the grid. Counts the number of live
@@ -47,8 +71,4 @@ public class RuleMajority extends RuleBooleanNeighborCount {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
-    }
 }

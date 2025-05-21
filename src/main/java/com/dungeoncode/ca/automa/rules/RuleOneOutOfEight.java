@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -17,6 +16,30 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanState
  */
 public class RuleOneOutOfEight extends RuleBooleanNeighborCount {
+
+    public RuleOneOutOfEight() {
+        super(8);
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
+//
+//                // Neighborhood Type
+//                Tag.MOORE,         // Uses 3x3 neighborhood excluding center
+//
+//                // Operation Types
+//                Tag.COUNTING,      // Counts exact number of neighbors
+//                Tag.LOGICAL,       // Uses logical operations for state transitions
+//                Tag.GROWTH,        // Implements growth patterns
+//
+//                // Behavior Types
+//                Tag.STRUCTURED,    // Creates organized, fractal-like patterns
+//                Tag.FRACTAL,       // Creates self-similar patterns at different scales
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
 
     /**
      * Applies the 1-OUT-OF-8 rule to compute the new state of a given cell in the grid. Counts the number of
@@ -45,8 +68,4 @@ public class RuleOneOutOfEight extends RuleBooleanNeighborCount {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
-    }
 }

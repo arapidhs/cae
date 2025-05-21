@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -21,6 +20,29 @@ import java.util.Random;
 public class RuleRandomAnneal extends RuleBooleanNeighborCount {
 
     private final Random random = new Random();
+
+    public RuleRandomAnneal() {
+        super(19);
+//        super(
+//                // Rule Type
+//                Tag.PROBABILISTIC,  // Uses random elements for state transitions
+//
+//                // Neighborhood Type
+//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
+//
+//                // Operation Types
+//                Tag.COUNTING,      // Counts live neighbors
+//                Tag.VOTING,        // Uses majority voting with noise
+//
+//                // Behavior Types
+//                Tag.DYNAMIC,       // Creates complex, evolving patterns
+//                Tag.PATTERN_SHAPING, // Smooths and shapes domain boundaries
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
 
     /**
      * Applies the RAND-ANNEAL rule to compute the new state of a given cell. Sums the active cells in the von Neumann
@@ -77,8 +99,4 @@ public class RuleRandomAnneal extends RuleBooleanNeighborCount {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.PROBABILISTIC;
-    }
 }

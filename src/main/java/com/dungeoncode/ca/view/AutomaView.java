@@ -3,6 +3,7 @@ package com.dungeoncode.ca.view;
 import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.Configuration;
+import com.dungeoncode.ca.core.Repository;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
@@ -47,18 +48,13 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
     private final int height = 40;
     private final int fontSize = 24;
 
-    private final List<Configuration<C, S>> configurations;
-    private int selected;
+    private final Repository<C, S> repository;
+    private int selectedConfId;
     private TerminalScreen screen;
 
-    /**
-     * Constructs the selection UI with a list of available configurations.
-     *
-     * @param configurations the list of available automata configurations
-     */
-    public AutomaView(List<Configuration<C, S>> configurations) {
-        this.configurations = configurations;
-        this.selected = -1;
+    public AutomaView(Repository<C, S> repository) {
+        this.repository = repository;
+        this.selectedConfId = -1;
     }
 
     /**
@@ -152,8 +148,8 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         RadioBoxList<String> configList = new RadioBoxList<>();
         configList.setPreferredSize(new TerminalSize(30, 35));
 
-        for (Configuration<C, S> config : configurations) {
-            configList.addItem(config.getName());
+        for (Configuration<C, S> config : repository.getConfigurations()) {
+            configList.addItem(config.getClass().getSimpleName());
         }
 
         // === Details Text Area ===
@@ -162,17 +158,17 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         // Listener for selection change: updates detail text box
         // start simulation if selection is the same
         configList.addListener((selectedIndex, prev) -> {
-            if (selected == selectedIndex) {
+            if (selectedConfId == selectedIndex) {
                 close();
             }
-            Configuration<C, S> selectedConf = configurations.get(selectedIndex);
-            selected = selectedIndex;
+            Configuration<C, S> selectedConf = repository.getConfigurations().get(selectedIndex);
+            selectedConfId = selectedIndex;
             setDetailsBoxText(selectedConf, detailsBox);
         });
 
-        if (selected > -1) {
-            Configuration<C, S> selectedConf = configurations.get(selected);
-            configList.setSelectedIndex(selected);
+        if (selectedConfId > -1) {
+            Configuration<C, S> selectedConf = repository.getConfigurations().get(selectedConfId);
+            configList.setSelectedIndex(selectedConfId);
             setDetailsBoxText(selectedConf, detailsBox);
         }
 
@@ -181,7 +177,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
 
         // === Buttons ===
         buttonsPanel.addComponent(new Button("Start", () -> {
-            if (selected >= 0) {
+            if (selectedConfId >= 0) {
                 this.close(); // Close the GUI
             } else {
                 MessageDialog.showMessageDialog(textGUI, "", "Select a configuration first!", MessageDialogButton.OK);
@@ -227,24 +223,16 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         }
     }
 
-    /**
-     * Sets the text content of the details box with formatted information about the selected configuration.
-     * The method formats the configuration's name, description, and citation with proper text wrapping
-     * and spacing for display in a text box with a width of 38 characters.
-     *
-     * @param selectedConf the selected configuration to display details for
-     * @param detailsBox   the text box to display the formatted details in
-     */
     private void setDetailsBoxText(Configuration<C, S> selectedConf, TextBox detailsBox) {
-        String name = selectedConf.getName();
-        String description = selectedConf.getDescription();
-        String citation = selectedConf.getCitation() == null ? "" : selectedConf.getCitation();
+        String name = selectedConf.getClass().getName();
+//        String description = selectedConf.getDescription();
+//        String citation = selectedConf.getCitation() == null ? "" : selectedConf.getCitation();
 
-        String formatted = formatWithWrapping(name, 38) + "\n\n"
-                + formatWithWrapping(description, 38) + "\n\n"
-                + formatWithWrapping(citation, 38);
+//        String formatted = formatWithWrapping(name, 38) + "\n\n"
+//                + formatWithWrapping(description, 38) + "\n\n"
+//                + formatWithWrapping(citation, 38);
 
-        detailsBox.setText(formatted);
+        detailsBox.setText(name);
     }
 
     /**
@@ -367,19 +355,19 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
     }
 
     public Configuration<C, S> getSelectedConfiguration() {
-        if (getSelected() > -1) {
-            return getConfigurations().get(getSelected());
+        if (getSelectedConfId() > -1) {
+            return getConfigurations().get(getSelectedConfId());
         } else {
             return null;
         }
     }
 
-    public int getSelected() {
-        return selected;
+    public int getSelectedConfId() {
+        return selectedConfId;
     }
 
     public List<Configuration<C, S>> getConfigurations() {
-        return configurations;
+        return repository.getConfigurations();
     }
 
     private void exampleMultiWindow(TerminalScreen screen) {
@@ -456,8 +444,8 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         // === Configuration List ===
         RadioBoxList<String> configList = new RadioBoxList<>();
         configList.setPreferredSize(new TerminalSize(30, 15));
-        for (Configuration<C, S> config : configurations) {
-            configList.addItem(config.getName());
+        for (Configuration<C, S> config : getConfigurations()) {
+            configList.addItem(config.getClass().getName());
         }
 
         // === Details Text Area ===
@@ -466,11 +454,11 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         // Listener for selection change: updates detail text box
         // start simulation if selection is the same
         configList.addListener((selectedIndex, prev) -> {
-            if (selected == selectedIndex) {
+            if (selectedConfId == selectedIndex) {
                 close();
             }
-            Configuration<C, S> selectedConf = configurations.get(selectedIndex);
-            selected = selectedIndex;
+            Configuration<C, S> selectedConf = getConfigurations().get(selectedIndex);
+            selectedConfId = selectedIndex;
 
             setDetailsBoxText(selectedConf, detailsBox);
         });

@@ -1,8 +1,7 @@
 package com.dungeoncode.ca.automa.rules;
 
+import com.dungeoncode.ca.core.AbstractRule;
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.Rule;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -18,9 +17,25 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class RuleCandleRain implements Rule<BooleanCell, BooleanState> {
+public class RuleCandleRain extends AbstractRule<BooleanCell, BooleanState> {
 
     private final Random random = new Random();
+
+    public RuleCandleRain() {
+        super(18);
+//        super(
+//                // Rule Type
+//                Tag.PROBABILISTIC,  // Uses random probability (1/32) for state transitions
+//
+//                // Behavior Types
+//                Tag.DYNAMIC,       // Changes over time
+//                Tag.DECAY,         // New tag for rules that show decay/erosion patterns
+//
+//                // Operation Types
+//                Tag.LOGICAL,       // Uses logical AND operation for state transitions
+//                Tag.RANDOM        // Uses Random for generating raindrops with probability 1/32
+//        );
+    }
 
     /**
      * Applies the CANDLE-RAIN rule to compute the new state of a given cell. State (value): a candle is blown out if a
@@ -48,8 +63,4 @@ public class RuleCandleRain implements Rule<BooleanCell, BooleanState> {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.PROBABILISTIC;
-    }
 }

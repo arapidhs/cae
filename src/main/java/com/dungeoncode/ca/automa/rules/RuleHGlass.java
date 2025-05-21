@@ -1,8 +1,8 @@
 package com.dungeoncode.ca.automa.rules;
 
+import com.dungeoncode.ca.core.AbstractRule;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -16,7 +16,7 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see Rule
  * @see BooleanState
  */
-public class RuleHGlassR implements Rule<BooleanCell, BooleanState> {
+public class RuleHGlass extends AbstractRule<BooleanCell, BooleanState> {
 
     /**
      * Lookup table for the HGLASS rule, mapping a 5-bit index (EWSNC: east, west, south, north, center) to
@@ -61,6 +61,28 @@ public class RuleHGlassR implements Rule<BooleanCell, BooleanState> {
         RULE_TABLE[0b11101] = true;  // 11101 -> 1
         RULE_TABLE[0b11110] = true;  // 11110 -> 1
         RULE_TABLE[0b11111] = true;  // 11111 -> 1
+    }
+
+    public RuleHGlass() {
+        super(3);
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,
+//
+//                // Neighborhood Type
+//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
+//
+//                // Operation Types
+//                Tag.LOOKUP_TABLE,
+//                Tag.BITWISE,
+//
+//                // Behavior Types
+//                Tag.CHAOTIC,       // Can exhibit chaotic behavior
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
     }
 
     /**
@@ -109,8 +131,4 @@ public class RuleHGlassR implements Rule<BooleanCell, BooleanState> {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
-    }
 }

@@ -2,7 +2,6 @@ package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -18,6 +17,30 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanState
  */
 public class RuleDiamonds extends RuleBooleanNeighborCount {
+
+    public RuleDiamonds() {
+        super(6);
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
+//
+//                // Neighborhood Type
+//                Tag.MOORE,         // Uses 8 surrounding cells plus center
+//
+//                // Operation Types
+//                Tag.LOGICAL,       // Uses logical OR operation
+//                Tag.LOGICAL_OR,    // Specifically uses OR operation
+//
+//                // Behavior Types
+//                Tag.GROWTH,        // Implements growth patterns
+//                Tag.MONOTONIC,     // Shows unidirectional, non-reversible growth
+//                Tag.STRUCTURED,    // Creates organized square patterns
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
 
     /**
      * Applies the DIAMONDS rule to compute the new state of a given cell in the grid. Uses the von Neumann
@@ -79,8 +102,4 @@ public class RuleDiamonds extends RuleBooleanNeighborCount {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
-    }
 }

@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -17,6 +16,30 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanState
  */
 public class RuleLichens extends RuleBooleanNeighborCount {
+
+    public RuleLichens() {
+        super(9);
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
+//
+//                // Neighborhood Type
+//                Tag.MOORE,         // Uses 3x3 neighborhood excluding center
+//
+//                // Operation Types
+//                Tag.COUNTING,      // Counts exact number of neighbors
+//                Tag.GROWTH,        // Implements growth patterns
+//                Tag.LOGICAL,       // Uses logical operations for state transitions
+//
+//                // Behavior Types
+//                Tag.ORGANIC,       // Creates natural, irregular patterns
+//                Tag.PATTERN_SHAPING, // Creates distinct visual patterns
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
 
     /**
      * Applies the LICHENS rule to compute the new state of a given cell in the grid. Counts the number of live
@@ -46,8 +69,4 @@ public class RuleLichens extends RuleBooleanNeighborCount {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
-    }
 }

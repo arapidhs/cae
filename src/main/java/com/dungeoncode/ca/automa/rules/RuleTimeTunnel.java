@@ -1,8 +1,7 @@
 package com.dungeoncode.ca.automa.rules;
 
+import com.dungeoncode.ca.core.AbstractRule;
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.Rule;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -16,7 +15,31 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public class RuleTimeTunnel implements Rule<BooleanCell, BooleanState> {
+public class RuleTimeTunnel extends AbstractRule<BooleanCell, BooleanState> {
+
+    public RuleTimeTunnel() {
+        super(17);
+//        super(
+//                // Rule Type
+//                Tag.DETERMINISTIC,  // Rule is deterministic
+//
+//                // Neighborhood Type
+//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
+//
+//                // Operation Types
+//                Tag.COUNTING,      // Counts live neighbors
+//                Tag.LOGICAL,       // Uses XOR operation
+//
+//                // Behavior Types
+//                Tag.DYNAMIC,       // Creates complex, evolving patterns
+//                Tag.WAVE,          // Creates wave-like patterns
+//                Tag.FRACTAL,       // Creates self-similar patterns at different scales
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
 
     /**
      * Applies the TIME-TUNNEL rule to compute the new state of a given cell in the grid. Uses second-order dynamics
@@ -74,8 +97,4 @@ public class RuleTimeTunnel implements Rule<BooleanCell, BooleanState> {
         return grid.getNextStates()[y][x];
     }
 
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
-    }
 }

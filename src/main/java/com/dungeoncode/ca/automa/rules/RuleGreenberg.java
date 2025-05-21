@@ -1,8 +1,8 @@
 package com.dungeoncode.ca.automa.rules;
 
+import com.dungeoncode.ca.core.AbstractRule;
 import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.Rule;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BrainCell;
 import com.dungeoncode.ca.core.impl.BrainState;
 
@@ -17,7 +17,31 @@ import com.dungeoncode.ca.core.impl.BrainState;
  * @see BrainCell
  * @see BrainState
  */
-public class RuleGreenberg implements Rule<BrainCell, BrainState> {
+public class RuleGreenberg extends AbstractRule<BrainCell, BrainState> {
+
+    public RuleGreenberg() {
+        super(15);
+//        super(
+//                // Rule Type
+//                Tag.SECOND_ORDER,  // Has multiple states (Ready, Firing, Refractory)
+//
+//                // Neighborhood Type
+//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
+//
+//                // Operation Types
+//                Tag.LOGICAL,       // Uses logical OR from DIAMONDS rule
+//                Tag.STATE_MACHINE,
+//
+//                // Behavior Types
+//                Tag.WAVE,          // Creates wave-like patterns
+//                Tag.HOLLOW,        // Creates hollow patterns
+//                Tag.STRUCTURED,    // Creates organized patterns
+//
+//                // Source Types
+//                Tag.BOOK,
+//                Tag.CLASSIC
+//        );
+    }
 
     /**
      * Applies the GREENBERG rule to compute the new state of a given cell in the grid. Uses second-order dynamics
@@ -101,11 +125,6 @@ public class RuleGreenberg implements Rule<BrainCell, BrainState> {
         }
         grid.getNextStates()[y][x].set(nextValue, nextEcho);
         return grid.getNextStates()[y][x];
-    }
-
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.RuleCategory;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
@@ -17,7 +16,12 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public class RuleFlipParity extends RuleParity {
+public class RuleParityFlip extends RuleParity {
+
+    public RuleParityFlip() {
+        super(16);
+        // getTags().add(Tag.REVERSIBLE);
+    }
 
     /**
      * Applies the PARITY-FLIP rule to compute the new state of a given cell in the grid. Uses second-order dynamics
@@ -41,11 +45,6 @@ public class RuleFlipParity extends RuleParity {
         boolean newState = parity ^ currentState.isEcho();
         grid.getNextStates()[y][x].set(newState, currentState.getValue(), parityCell.getLiveSum());
         return grid.getNextStates()[y][x];
-    }
-
-    @Override
-    public RuleCategory getRuleCategory() {
-        return RuleCategory.DETERMINISTIC;
     }
 
 }

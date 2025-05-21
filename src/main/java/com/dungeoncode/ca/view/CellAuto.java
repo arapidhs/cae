@@ -4,11 +4,10 @@ import com.dungeoncode.ca.automa.*;
 import com.dungeoncode.ca.core.Cell;
 import com.dungeoncode.ca.core.CellState;
 import com.dungeoncode.ca.core.Configuration;
+import com.dungeoncode.ca.core.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -47,41 +46,37 @@ public class CellAuto {
     public static void main(String[] args) {
         try {
 
+            Repository repository = new Repository<>();
             // Initialize available configurations
-            configurations = new ArrayList<>();
-            configurations.add(new ConfInkspot());
-            configurations.add(new ConfGameOfLife());
-            configurations.add(new ConfHglass());
-            configurations.add(new ConfParity());
-            configurations.add(new ConfSquares());
-            configurations.add(new ConfDiamonds());
-            configurations.add(new ConfTriangles());
-            configurations.add(new ConfOneOutOfEight());
-            configurations.add(new ConfLichens());
-            configurations.add(new ConfLichensWithDeath());
-            configurations.add(new ConfMajority());
-            configurations.add(new ConfVichniacAnneal());
-            configurations.add(new ConfBanks());
-            configurations.add(new ConfBriansBrain());
-            configurations.add(new ConfGreenberg());
-            configurations.add(new ConfParityFlip());
-            configurations.add(new ConfTimeTunnel());
-            configurations.add(new ConfCandleRain());
-            configurations.add(new ConfRandomAnneal());
-            configurations.add(new ConfHistogram());
-            configurations.add(new ConfTubeWorms());
-            configurations.add(new ConfNaiveDiffusion());
-            configurations.add(new ConfHandshakeDiffusion());
-            configurations.add(new ConfGeneticDrift());
-
-            // Sort the list by configuration name
-            configurations.sort(Comparator.comparing((Configuration c) -> c.getPage())
-                    .thenComparing(Configuration::getName));
+            // configurations = new ArrayList<>();
+            repository.addConfiguration(new ConfInkspot());
+            repository.addConfiguration(new ConfGameOfLife());
+            repository.addConfiguration(new ConfHglass());
+            repository.addConfiguration(new ConfParity());
+            repository.addConfiguration(new ConfSquares());
+            repository.addConfiguration(new ConfDiamonds());
+            repository.addConfiguration(new ConfTriangles());
+            repository.addConfiguration(new ConfOneOutOfEight());
+            repository.addConfiguration(new ConfLichens());
+            repository.addConfiguration(new ConfLichensWithDeath());
+            repository.addConfiguration(new ConfMajority());
+            repository.addConfiguration(new ConfVichniacAnneal());
+            repository.addConfiguration(new ConfBanks());
+            repository.addConfiguration(new ConfBriansBrain());
+            repository.addConfiguration(new ConfGreenberg());
+            repository.addConfiguration(new ConfParityFlip());
+            repository.addConfiguration(new ConfTimeTunnel());
+            repository.addConfiguration(new ConfCandleRain());
+            repository.addConfiguration(new ConfRandomAnneal());
+            repository.addConfiguration(new ConfHistogram());
+            repository.addConfiguration(new ConfNaiveDiffusion());
+            repository.addConfiguration(new ConfHandshakeDiffusion());
+            repository.addConfiguration(new ConfGeneticDrift());
 
             running = true; // Set application running state
-            automaView = new AutomaView(configurations);
+            automaView = new AutomaView(repository);
             while (running) {
-                setup(); // Run configuration selection and simulation
+                setup(repository); // Run configuration selection and simulation
             }
         } catch (Exception e) {
             LOGGER.error("Application error: {}", e.getMessage(), e);
@@ -93,16 +88,17 @@ public class CellAuto {
      * Sets up the configuration selection view and launches the simulation if a configuration
      * is selected. Exits the application if no configuration is chosen.
      */
-    private static void setup() {
+    private static void setup(Repository repository) {
         automaView.setup(); // Display configuration selection view
-        if (automaView.getSelected() > -1) {
+        if (automaView.getSelectedConfId() > -1) {
             // Launch simulation with selected configuration
             Configuration conf = automaView.getSelectedConfiguration();
             AutomaController<Cell<CellState<?>>, CellState<?>> automaController =
-                    new AutomaController<>(1080, 720, 4, configurations, conf);
+                    new AutomaController<>(960, 960, 4, repository.getConfigurations(), conf);
             automaController.run();
         } else {
             System.exit(0); // Exit if no configuration is selected
         }
     }
+
 }

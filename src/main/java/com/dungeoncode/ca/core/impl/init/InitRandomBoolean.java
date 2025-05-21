@@ -33,9 +33,9 @@ public class InitRandomBoolean extends InitNextStatesBoolean {
             for (int x = 0; x < grid.getWidth(); x++) {
                 boolean isActive = rnd.nextBoolean();
                 if (grid.getCell(x, y) == null) {
-                    grid.setCell(x, y, new BooleanCell(x, y, isActive, false,0));
+                    grid.setCell(x, y, new BooleanCell(x, y, isActive, false, 0));
                 } else {
-                    grid.getCell(x, y).setState(isActive, false,0);
+                    grid.getCell(x, y).setState(isActive, false, 0);
                 }
             }
         }

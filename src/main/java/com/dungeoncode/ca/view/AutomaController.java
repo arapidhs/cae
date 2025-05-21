@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.googlecode.lanterna.input.KeyType.Character;
-import static java.lang.Enum.valueOf;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
@@ -82,7 +81,6 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfCandleRain.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfRandomAnneal.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfHistogram.class.getName(), rendererBoolean);
-        CELL_RENDERER.put(ConfTubeWorms.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfNaiveDiffusion.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfHandshakeDiffusion.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfGeneticDrift.class.getName(), rendererBooleanId);
@@ -373,7 +371,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                             }
                         }
                         case ArrowRight -> {
-                            if(automa.getGrid().getCell(0,0) instanceof BooleanCell) {
+                            if (automa.getGrid().getCell(0, 0) instanceof BooleanCell) {
                                 if (renderer.getStateRenderer() instanceof RendererBoolean) {
                                     ((RendererBoolean) renderer.getStateRenderer()).nextPalette();
                                     renderer.accept(automa.getGrid());
@@ -406,10 +404,20 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                             }
                         }
                         case 'r', 'R' -> {
-                            if ( !automaRestarting ) {
-                                automaRestarting=true;
+                            if (!automaRestarting) {
+                                automaRestarting = true;
+
+                                boolean wasRunning = automa.isRunning();
+                                if (automa.isRunning()) {
+                                    automa.stop();
+                                }
                                 automa.getGrid().initialize();
-                                automaRestarting=false;
+                                if (wasRunning) {
+                                    automa.resume();
+                                } else {
+                                    renderer.accept(automa.getGrid());
+                                }
+                                automaRestarting = false;
                             }
                         }
                         case 'i', 'I' -> {
@@ -472,7 +480,6 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
                                 Grid<BooleanCell, BooleanState> grid = (Grid<BooleanCell, BooleanState>) automa.getGrid();
                                 int width = grid.getWidth();
                                 int height = grid.getHeight();
-                                // Set all cells to Ready state initially
                                 for (int y = 0; y < height; y++) {
                                     for (int x = 0; x < width; x++) {
                                         BooleanCell cell = grid.getCell(x, y);
@@ -619,17 +626,17 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             // Show configuration details if one is selected
             if (configuration != null) {
                 // Display Name with emphasis
-                textGraphics.putString(leftStartCol, row++, "Automa: " + configuration.getName(), SGR.BOLD);
+                textGraphics.putString(leftStartCol, row++, "Automa: " + configuration.getClass().getName(), SGR.BOLD);
                 row++;
 
-                // Display Description with word wrapping
-                //textGraphics.putString(leftStartCol, row++, "Description:", SGR.BOLD);
-                String description = configuration.getDescription();
-                if (description != null && !description.isEmpty()) {
-                    row = wrapAndPrintText(description, leftStartCol + 2, row, leftColumnWidth - 2);
-                } else {
-                    textGraphics.putString(leftStartCol + 2, row++, "No description available.");
-                }
+//                // Display Description with word wrapping
+//                //textGraphics.putString(leftStartCol, row++, "Description:", SGR.BOLD);
+//                String description = configuration.getDescription();
+//                if (description != null && !description.isEmpty()) {
+//                    row = wrapAndPrintText(description, leftStartCol + 2, row, leftColumnWidth - 2);
+//                } else {
+//                    textGraphics.putString(leftStartCol + 2, row++, "No description available.");
+//                }
 
             } else {
                 textGraphics.putString(leftStartCol, row++, "No configuration selected.", SGR.BOLD);
@@ -645,7 +652,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             // Print numbered list of configurations
             for (int i = 0; i < configurations.size(); i++) {
                 Configuration<C, S> config = configurations.get(i);
-                String listItem = String.format("%d. %s", i + 1, config.getName());
+                String listItem = String.format("%d. %s", i + 1, config.getClass().getName());
 
                 // Highlight selected configuration
                 if (config == configuration) {
@@ -757,7 +764,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             }
 
             // Generate filename with configuration name and millisecond-precision timestamp
-            String configName = configuration.getName().replaceAll("[^a-zA-Z0-9]", "_");
+            String configName = configuration.getClass().getName().replaceAll("[^a-zA-Z0-9]", "_");
             String timestamp = String.format("%tY%tm%td%tH%tM%tS%tL",
                     System.currentTimeMillis(), System.currentTimeMillis(),
                     System.currentTimeMillis(), System.currentTimeMillis(),

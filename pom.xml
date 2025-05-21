@@ -34,13 +34,19 @@
 			<version>3.1.2</version>
 		</dependency>
 
+		<!-- JSON support -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.15.2</version>
+		</dependency>
+
 		<!-- Static analysis annotations -->
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
 			<artifactId>spotbugs-annotations</artifactId>
 			<version>4.2.0</version>
 		</dependency>
-
 
 		<!-- Logging -->
 		<dependency>

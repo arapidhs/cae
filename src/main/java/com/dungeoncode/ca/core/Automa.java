@@ -3,6 +3,7 @@ package com.dungeoncode.ca.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -32,7 +33,7 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
     /**
      * The rule applied to update cell states.
      */
-    private Rule<C, S> rule;
+    private List<Rule<C, S>> rules;
 
     /**
      * The consumer responsible for rendering or processing the grid.
@@ -75,7 +76,7 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
      */
     public void configure(Map<String, Object> config) {
         this.grid = (Grid<C, S>) config.get(CONF_GRID);
-        this.rule = (Rule<C, S>) config.get(CONF_RULE);
+        this.rules = (List<Rule<C, S>>) config.get(CONF_RULES);
         this.intervalMillis = Long.parseLong(String.valueOf(config.get(CONF_INTERVAL_MILLIS)));
     }
 
@@ -119,11 +120,13 @@ public class Automa<C extends Cell<S>, S extends CellState<?>> {
      */
     public void step() {
 
-        // Apply rules to update newGrid
-        for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
-                C cell = grid.getCell(x, y);
-                rule.apply(grid, cell);
+        for (Rule<C, S> rule : rules) {
+            // Apply rules to update newGrid
+            for (int x = 0; x < grid.getWidth(); x++) {
+                for (int y = 0; y < grid.getHeight(); y++) {
+                    C cell = grid.getCell(x, y);
+                    rule.apply(grid, cell);
+                }
             }
         }
 

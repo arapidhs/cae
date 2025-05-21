@@ -1,84 +1,63 @@
 package com.dungeoncode.ca.core;
 
-/**
- * An abstract base class for configurations in a cellular automaton, implementing the {@link Configuration} interface.
- * Provides default implementations for storing and retrieving configuration metadata (name, description, citation).
- * Subclasses must implement the {@link #configure(Automa, int, int, long)} method to define specific configuration logic.
- *
- * @param <C> the type of cells in the automaton, extending {@link Cell}
- * @param <S> the type of cell states, extending {@link CellState}
- */
+import com.dungeoncode.ca.automa.rules.RuleInkspot;
+import com.dungeoncode.ca.core.impl.init.InitCentralBlob;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static com.dungeoncode.ca.core.Constants.*;
+
 public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellState<?>> implements Configuration<C, S> {
-    /**
-     * The name of the configuration.
-     */
-    private final String name;
 
-    /**
-     * The description of the configuration.
-     */
-    private final String description;
+    private final int id;
+    private final List<Rule<C, S>> rules;
+    private GridInitializer<C, S> gridInitializer;
 
-    /**
-     * The citation or reference for the configuration.
-     */
-    private final String citation;
+    protected AbstractConfiguration(int id, GridInitializer<C, S> gridInitializer, List<Rule<C, S>> rules) {
+        Objects.requireNonNull(rules);
+        this.id = id;
+        this.gridInitializer = gridInitializer;
+        this.rules = rules;
+    }
 
-    /**
-     * The citation page;
-     */
-    private final int page;
+    public int getId() {
+        return id;
+    }
 
-    /**
-     * Constructs a new configuration with the specified metadata.
-     *
-     * @param name        the name of the configuration
-     * @param description a description of the configuration
-     * @param citation    a citation or reference for the configuration, or an empty string if none
-     */
-    public AbstractConfiguration(String name, String description, String citation, int page) {
-        this.name = name;
-        this.description = description;
-        this.citation = citation;
-        this.page=page;
+    @Override
+    public GridInitializer<C, S> getGridInitializer() {
+        return gridInitializer;
+    }
+
+    @Override
+    public List<Rule<C, S>> getRules() {
+        return rules;
     }
 
     /**
-     * Returns the name of this configuration.
+     * Configures the specified {@link Automa} with a grid, rule, and interval for the Inkspot automaton.
+     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitCentralBlob}
+     * with a 7x7 random central region, and applies the {@link RuleInkspot} for state updates.
      *
-     * @return the configuration name
+     * @param automa         the {@link Automa} to configure
+     * @param width          the width (number of columns) of the grid
+     * @param height         the height (number of rows) of the grid
+     * @param intervalMillis the interval in milliseconds between automaton steps
      */
     @Override
-    public String getName() {
-        return name;
+    public void configure(Automa<C, S> automa, int width, int height, long intervalMillis) {
+        Map<String, Object> config = new HashMap<>();
+        Grid<C, S> grid = new Grid<>(width, height, getGridInitializer());
+        config.put(CONF_GRID, grid);
+        config.put(CONF_RULES, getRules());
+        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
+        automa.configure(config);
     }
 
-    /**
-     * Returns a description of this configuration.
-     *
-     * @return the configuration description
-     */
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Returns a citation or reference for this configuration.
-     *
-     * @return the citation or an empty string if none
-     */
-    @Override
-    public String getCitation() {
-        return citation;
-    }
-
-    /**
-     * Returns the citation page.
-     *
-     * @return the citation page or 0 if N/A.
-     */
-    public int getPage() {
-        return page;
+    public void setGridInitializer(GridInitializer<C, S> gridInitializer) {
+        this.gridInitializer = gridInitializer;
     }
 }
