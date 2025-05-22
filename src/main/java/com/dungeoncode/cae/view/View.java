@@ -13,6 +13,7 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
+import com.googlecode.lanterna.gui2.dialogs.WaitingDialog;
 import com.googlecode.lanterna.gui2.menu.Menu;
 import com.googlecode.lanterna.gui2.menu.MenuBar;
 import com.googlecode.lanterna.gui2.menu.MenuItem;
@@ -134,7 +135,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
             // Display configuration selection window
             showConfigurationWindow(screen);
-            // exampleMultiWindow(screen);
+            //exampleMultiWindow(screen);
             //exampleTableWindow(screen);
         } catch (IOException e) {
             throw new RuntimeException("Failed to initialize terminal: " + e.getMessage(), e);
@@ -152,7 +153,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
     private void showConfigurationWindow(@Nonnull TerminalScreen screen) {
         Objects.requireNonNull(screen, "Screen cannot be null");
         final MultiWindowTextGUI textGUI = new MultiWindowTextGUI(screen);
-        textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
+        // textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
         // textGUI.setTheme(LanternaThemes.getRegisteredTheme("conqueror"));
 
         // ESC key to confirm exit
@@ -188,12 +189,13 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
                 .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Beginning)));
 
         // Configuration list
-        RadioBoxList<String> configList = new RadioBoxList<>();
+        MyRadioBoxList configList = new MyRadioBoxList();
         configList.setPreferredSize(new TerminalSize(30, 35));
         for (Configuration<C, S> config : repository.getConfigurations()) {
             Descriptor descriptor = repository.getDescriptorByConfId(config.getId());
             configList.addItem(descriptor.getName());
         }
+
 
         // Details text area
         TextBox detailsBox = new TextBox(new TerminalSize(45, 35)).setReadOnly(true);
@@ -241,6 +243,8 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
         // Launch the GUI
         textGUI.addWindowAndWait(window);
+
+
     }
 
     /**
@@ -542,6 +546,18 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         });
         menuFile.add(exitItem);
 
+        MenuItem closetItem = new MenuItem("Close", new Runnable() {
+            public void run() {
+                menuFile.takeFocus();
+            }
+        });
+        menuFile.add(closetItem);
+
+        Menu subMenu = new Menu("Submenu");
+        subMenu.add(new MenuItem("Opoton 1"));
+        subMenu.add(new MenuItem("Opoton 2"));
+        menuFile.add(subMenu);
+
         topPanel.addComponent(menubar);
         rootPanel.addComponent(topPanel);
         Border centerPanel1 = centerPanel.withBorder(Borders.singleLine("Center Panel"));
@@ -596,18 +612,33 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
         // ESC key to confirm exit
         textGUI.addListener((gui, key) -> {
-            if (key.getKeyType() == KeyType.Escape) {
+            if (key.isCtrlDown() &&  key.getKeyType() == KeyType.Character && key.getCharacter()=='x') {
                 confirmExit(textGUI);
             }
             menubar.getMenu(0).handleInput(key);
             return false;
         });
 
+
+
+
+
         // Launch the GUI
-        textGUI.addWindowAndWait(window);
+        textGUI.addWindow(window);
+        // textGUI.addWindowAndWait(window);
         //        textGUI.addWindow(window2);
         //        textGUI.addWindowAndWait(window3);
 
     }
 
+    class MyRadioBoxList extends RadioBoxList<String> {
+        @Override
+        public synchronized Result handleKeyStroke(KeyStroke keyStroke) {
+            if ( keyStroke.getKeyType() == KeyType.ArrowRight) {
+                return Result.HANDLED;
+            } else {
+                return super.handleKeyStroke(keyStroke);
+            }
+        }
+    }
 }
