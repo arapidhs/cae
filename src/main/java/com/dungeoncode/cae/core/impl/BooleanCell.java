@@ -24,7 +24,7 @@ public class BooleanCell extends AbstractCell<BooleanState> {
      */
     public BooleanCell(int x, int y, boolean state, boolean echo, int id) {
         super(x, y);
-        this.state = new BooleanState(state, echo, 0, 0, id);
+        this.state = new BooleanState(state, echo, 0,  id);
     }
 
     /**
@@ -66,7 +66,7 @@ public class BooleanCell extends AbstractCell<BooleanState> {
      */
     @Override
     public void copyState(BooleanState source) {
-        this.state.set(source.getValue(), source.isEcho(), source.getLiveSum(), source.getTimer(), source.getId());
+        this.state.set(source.getValue(), source.isEcho(), source.getLiveSum(), source.getId());
     }
 
     /**
@@ -77,6 +77,6 @@ public class BooleanCell extends AbstractCell<BooleanState> {
      * @param id    the new identifier (0 = none, >0 = specific category)
      */
     public void setState(boolean value, boolean echo, int id) {
-        this.state.set(value, echo, 0, 0, id);
+        this.state.set(value, echo, 0, id);
     }
 }

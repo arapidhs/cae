@@ -152,7 +152,8 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
     private void showConfigurationWindow(@Nonnull TerminalScreen screen) {
         Objects.requireNonNull(screen, "Screen cannot be null");
         final MultiWindowTextGUI textGUI = new MultiWindowTextGUI(screen);
-        // textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
+        textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
+        // textGUI.setTheme(LanternaThemes.getRegisteredTheme("conqueror"));
 
         // ESC key to confirm exit
         textGUI.addListener((gui, key) -> {
