@@ -118,7 +118,7 @@
 									<!-- Adds Main-Class to manifest -->
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<mainClass>com.dungeoncode.ca.view.ViewMain</mainClass>
+											<mainClass>com.dungeoncode.cae.view.ViewMain</mainClass>
 										</transformer>
 									</transformers>
 									<!-- Output file name -->
@@ -174,7 +174,7 @@
 									<!-- Absolute path to avoid conflict with shade -->
 									<directory>${project.basedir}/src/main/resources</directory>
 									<includes>
-										<include>java-rogue.bat</include>
+										<include>cae.bat</include>
 									</includes>
 								</resource>
 							</resources>
