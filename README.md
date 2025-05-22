@@ -12,5 +12,3 @@ A Java-based terminal application for simulating and visualizing cellular automa
 
 ---
 *Note*: Inspired by *Cellular Automata Machines: A New Environment for Modeling* by Toffoli and Margolus (MIT Press, 1987).
-
-Test update
