@@ -23,25 +23,6 @@ public class RuleRandomAnneal extends RuleBooleanNeighborCount {
 
     public RuleRandomAnneal() {
         super(19);
-//        super(
-//                // Rule Type
-//                Tag.PROBABILISTIC,  // Uses random elements for state transitions
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts live neighbors
-//                Tag.VOTING,        // Uses majority voting with noise
-//
-//                // Behavior Types
-//                Tag.DYNAMIC,       // Creates complex, evolving patterns
-//                Tag.PATTERN_SHAPING, // Smooths and shapes domain boundaries
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

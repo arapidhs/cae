@@ -19,29 +19,6 @@ public class RuleLichensWithDeath extends RuleBooleanNeighborCount {
 
     public RuleLichensWithDeath() {
         super(10);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.MOORE,         // Uses 3x3 neighborhood excluding center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts exact number of neighbors
-//                Tag.GROWTH,        // Implements growth patterns
-//                Tag.DEATH,         // Includes death mechanism for cells with 4 neighbors
-//                Tag.LOGICAL,       // Uses logical operations for state transitions
-//
-//                // Behavior Types
-//                Tag.ORGANIC,       // Creates natural, irregular patterns
-//                Tag.COMPETITIVE,   // Introduces competition through death mechanism
-//                Tag.DYNAMIC,       // Creates complex, changing patterns over time
-//                Tag.PATTERN_SHAPING, // Creates distinct visual patterns
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

@@ -4,12 +4,15 @@ import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
- * Implements the ANNEAL rule for a cellular automaton, where a cell becomes active if it has exactly 4 or 6 or
- * more live cells in its 3x3 Moore neighborhood (including the center), and inactive otherwise. This voting rule,
- * a variation of MAJORITY, encourages reshuffling at boundaries, leading to gradual annealing of domains with
- * straighter boundaries over time. This rule, proposed by Gerard Vichniac, is described in Chapter 5, Section 5.4
- * of <i>Cellular Automata Machines: A New Environment for Modeling</i>.
+ * Implements the ANNEAL rule for a cellular automaton, a voting rule variation of MAJORITY where a cell becomes
+ * active if it has exactly 4 or 6 or more live cells in its 3x3 Moore neighborhood (including the center), and
+ * inactive otherwise. Proposed by Gerard Vichniac, this rule encourages boundary reshuffling, leading to gradual
+ * domain annealing with straighter boundaries, modeling surface tension. Described in Chapter 5, Section 5.4 of
+ * <i>Cellular Automata Machines: A New Environment for Modeling</i> (MIT Press).
  *
  * @see RuleBooleanNeighborCount
  * @see BooleanCell
@@ -17,58 +20,44 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  */
 public class RuleAnneal extends RuleBooleanNeighborCount {
 
+    /**
+     * Constructs a new ANNEAL rule with a fixed ID.
+     */
     public RuleAnneal() {
         super(12);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.MOORE,         // Uses 3x3 neighborhood including center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts live cells in neighborhood
-//                Tag.PATTERN_SHAPING, // Specifically designed for pattern modification
-//
-//                // Behavior Types
-//                Tag.STRUCTURED,    // Creates organized domains
-//                Tag.STABLE,        // Forms stable boundaries
-//                Tag.DOMAIN,        // Creates distinct domains
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**
-     * Applies the ANNEAL rule to compute the new state of a given cell in the grid. Counts the number of live
-     * cells in the 3x3 Moore neighborhood (including the center). If the count is exactly 4 or 6 or more, the
-     * cell becomes active (true); otherwise, it becomes inactive (false). This results in interpenetrating domains
-     * with dynamic boundaries that straighten over time, modeling surface tension.
+     * Applies the ANNEAL rule to compute the new state of a given cell. Counts live cells in the 3x3 Moore
+     * neighborhood (including the center). The cell becomes active (true) if the count is exactly 4 or 6 or more,
+     * otherwise inactive (false). Updates the grid's intermediate state with the new state, echo, and neighbor count.
      *
-     * @param grid the {@link Grid} containing the cell and its neighbors
-     * @param cell the {@link BooleanCell} whose state is to be updated
+     * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
+     * @param cell the {@link BooleanCell} to update, must not be null
      * @return the new {@link BooleanState} of the cell
+     * @throws NullPointerException if grid or cell is null
      */
     @Override
-    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+    public BooleanState apply(@Nonnull Grid<BooleanCell, BooleanState> grid, @Nonnull BooleanCell cell) {
+        Objects.requireNonNull(grid, "Grid cannot be null");
+        Objects.requireNonNull(cell, "Cell cannot be null");
+
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
 
-        // Count live neighbors in the Moore neighborhood (excluding the center)
+        // Count live neighbors in Moore neighborhood (excluding center)
         int liveNeighbors = countLiveMooreNeighbors(grid, x, y);
-        // Include the center cell in the count (9SUM includes CENTER)
+        // Include center cell (9SUM)
         if (cell.getState().getValue()) {
             liveNeighbors++;
         }
 
-        // Apply the decision table: active if exactly 4 or 6+ live cells, inactive otherwise
+        // Decision table: active for 4 or 6+ live cells, inactive otherwise
         boolean isActive = liveNeighbors == 4 || liveNeighbors >= 6;
-
         boolean echo = cell.getState().getValue();
-        grid.getIntermediateStates()[y][x].set(isActive, echo, liveNeighbors);
-        return grid.getIntermediateStates()[y][x];
-    }
 
+        BooleanState[][] intermediateStates = grid.getIntermediateStates();
+        intermediateStates[y][x].set(isActive, echo, liveNeighbors);
+        return intermediateStates[y][x];
+    }
 }

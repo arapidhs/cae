@@ -19,26 +19,6 @@ public class RuleOneOutOfEight extends RuleBooleanNeighborCount {
 
     public RuleOneOutOfEight() {
         super(8);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.MOORE,         // Uses 3x3 neighborhood excluding center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts exact number of neighbors
-//                Tag.LOGICAL,       // Uses logical operations for state transitions
-//                Tag.GROWTH,        // Implements growth patterns
-//
-//                // Behavior Types
-//                Tag.STRUCTURED,    // Creates organized, fractal-like patterns
-//                Tag.FRACTAL,       // Creates self-similar patterns at different scales
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

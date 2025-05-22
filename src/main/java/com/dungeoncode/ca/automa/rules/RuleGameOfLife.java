@@ -29,21 +29,6 @@ public class RuleGameOfLife extends RuleBooleanNeighborCount {
      */
     public RuleGameOfLife(boolean tracingEnabled) {
         super((2));
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//                // Operation Types
-//                Tag.COUNTING,     // Counts live neighbors
-//
-//                // Behavior Types
-//                Tag.STABLE,       // Can produce stable patterns
-//                Tag.OSCILLATION,  // Can produce oscillating patterns
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC,
-//                Tag.FOUNDATIONAL
-//        );
         this.tracingEnabled = tracingEnabled;
     }
 

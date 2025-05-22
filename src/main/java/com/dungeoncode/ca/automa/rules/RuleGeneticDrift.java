@@ -4,51 +4,71 @@ import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.Random;
 
 /**
- * Implements the GENETIC-DRIFT rule, extending NAIVE-DIFFUSION. Models diffusion of particles (genes) with species IDs.
- * A cell can move to a neighbor if the neighbor has no species (ID 0) or the same species ID, using either a copy or handshake mechanism.
- * Optionally splits the grid into 3x3 subgrids to inhibit movement across boundaries.
+ * Implements the GENETIC-DRIFT rule for a cellular automaton, extending NAIVE-DIFFUSION to model diffusion of
+ * particles (genes) with species IDs. A cell can move to a neighbor with no species (ID 0) or the same species ID,
+ * using either a copy or handshake mechanism. Optionally splits the grid into 3x3 subgrids to inhibit movement
+ * across boundaries. Described in Chapter 9, Section 9.4 of <i>Cellular Automata Machines: A New Environment for
+ * Modeling</i> (MIT Press).
+ *
+ * @see RuleBooleanNeighborCount
+ * @see BooleanCell
+ * @see BooleanState
  */
 public class RuleGeneticDrift extends RuleBooleanNeighborCount {
+
+    /** Random number generator for neighbor selection. */
     private final Random random = new Random();
+
+    /** Indicates whether subgrid boundaries are enforced. */
     private final boolean useGrid;
+
+    /** Indicates whether handshake mechanism is used for diffusion. */
     private final boolean useHandshake;
+
+    /** Number of subgrids per axis (3x3 grid). */
     private final int subgridCountPerAxis = 3;
 
+    /**
+     * Constructs a new GENETIC-DRIFT rule with default settings (no subgrid, no handshake).
+     */
     public RuleGeneticDrift() {
         this(false, false);
     }
 
+    /**
+     * Constructs a new GENETIC-DRIFT rule with specified settings.
+     *
+     * @param useGrid      true to enforce 3x3 subgrid boundaries, false otherwise
+     * @param useHandshake true to use handshake mechanism for diffusion, false for copy mechanism
+     */
     public RuleGeneticDrift(boolean useGrid, boolean useHandshake) {
         super(23);
-//        super(
-//                // Rule Type
-//                Tag.PROBABILISTIC,  // Due to random neighbor selection
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
-//
-//                // Operation Types
-//                Tag.HANDSHAKE,     // Particle diffusion behavior
-//                Tag.DIFFUSION,     // Particle diffusion behavior
-//                Tag.SPECIES,
-//
-//                // Behavior Types
-//                Tag.DYNAMIC,       // Changes over time
-//                Tag.STRUCTURED,    // Creates organized patterns of species
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
         this.useGrid = useGrid;
         this.useHandshake = useHandshake;
     }
 
+    /**
+     * Applies the GENETIC-DRIFT rule to compute the new state of a cell. Selects a random von Neumann neighbor
+     * (north, south, east, west) and allows movement if the neighbor has no species (ID 0) or the same species ID,
+     * respecting subgrid boundaries if enabled. Uses a copy mechanism (direct transfer) or handshake mechanism
+     * (mutual state exchange) for diffusion. Updates the grid's intermediate state with the new state, echo,
+     * neighbor count, and species ID.
+     *
+     * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
+     * @param cell the {@link BooleanCell} to update, must not be null
+     * @return the new {@link BooleanState} of the cell
+     * @throws NullPointerException if grid or cell is null
+     */
     @Override
-    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+    public BooleanState apply(@Nonnull Grid<BooleanCell, BooleanState> grid, @Nonnull BooleanCell cell) {
+        Objects.requireNonNull(grid, "Grid cannot be null");
+        Objects.requireNonNull(cell, "Cell cannot be null");
+
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
         int width = grid.getWidth();
@@ -64,21 +84,20 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
 
         // Random direction (0=north, 1=south, 2=west, 3=east)
         int direction = random.nextInt(4);
-        int dx = 0, dy = 0;
-        switch (direction) {
-            case 0:
-                dy = -1;
-                break; // North
-            case 1:
-                dy = 1;
-                break; // South
-            case 2:
-                dx = -1;
-                break; // West
-            case 3:
-                dx = 1;
-                break; // East
-        }
+        int dx = switch (direction) {
+            case 0 -> 0;    // North
+            case 1 -> 0;    // South
+            case 2 -> -1;   // West
+            case 3 -> 1;    // East
+            default -> 0;
+        };
+        int dy = switch (direction) {
+            case 0 -> -1;   // North
+            case 1 -> 1;    // South
+            case 2, 3 -> 0; // West, East
+            default -> 0;
+        };
+
         int nx = (x + dx + width) % width;
         int ny = (y + dy + height) % height;
         BooleanState targetState = grid.getCell(nx, ny).getState();
@@ -87,7 +106,7 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
 
         // Movement conditions
         boolean canMove = (!useGrid || (x / subgridWidth == nx / subgridWidth && y / subgridHeight == ny / subgridHeight))
-                && currentId == 0 && targetId > 0;
+                && (currentId == 0 || currentId == targetId);
 
         boolean newValue = currentValue;
         boolean newEcho = currentValue;
@@ -104,13 +123,15 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
                     newValue = false;
                 }
             } else {
-                newValue = true;
-                newId = targetId;
+                if (!currentValue && targetValue) {
+                    newValue = true;
+                    newId = targetId;
+                }
             }
         }
 
-        grid.getIntermediateStates()[y][x].set(newValue, newEcho, liveSum, 0, newId);
-        return grid.getIntermediateStates()[y][x];
+        BooleanState[][] intermediateStates = grid.getIntermediateStates();
+        intermediateStates[y][x].set(newValue, newEcho, liveSum, 0, newId);
+        return intermediateStates[y][x];
     }
-
 }

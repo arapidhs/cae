@@ -33,35 +33,6 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
      */
     public ConfNaiveDiffusion() {
         super(22, null, List.of(new RuleNaiveDiffusion()));
-//        super(
-//                "Naive Particle Diffusion",
-//                "A cellular automaton modeling diffusion of particles, where the state (value) represents particles " +
-//                        "(true = particle, false = empty). Each cell copies the state of a randomly chosen neighbor " +
-//                        "in one of four directions (north, south, east, west), leading to non-conserved particle counts. " +
-//                        "Initialized with a disk-shaped region of active cells (radius based on grid dimensions), it " +
-//                        "produces a diffusion pattern that breaks up into tongues of fire, as described in Toffoli and " +
-//                        "Margolus (1987).",
-//                "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-//                        "Chapter 9, Section 9.4, p. 84-86. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
-//                84,
-//                // Rule Type
-//                Tag.PROBABILISTIC,  // Due to random neighbor selection
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
-//
-//                // Operation Types
-//                Tag.DIFFUSION,     // Particle diffusion behavior
-//                Tag.RANDOM,           // Uses random selection
-//
-//                // Behavior Types
-//                Tag.DYNAMIC,       // Changes over time
-//                Tag.PATTERN_SHAPING,       // Creates distinct patterns
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**
@@ -85,4 +56,5 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automaton.configure(config);
     }
+
 }

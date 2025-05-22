@@ -58,6 +58,9 @@ public enum Tag {
     COMPETITIVE("Competitive", "Patterns with competitive growth or survival mechanisms"),
     DOMAIN("Domain", "Patterns forming distinct, interpenetrating domains"),
     FRACTAL("Fractal", "Patterns with self-similar structures repeating at different scales"),
+    LOCALIZED ("Localized", "Initial configurations with activity confined to a specific region"),
+    BASELINE ("Baseline", "Initial configurations with a fixed region acting as a boundary or inhibitor"),
+    SPARSE ("Sparse", "Initial configurations with widely distributed, isolated active cells"),
 
     // Source Types
     BOOK("Book", "Configurations sourced from a book or academic publication"),
@@ -101,7 +104,7 @@ public enum Tag {
      */
     public static final EnumSet<Tag> BEHAVIOR_TYPES = EnumSet.of(
             GROWTH, OSCILLATION, CHAOTIC, STABLE, WAVE, PATTERN_SHAPING, NEURAL, DECAY, MONOTONIC,
-            HOLLOW, ACCUMULATION, ORGANIC, COMPETITIVE, DOMAIN, FRACTAL
+            HOLLOW, ACCUMULATION, ORGANIC, COMPETITIVE, DOMAIN, FRACTAL, LOCALIZED, BASELINE, SPARSE
     );
 
     /**

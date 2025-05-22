@@ -1,11 +1,10 @@
 package com.dungeoncode.ca.view;
 
-import com.dungeoncode.ca.core.Cell;
-import com.dungeoncode.ca.core.CellState;
-import com.dungeoncode.ca.core.Configuration;
-import com.dungeoncode.ca.core.Repository;
+import com.dungeoncode.ca.core.*;
 import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.bundle.LanternaThemes;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.Button;
@@ -17,6 +16,8 @@ import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.gui2.menu.Menu;
 import com.googlecode.lanterna.gui2.menu.MenuBar;
 import com.googlecode.lanterna.gui2.menu.MenuItem;
+import com.googlecode.lanterna.gui2.table.Table;
+import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -33,8 +34,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
-import static com.googlecode.lanterna.gui2.Window.Hint.FIT_TERMINAL_WINDOW;
-import static com.googlecode.lanterna.gui2.Window.Hint.FULL_SCREEN;
+import static com.googlecode.lanterna.gui2.Window.Hint.*;
 
 /**
  * Terminal-based user interface for selecting cellular automaton configurations before starting a simulation.
@@ -45,22 +45,22 @@ import static com.googlecode.lanterna.gui2.Window.Hint.FULL_SCREEN;
  * @param <C> the type of cells, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
-public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
+public class View<C extends Cell<S>, S extends CellState<?>> {
 
     /**
      * The default terminal width in columns.
      */
-    private final int width = 120;
+    private final int width = 180;
 
     /**
      * The default terminal height in rows.
      */
-    private final int height = 40;
+    private final int height = 60;
 
     /**
      * The font size for terminal rendering.
      */
-    private final int fontSize = 16;
+    private final int fontSize = 12;
 
     /**
      * The repository of available configurations.
@@ -83,7 +83,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
      * @param repository the {@link Repository} of configurations, must not be null
      * @throws NullPointerException if repository is null
      */
-    public AutomaView(@Nonnull Repository<C, S> repository) {
+    public View(@Nonnull Repository<C, S> repository) {
         this.repository = Objects.requireNonNull(repository, "Repository cannot be null");
         this.selectedConfId = -1;
     }
@@ -97,10 +97,11 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
     public void setup() {
         try {
             // Load custom font (work-in-progress)
+            String fontPath="/fonts/jetbrains/JetBrainsMono-ExtraLight.ttf";
             Font font;
-            try (InputStream is = AutomaView.class.getResourceAsStream("/fonts/ibm/Ac437_IBM_VGA_9x14.ttf")) {
+            try (InputStream is = View.class.getResourceAsStream(fontPath)) {
                 if (is == null) {
-                    throw new IOException("Font resource not found: /fonts/ibm/Ac437_IBM_VGA_9x14.ttf");
+                    throw new IOException("Font resource not found: " + fontPath);
                 }
                 font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, fontSize);
             } catch (Exception e) {
@@ -115,7 +116,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
             terminalFactory.setTerminalEmulatorTitle("Cellular Automata");
             terminalFactory.setInitialTerminalSize(new TerminalSize(width, height));
             terminalFactory.setTerminalEmulatorFontConfiguration(
-                    SwingTerminalFontConfiguration.newInstance(monospacedFont)
+                    SwingTerminalFontConfiguration.newInstance(font)
             );
 
             screen = terminalFactory.createScreen();
@@ -133,7 +134,8 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
 
             // Display configuration selection window
             showConfigurationWindow(screen);
-
+            // exampleMultiWindow(screen);
+            //exampleTableWindow(screen);
         } catch (IOException e) {
             throw new RuntimeException("Failed to initialize terminal: " + e.getMessage(), e);
         } finally {
@@ -150,7 +152,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
     private void showConfigurationWindow(@Nonnull TerminalScreen screen) {
         Objects.requireNonNull(screen, "Screen cannot be null");
         final MultiWindowTextGUI textGUI = new MultiWindowTextGUI(screen);
-        textGUI.setTheme(LanternaThemes.getRegisteredTheme("conqueror"));
+        // textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
 
         // ESC key to confirm exit
         textGUI.addListener((gui, key) -> {
@@ -160,7 +162,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
             return false;
         });
 
-        final BasicWindow window = new BasicWindow("Cellular Automata Simulator");
+        final BasicWindow window = new BasicWindow("CAE");
         window.setHints(List.of(FULL_SCREEN, FIT_TERMINAL_WINDOW));
 
         // Root layout
@@ -177,7 +179,7 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
 
         // Header
         topPanel.addComponent(new EmptySpace());
-        topPanel.addComponent(new Label("Terminal-based Cellular Automata Simulator").addStyle(SGR.BOLD));
+        topPanel.addComponent(new Label("Terminal-based Cellular Automata Engine").addStyle(SGR.BOLD));
         topPanel.addComponent(new Label("Explore, configure, and run dynamic automata systems").addStyle(SGR.ITALIC));
         topPanel.addComponent(new Label("in a fully interactive text interface.").addStyle(SGR.ITALIC));
         topPanel.addComponent(new EmptySpace());
@@ -188,7 +190,8 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         RadioBoxList<String> configList = new RadioBoxList<>();
         configList.setPreferredSize(new TerminalSize(30, 35));
         for (Configuration<C, S> config : repository.getConfigurations()) {
-            configList.addItem(config.getClass().getSimpleName());
+            Descriptor descriptor = repository.getDescriptorByConfId(config.getId());
+            configList.addItem(descriptor.getName());
         }
 
         // Details text area
@@ -235,19 +238,6 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         rootPanel.addComponent(mainPanel);
         window.setComponent(rootPanel);
 
-        // Experimental menu bar (work-in-progress)
-        MenuBar menuBar = new MenuBar();
-        Menu menuFile = new Menu("File");
-        menuBar.add(menuFile);
-        menuFile.add(new MenuItem("Open...", () -> {
-            File file = new FileDialogBuilder().build().showDialog(textGUI);
-            if (file != null) {
-                MessageDialog.showMessageDialog(textGUI, "Open", "Selected file:\n" + file, MessageDialogButton.OK);
-            }
-        }));
-        menuFile.add(new MenuItem("Exit", this::exit));
-        topPanel.addComponent(menuBar);
-
         // Launch the GUI
         textGUI.addWindowAndWait(window);
     }
@@ -288,8 +278,9 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
     private void setDetailsBoxText(Configuration<C, S> selectedConf, TextBox detailsBox) {
         Objects.requireNonNull(selectedConf, "Selected configuration cannot be null");
         Objects.requireNonNull(detailsBox, "Details box cannot be null");
-        String name = selectedConf.getClass().getSimpleName();
-        detailsBox.setText(name);
+        Descriptor descriptorByConfId = repository.getDescriptorByConfId(selectedConf.getId());
+        String s = descriptorByConfId.toString();
+        detailsBox.setText(formatWithWrapping(s,44));
     }
 
     /**
@@ -440,4 +431,182 @@ public class AutomaView<C extends Cell<S>, S extends CellState<?>> {
         }
         return result.toString();
     }
+
+    private void exampleTableWindow(TerminalScreen screen) {
+        final MultiWindowTextGUI textGUI = new MultiWindowTextGUI(screen);
+        //
+        textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
+        //        textGUI.setTheme(LanternaThemes.getRegisteredTheme("conqueror"));
+        //        textGUI.setTheme(LanternaThemes.getRegisteredTheme("bigsnake"));
+//                textGUI.setTheme(LanternaThemes.getRegisteredTheme("businessmachine"));
+//                textGUI.setTheme(LanternaThemes.getRegisteredTheme("defrost"));
+        //textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
+        final BasicWindow rootwindow = new BasicWindow();
+        rootwindow.setFixedSize(new TerminalSize(width, height));
+        rootwindow.setHints(List.of(NO_DECORATIONS, NO_POST_RENDERING, CENTERED, FULL_SCREEN, CENTERED));
+
+        final BasicWindow tableWindow = new BasicWindow("Window 2");
+        tableWindow.setHints(List.of(NO_POST_RENDERING, FIXED_POSITION, NO_DECORATIONS));
+        tableWindow.setFixedSize(new TerminalSize(width,height));
+        tableWindow.setPosition(TerminalPosition.TOP_LEFT_CORNER);
+
+        Panel tablePanel = new Panel(new AbsoluteLayout());
+
+        Table<String> table = new Table<>("Automaton", "");
+        Border borderedtable = table.withBorder(Borders.singleLine());
+        borderedtable.setPosition(new TerminalPosition(0,0));
+        borderedtable.setSize(new TerminalSize(width,height));
+
+        for( Configuration configuration:repository.getConfigurations()){
+            Descriptor descriptorByConfId = repository.getDescriptorByConfId(configuration.getId());
+            table.getTableModel().addRow( descriptorByConfId.getName(),descriptorByConfId.getDescription().substring(0,150));
+        }
+
+        TextBox textBox = new TextBox("");
+        textBox.setTextChangeListener((newText, changedByUserInteraction) -> {
+            table.setSelectedRow(table.getSelectedRow()+1);
+            table.takeFocus();
+        });
+        textBox.setPosition(TerminalPosition.TOP_LEFT_CORNER);
+        textBox.setSize(new TerminalSize(width,1));
+
+        //tablePanel.addComponent(textBox);
+        tablePanel.addComponent(borderedtable);
+
+        tableWindow.setComponent(tablePanel);
+
+        textGUI.addWindow(rootwindow);
+        textGUI.addWindow(tableWindow);
+        textGUI.setActiveWindow(tableWindow);
+        rootwindow.waitUntilClosed();
+
+    }
+    private void exampleMultiWindow(TerminalScreen screen) {
+        final MultiWindowTextGUI textGUI = new MultiWindowTextGUI(screen);
+        textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
+
+        final BasicWindow window = new BasicWindow();
+        window.setFixedSize(new TerminalSize(width, height));
+        window.setHints(List.of(NO_DECORATIONS, NO_POST_RENDERING, CENTERED, FULL_SCREEN));
+
+        final BasicWindow window2 = new BasicWindow("Window 2");
+        window2.setHints(List.of(NO_POST_RENDERING, FIXED_POSITION));
+        window2.setFixedSize(new TerminalSize(width / 4, height / 4));
+        window2.setPosition(new TerminalPosition(50, 10));
+
+        final BasicWindow window3 = new BasicWindow("Window 3");
+        window3.setFixedSize(new TerminalSize(width / 3, height / 3));
+        window3.setPosition(new TerminalPosition(50, 15));
+        // window.setHints(List.of(NO_DECORATIONS,NO_POST_RENDERING,CENTERED,FULL_SCREEN));
+
+        Panel rootPanel = new Panel(new AbsoluteLayout());
+        //rootPanel.setFillColorOverride(TextColor.ANSI.BLUE);
+        rootPanel.setPosition(new TerminalPosition(10, 10));
+        rootPanel.setSize(new TerminalSize(width / 2, height / 2));
+        rootPanel.setPreferredSize(new TerminalSize(width / 2, height / 2));
+        Panel topPanel = new Panel();
+        topPanel.setPosition(new TerminalPosition(0,0 ));
+        topPanel.setSize(new TerminalSize(80, 1));
+        Panel centerPanel = new Panel();
+
+        centerPanel.setSize(new TerminalSize(width, height));
+        centerPanel.setPosition(new TerminalPosition(10, 10));
+        centerPanel.setPosition(new TerminalPosition(5, 5));
+        centerPanel.setPreferredSize(new TerminalSize(width, height));
+        centerPanel.setFillColorOverride(TextColor.ANSI.BLUE);
+        MenuBar menubar = new MenuBar();
+
+        menubar.setPosition(new TerminalPosition(5,0));
+        menubar.setSize(new TerminalSize(40,1));
+        // "File" menu
+        Menu menuFile = new Menu("File");
+
+        menuFile.setSize(new TerminalSize(40,1));
+        menubar.add(menuFile);
+        MenuItem openItem = new MenuItem("Open...", new Runnable() {
+            public void run() {
+                File file = new FileDialogBuilder().build().showDialog(textGUI);
+                if (file != null)
+                    MessageDialog.showMessageDialog(
+                            textGUI, "Open", "Selected file:\n" + file, MessageDialogButton.OK);
+            }
+        });
+
+        menuFile.add(openItem);
+
+        MenuItem exitItem = new MenuItem("Exit", new Runnable() {
+            public void run() {
+                System.exit(0);
+            }
+        });
+        menuFile.add(exitItem);
+
+        topPanel.addComponent(menubar);
+        rootPanel.addComponent(topPanel);
+        Border centerPanel1 = centerPanel.withBorder(Borders.singleLine("Center Panel"));
+        centerPanel1.setPosition(new TerminalPosition(5, 5));
+        centerPanel1.setSize(new TerminalSize(30, 8));
+        rootPanel.addComponent(centerPanel1);
+
+        // === Configuration List ===
+        RadioBoxList<String> configList = new RadioBoxList<>();
+        configList.setPreferredSize(new TerminalSize(30, 15));
+        for (Configuration<C, S> config : getConfigurations()) {
+            configList.addItem(config.getClass().getName());
+        }
+
+        configList.addListener(new RadioBoxList.Listener() {
+            @Override
+            public void onSelectionChanged(int selectedIndex, int previousSelection) {
+                confirmExit(textGUI);
+            }
+        });
+        // === Details Text Area ===
+        TextBox detailsBox = new TextBox(new TerminalSize(40, 15)).setReadOnly(true);
+
+        // Listener for selection change: updates detail text box
+        // start simulation if selection is the same
+        configList.addListener((selectedIndex, prev) -> {
+            if (selectedConfId == selectedIndex) {
+                close();
+            }
+            Configuration<C, S> selectedConf = getConfigurations().get(selectedIndex);
+            selectedConfId = selectedIndex;
+
+            setDetailsBoxText(selectedConf, detailsBox);
+        });
+
+
+        centerPanel.addComponent(configList.withBorder(Borders.singleLine("Available Configurations")));
+        centerPanel.addComponent(detailsBox.withBorder(Borders.singleLine("Configuration Details")));
+
+        window.setComponent(rootPanel);
+
+        menubar.getMenu(0).setInputFilter(new InputFilter() {
+            @Override
+            public boolean onInput(Interactable interactable, KeyStroke keyStroke) {
+                if(keyStroke.getKeyType()==KeyType.F1) {
+                    interactable.takeFocus();
+                    return true;
+                }
+                return true;
+            }
+        });
+
+        // ESC key to confirm exit
+        textGUI.addListener((gui, key) -> {
+            if (key.getKeyType() == KeyType.Escape) {
+                confirmExit(textGUI);
+            }
+            menubar.getMenu(0).handleInput(key);
+            return false;
+        });
+
+        // Launch the GUI
+        textGUI.addWindowAndWait(window);
+        //        textGUI.addWindow(window2);
+        //        textGUI.addWindowAndWait(window3);
+
+    }
+
 }

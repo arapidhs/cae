@@ -1,0 +1,72 @@
+[
+  {
+    "id": 4,
+    "name": "Central Blob",
+    "description": "Initializes a grid with a centered rectangular region of random boolean states (active/inactive), with all other cells inactive, creating a localized blob of activity for cellular automata experiments.",
+    "tags": [
+      "PROBABILISTIC",
+      "RANDOM",
+      "LOCALIZED"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Central Square",
+    "description": "Initializes a grid with a centered square region of active states, with all other cells inactive, creating a localized active area for cellular automata experiments.",
+    "tags": [
+      "DETERMINISTIC",
+      "LOCALIZED"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Centered Disk",
+    "description": "Initializes a grid with a disk-shaped region of active cells centered in the grid, with all other cells inactive, suitable for diffusion experiments like NAIVE-DIFFUSION.",
+    "tags": [
+      "DETERMINISTIC",
+      "LOCALIZED"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Histogram Baseline",
+    "description": "Initializes a grid with a random distribution of active and inactive cells (50% probability, echo=false) and a fixed active baseline at the bottom row (value=true, echo=true) for inhibition, suitable for rules like SAFE-PASS.",
+    "tags": [
+      "PROBABILISTIC",
+      "RANDOM",
+      "LOCALIZED",
+      "BASELINE"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Random Boolean Soup",
+    "description": "Initializes a grid with a random distribution of live and dead cells (50% probability each), creating a chaotic initial configuration for cellular automata experiments.",
+    "tags": [
+      "PROBABILISTIC",
+      "RANDOM",
+      "CHAOTIC"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Random Species Distribution",
+    "description": "Initializes a grid with a random distribution of active cells (up to a specified population) assigned species IDs (1 to numSpecies), with remaining cells inactive (ID 0), designed for species-based cellular automata rules.",
+    "tags": [
+      "PROBABILISTIC",
+      "RANDOM",
+      "SPECIES",
+      "CHAOTIC"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Random Spots Placement",
+    "description": "Initializes a grid by placing a specified number of active cells at random positions, with all other cells inactive, creating sparse patterns with isolated active regions.",
+    "tags": [
+      "PROBABILISTIC",
+      "RANDOM",
+      "SPARSE"
+    ]
+  }
+]

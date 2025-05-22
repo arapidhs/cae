@@ -27,17 +27,17 @@ import java.util.Random;
  * @param <C> the type of cells, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
-public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends MouseAdapter {
+public class EngineListener<C extends Cell<S>, S extends CellState<?>> extends MouseAdapter {
 
     /**
      * Logger for mouse interaction events and errors.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AutomaListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EngineListener.class);
 
     /**
      * The controller managing the automaton and terminal display.
      */
-    private final AutomaController<C, S> automaController;
+    private final ViewEngine<C, S> viewEngine;
 
     /**
      * The mouse button currently pressed (1 = left, 2 = middle, 3 = right).
@@ -57,13 +57,13 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
     /**
      * Constructs a new mouse listener for the specified controller.
      *
-     * @param automaController the {@link AutomaController} managing the automaton, must not be null
-     * @throws NullPointerException if automaController is null
+     * @param viewEngine the {@link ViewEngine} managing the automaton, must not be null
+     * @throws NullPointerException if viewEngine is null
      */
-    public AutomaListener(@Nonnull AutomaController<C, S> automaController) {
-        this.automaController = Objects.requireNonNull(automaController, "Controller cannot be null");
-        int width = automaController.getWidth();
-        int height = automaController.getHeight();
+    public EngineListener(@Nonnull ViewEngine<C, S> viewEngine) {
+        this.viewEngine = Objects.requireNonNull(viewEngine, "Controller cannot be null");
+        int width = viewEngine.getWidth();
+        int height = viewEngine.getHeight();
         this.radius = (int) (Math.min(width, height) * 0.1);
     }
 
@@ -76,8 +76,8 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
     @Override
     public void mouseClicked(@Nonnull MouseEvent e) {
         Objects.requireNonNull(e, "Mouse event cannot be null");
-        int col = e.getX() / automaController.getCellFontSize();
-        int row = e.getY() / automaController.getCellFontSize();
+        int col = e.getX() / viewEngine.getCellFontSize();
+        int row = e.getY() / viewEngine.getCellFontSize();
         applyChanges(col, row, e.getButton());
     }
 
@@ -115,25 +115,25 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
         updateRadius(dr);
 
         try {
-            Automaton<C, S> automaton = automaController.getAutoma();
+            Automaton<C, S> automaton = viewEngine.getAutoma();
             boolean wasRunning = automaton.isRunning();
             if (wasRunning) {
                 automaton.stop();
             }
 
-            int col = e.getX() / automaController.getCellFontSize();
-            int row = e.getY() / automaController.getCellFontSize();
+            int col = e.getX() / viewEngine.getCellFontSize();
+            int row = e.getY() / viewEngine.getCellFontSize();
 
-            automaController.getTextGraphics().drawRectangle(
+            viewEngine.getTextGraphics().drawRectangle(
                     new TerminalPosition(col - radius, row - radius),
                     new TerminalSize(2 * radius, 2 * radius),
                     CellCharacter.fromColor(TextColor.ANSI.WHITE));
-            automaController.getScreen().refresh(Screen.RefreshType.DELTA);
+            viewEngine.getScreen().refresh(Screen.RefreshType.DELTA);
 
             if (wasRunning) {
                 automaton.start();
             } else {
-                automaController.getRenderer().accept(automaController.getAutoma().getGrid());
+                viewEngine.getRenderer().accept(viewEngine.getAutoma().getGrid());
             }
         } catch (Exception ex) {
             throw new RuntimeException("Failed to draw radius outline: " + ex.getMessage(), ex);
@@ -146,8 +146,8 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
      * @param dr the radius change (positive to increase, negative to decrease)
      */
     private void updateRadius(int dr) {
-        int width = automaController.getWidth();
-        int height = automaController.getHeight();
+        int width = viewEngine.getWidth();
+        int height = viewEngine.getHeight();
         radius += dr;
         radius = Math.max(0, Math.min(radius, (width + height) / 8));
     }
@@ -161,8 +161,8 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
     @Override
     public void mouseDragged(@Nonnull MouseEvent e) {
         Objects.requireNonNull(e, "Mouse event cannot be null");
-        int col = e.getX() / automaController.getCellFontSize();
-        int row = e.getY() / automaController.getCellFontSize();
+        int col = e.getX() / viewEngine.getCellFontSize();
+        int row = e.getY() / viewEngine.getCellFontSize();
         applyChanges(col, row, button);
     }
 
@@ -176,13 +176,13 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
      * @param button the mouse button (1 = left, 2 = middle, 3 = right)
      */
     private void applyChanges(int col, int row, int button) {
-        C cell = automaController.getAutoma().getGrid().getCell(0, 0);
+        C cell = viewEngine.getAutoma().getGrid().getCell(0, 0);
         if (!(cell instanceof BooleanCell)) {
             return;
         }
 
-        int width = automaController.getWidth();
-        int height = automaController.getHeight();
+        int width = viewEngine.getWidth();
+        int height = viewEngine.getHeight();
 
         if (radius > 0) {
             for (int dy = -radius; dy <= radius; dy++) {
@@ -203,8 +203,8 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
             }
         }
 
-        if (!automaController.getAutoma().isRunning()) {
-            automaController.getRenderer().accept(automaController.getAutoma().getGrid());
+        if (!viewEngine.getAutoma().isRunning()) {
+            viewEngine.getRenderer().accept(viewEngine.getAutoma().getGrid());
         }
     }
 
@@ -219,7 +219,7 @@ public class AutomaListener<C extends Cell<S>, S extends CellState<?>> extends M
      * @param distance the distance from the center of the affected area
      */
     private void updateCell(int button, int nx, int ny, double distance) {
-        BooleanCell cell = (BooleanCell) automaController.getAutoma().getGrid().getCell(nx, ny);
+        BooleanCell cell = (BooleanCell) viewEngine.getAutoma().getGrid().getCell(nx, ny);
         if (cell != null) {
             try {
                 if (button == 1) {

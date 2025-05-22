@@ -18,27 +18,6 @@ public class RuleMajority extends RuleBooleanNeighborCount {
 
     public RuleMajority() {
         super(11);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.MOORE,         // Uses 3x3 neighborhood including center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts number of active neighbors
-//                Tag.VOTING,        // Uses majority voting mechanism
-//                Tag.LOGICAL,       // Uses logical operations for state transitions
-//
-//                // Behavior Types
-//                Tag.STRUCTURED,    // Creates organized domains
-//                Tag.STABLE,        // Forms stable boundaries
-//                Tag.DOMAIN,         // Creates distinct domains
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

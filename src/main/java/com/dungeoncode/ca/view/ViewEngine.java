@@ -42,12 +42,12 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  * @param <C> the type of cells in the automaton, extending {@link Cell}
  * @param <S> the type of cell states, extending {@link CellState}
  */
-public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
+public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
 
     /**
      * Logger for recording view events and errors.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AutomaController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ViewEngine.class);
 
     /**
      * Maps configuration class names to their corresponding state renderers.
@@ -58,7 +58,6 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
     static {
         RendererBoolean rendererBoolean = new RendererBoolean(RendererBoolean.Palette.DEFAULT);
         RendererBooleanId rendererBooleanId = new RendererBooleanId();
-        RendererBrain rendererBrain = new RendererBrain();
 
         CELL_RENDERER = new HashMap<>();
         CELL_RENDERER.put(ConfInkspot.class.getName(), rendererBoolean);
@@ -74,8 +73,6 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfMajority.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfVichniacAnneal.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfBanks.class.getName(), rendererBoolean);
-        CELL_RENDERER.put(ConfBriansBrain.class.getName(), rendererBrain);
-        CELL_RENDERER.put(ConfGreenberg.class.getName(), rendererBrain);
         CELL_RENDERER.put(ConfParityFlip.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfTimeTunnel.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfCandleRain.class.getName(), rendererBoolean);
@@ -169,7 +166,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
      * @throws NullPointerException if configuration is null
      * @throws RuntimeException     if font loading fails
      */
-    public AutomaController(int px, int py, int cellFontSize, List<Configuration> configurations, @NonNull Configuration<C, S> configuration) {
+    public ViewEngine(int px, int py, int cellFontSize, List<Configuration> configurations, @NonNull Configuration<C, S> configuration) {
         Objects.requireNonNull(configuration);
         this.px = px;
         this.py = py;
@@ -192,7 +189,7 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
      */
     private void setupFonts() {
         try {
-            final InputStream is = AutomaController.class.getResourceAsStream(
+            final InputStream is = ViewEngine.class.getResourceAsStream(
                     "/fonts/ibm/Px437_IBM_Conv.ttf"
             );
             assert is != null;
@@ -228,15 +225,15 @@ public class AutomaController<C extends Cell<S>, S extends CellState<?>> {
             Terminal terminal = screen.getTerminal();
             if (terminal instanceof SwingTerminalFrame swingTerminalFrame) {
                 if (automaton.getGrid().getCell(0, 0) instanceof BooleanCell) {
-                    AutomaListener<C, S> automaListener = new AutomaListener<>(this);
-                    swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(automaListener);
-                    swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(automaListener);
-                    swingTerminalFrame.getContentPane().getComponent(0).addMouseWheelListener(automaListener);
+                    EngineListener<C, S> engineListener = new EngineListener<>(this);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseListener(engineListener);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseMotionListener(engineListener);
+                    swingTerminalFrame.getContentPane().getComponent(0).addMouseWheelListener(engineListener);
                 }
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize AutomaController: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to initialize ViewEngine: " + e.getMessage(), e);
         }
     }
 

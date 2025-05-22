@@ -19,26 +19,6 @@ public class RuleLichens extends RuleBooleanNeighborCount {
 
     public RuleLichens() {
         super(9);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.MOORE,         // Uses 3x3 neighborhood excluding center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts exact number of neighbors
-//                Tag.GROWTH,        // Implements growth patterns
-//                Tag.LOGICAL,       // Uses logical operations for state transitions
-//
-//                // Behavior Types
-//                Tag.ORGANIC,       // Creates natural, irregular patterns
-//                Tag.PATTERN_SHAPING, // Creates distinct visual patterns
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

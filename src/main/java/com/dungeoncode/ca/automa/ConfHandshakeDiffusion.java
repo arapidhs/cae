@@ -33,35 +33,6 @@ public class ConfHandshakeDiffusion extends AbstractConfiguration<BooleanCell, B
      */
     public ConfHandshakeDiffusion() {
         super(23, null, List.of(new RuleNaiveDiffusion(false, true)));
-//        super(
-//                "Naive Diffusion with Handshake",
-//                "A cellular automaton modeling diffusion of particles with a handshake protocol, where the state (value) " +
-//                        "represents particles (true = particle, false = empty). Active cells give their state (becoming inactive) " +
-//                        "to an empty neighbor, and inactive cells take a state (becoming active) from a neighbor with a particle, " +
-//                        "moving in one of four directions (north, south, east, west). Initialized with a disk-shaped region of " +
-//                        "active cells (radius based on grid dimensions), it produces a diffusion pattern that breaks up into " +
-//                        "tongues of fire, as described in Toffoli and Margolus (1987).",
-//                "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-//                        "Chapter 9, Section 9.4, p. 84-86. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
-//                85,
-//                Tag.DETERMINISTIC,
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
-//
-//                // Operation Types
-//                Tag.DIFFUSION,     // Particle diffusion behavior
-//                Tag.HANDSHAKE,     // Tag for rules that use handshake protocols
-//                Tag.CONSERVATION,  // Tag for rules that preserve particle count
-//
-//                // Behavior Types
-//                Tag.DYNAMIC,       // Changes over time
-//                Tag.PATTERN_SHAPING,
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

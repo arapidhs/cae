@@ -5,10 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.dungeoncode</groupId>
-	<artifactId>cell-automata</artifactId>
+	<artifactId>cae</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
-	<name>Cell Automata</name>
+	<name>Cellular Automata Engine (CAE)</name>
 	<description>Terminal-based cellular automata simulation.</description>
 
 	<!-- Developer info -->
@@ -95,7 +95,7 @@
 											<!-- Absolute path to avoid conflict with shade -->
 											<directory>${project.basedir}/src/main/resources</directory>
 											<includes>
-												<include>cell-automata.bat</include>
+												<include>cae.bat</include>
 											</includes>
 										</resource>
 									</resources>
@@ -118,11 +118,11 @@
 									<!-- Adds Main-Class to manifest -->
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<mainClass>com.dungeoncode.ca.view.CellAuto</mainClass>
+											<mainClass>com.dungeoncode.ca.view.ViewMain</mainClass>
 										</transformer>
 									</transformers>
 									<!-- Output file name -->
-									<finalName>cell-automata</finalName>
+									<finalName>cae</finalName>
 									<!-- Prevents overwritten pom issues -->
 									<dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
 									<!-- Suppresses warnings and overlapping resource issues -->

@@ -41,28 +41,6 @@ public class RuleNaiveDiffusion extends RuleBooleanNeighborCount {
      */
     public RuleNaiveDiffusion() {
         super(22);
-//        super(
-//                // Rule Type
-//                Tag.PROBABILISTIC,  // Uses random neighbor selection
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
-//
-//                // Operation Types
-//                Tag.DIFFUSION,     // Particle diffusion behavior
-//                Tag.RANDOM,        // Uses random selection for movement
-//                Tag.HANDSHAKE,     // Optional handshake protocol for state exchange
-//                Tag.CONSERVATION,  // When handshake is enabled, preserves particle count
-//
-//                // Behavior Types
-//                Tag.DYNAMIC,       // Changes over time
-//                Tag.PATTERN_SHAPING,// Creates distinct patterns (tongues of fire)
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
-
         this.useGrid = false;
         this.useHandshake = false;
     }

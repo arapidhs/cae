@@ -1,0 +1,576 @@
+[
+  {
+    "id": 13,
+    "name": "Banks",
+    "description": "A rule where a cell's state is updated based on its von Neumann neighborhood (north, south, east, west, excluding the center) to fill pockets and erase corners in patterns of active cells, enabling computing circuitry construction.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.5 Bank's computer",
+      "page": 42,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "COUNTING",
+      "LOGICAL",
+      "PATTERN_SHAPING",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Anneal",
+    "description": "A voting rule variation of MAJORITY where a cell becomes active if it has exactly 4 or 6 or more live cells in its 3x3 Moore neighborhood (including the center), and inactive otherwise. Encourages boundary reshuffling, leading to gradual domain annealing with straighter boundaries, modeling surface tension.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.4 Voting rules",
+      "page": 41,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "MOORE",
+      "COUNTING",
+      "PATTERN_SHAPING",
+      "STRUCTURED",
+      "STABLE",
+      "DOMAIN",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 18,
+    "name": "CandleRain",
+    "description": "A probabilistic rule simulating candles extinguished by random raindrops. A lit candle is blown out with a 1/32 probability of a raindrop hit, producing exponential decay of lit candles.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 8 Randomness and probabilistic rules",
+      "subsection": "8.1 Exponential decay",
+      "page": 68,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "PROBABILISTIC",
+      "DYNAMIC",
+      "DECAY",
+      "LOGICAL",
+      "RANDOM",
+      "BOOK"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Diamonds",
+    "description": "A rule where a cell's next state is the logical OR of its von Neumann neighborhood (center and four orthogonal cells: north, south, east, west). A single active cell grows into a uniformly expanding diamond of active cells, demonstrating monotonic, unconstrained growth.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.1 Unconstrained growth",
+      "page": 38,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "LOGICAL",
+      "LOGICAL_OR",
+      "GROWTH",
+      "MONOTONIC",
+      "STRUCTURED",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Squares",
+    "description": "A rule where a cell's next state is the logical OR of its Moore neighborhood (center and eight surrounding cells). A single active cell grows into a uniformly expanding square of active cells, demonstrating monotonic, unconstrained growth.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.1 Unconstrained growth",
+      "page": 37,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "MOORE",
+      "LOGICAL",
+      "LOGICAL_OR",
+      "GROWTH",
+      "MONOTONIC",
+      "STRUCTURED",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Triangles",
+    "description": "A rule where a cell's next state is the logical OR of a subset of its von Neumann neighborhood (north, west, center, east). A single active cell grows into a uniformly expanding triangle pointing south, breaking four-fold symmetry.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.1 Unconstrained growth",
+      "page": 38,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "LOGICAL",
+      "LOGICAL_OR",
+      "GROWTH",
+      "MONOTONIC",
+      "STRUCTURED",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "GameOfLife",
+    "description": "Conway's Game of Life rule where live cells survive with 2 or 3 live neighbors, die otherwise, and dead cells become alive with exactly 3 live neighbors. Supports optional tracing to persist echo for cells ever alive.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 3 A live demo",
+      "subsection": "3.1 The game of 'life'",
+      "page": 20,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "COUNTING",
+      "STABLE",
+      "OSCILLATION",
+      "BOOK",
+      "CLASSIC",
+      "FOUNDATIONAL"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "GeneticDrift",
+    "description": "A rule extending NAIVE-DIFFUSION to model diffusion of particles with species IDs. Cells move to a random von Neumann neighbor with no species (ID 0) or the same species ID, using copy or handshake mechanisms, with optional 3x3 subgrid boundaries.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 9 A sampler of techniques",
+      "subsection": "9.4 Genetic drift",
+      "page": 84,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "PROBABILISTIC",
+      "VON_NEUMANN",
+      "HANDSHAKE",
+      "DIFFUSION",
+      "SPECIES",
+      "DYNAMIC",
+      "STRUCTURED",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "HGlass",
+    "description": "A rule using a 32-bit lookup table based on the states of a cell and its four orthogonal neighbors (east, west, south, north) to produce diverse behaviors, from chaotic growth to structured patterns, depending on initial conditions.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 4 The rules of the game",
+      "subsection": "4.1 The choices of creation",
+      "page": 29,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "LOOKUP_TABLE",
+      "BITWISE",
+      "CHAOTIC",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Inkspot",
+    "description": "A rule where a cell becomes black (true) if it has exactly three black neighbors in its 3x3 Moore neighborhood or is already black, producing organic, spreading patterns on a toroidal grid.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 1 Cellular automata",
+      "subsection": "1.2 Animate-by-numbers",
+      "page": 6,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "MOORE",
+      "COUNTING",
+      "SPREAD",
+      "LOGICAL",
+      "LOGICAL_OR",
+      "ORGANIC",
+      "DYNAMIC",
+      "PATTERN_SHAPING",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Lichens",
+    "description": "A rule where a cell becomes active if it has exactly 3, 7, or 8 live neighbors in its Moore neighborhood (excluding the center), producing irregular, lichen-like growth from a seed of at least three cells.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.2 Constrained growth",
+      "page": 39,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "MOORE",
+      "COUNTING",
+      "GROWTH",
+      "LOGICAL",
+      "ORGANIC",
+      "PATTERN_SHAPING",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "LichensWithDeath",
+    "description": "A rule where a cell becomes active with 3, 7, or 8 live neighbors, inactive with 4 live neighbors, and unchanged otherwise in its Moore neighborhood, producing complex, unpredictable lichen-like patterns with competitive growth.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.3 Competitive growth",
+      "page": 40,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "MOORE",
+      "COUNTING",
+      "GROWTH",
+      "DEATH",
+      "LOGICAL",
+      "ORGANIC",
+      "COMPETITIVE",
+      "DYNAMIC",
+      "PATTERN_SHAPING",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Majority",
+    "description": "A voting rule where a cell adopts the majority state in its 3x3 Moore neighborhood (including center). Active if 5 or more cells are active, otherwise inactive, forming stable, interpenetrating domains.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.4 Voting rules",
+      "page": 41,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "MOORE",
+      "COUNTING",
+      "VOTING",
+      "LOGICAL",
+      "STRUCTURED",
+      "STABLE",
+      "DOMAIN",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 22,
+    "name": "NaiveDiffusion",
+    "description": "A rule modeling particle diffusion by copying a random von Neumann neighbor's state or using a handshake protocol, with optional 3x3 subgrid boundaries to inhibit movement, producing tongue-like diffusion patterns.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 9 A sampler of techniques",
+      "subsection": "9.4 Genetic drift",
+      "page": 84,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "PROBABILISTIC",
+      "VON_NEUMANN",
+      "DIFFUSION",
+      "RANDOM",
+      "HANDSHAKE",
+      "CONSERVATION",
+      "DYNAMIC",
+      "PATTERN_SHAPING",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "OneOutOfEight",
+    "description": "A rule where a cell becomes active if it has exactly one live neighbor in its Moore neighborhood (excluding the center), producing sparse, fractal-like growth from a single seed.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 5 Our first rules",
+      "subsection": "5.2 Constrained growth",
+      "page": 39,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "MOORE",
+      "COUNTING",
+      "LOGICAL",
+      "GROWTH",
+      "STRUCTURED",
+      "FRACTAL",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Parity",
+    "description": "A rule where a cell's next state is the XOR of its von Neumann neighborhood (center, north, south, west, east), becoming live if the number of live cells is odd, dead if even, producing structured, fractal-like patterns.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 4 The rules of the game",
+      "subsection": "4.2 Rules in words",
+      "page": 30,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "LOGICAL",
+      "STRUCTURED",
+      "FRACTAL",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "ParityFlip",
+    "description": "A second-order dynamics rule extending PARITY by XORing the parity (odd/even live cells in von Neumann neighborhood) with the previous state (echo), producing complex, dynamic patterns influenced by state history.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 6 Second-order dynamics",
+      "subsection": "6.2 Going into reverse gear",
+      "page": 50,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "LOGICAL",
+      "REVERSIBLE",
+      "STRUCTURED",
+      "FRACTAL",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 19,
+    "name": "RandomAnneal",
+    "description": "A probabilistic modification of the 5MAJ majority voting rule using a von Neumann neighborhood. Cells with 0-1 live neighbors become inactive, 4-5 become active, 2 become active with 1/32 probability, and 3 become inactive with 1/32 probability, smoothing domain boundaries.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 8 Randomness and probabilistic rules",
+      "subsection": "8.3 Voting rules, revisited",
+      "page": 70,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "PROBABILISTIC",
+      "VON_NEUMANN",
+      "COUNTING",
+      "VOTING",
+      "DYNAMIC",
+      "PATTERN_SHAPING",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 20,
+    "name": "SafePass",
+    "description": "A rule simulating particle conservation where tokens fall downward in columns and pile up above a baseline (echo=true) to form a histogram, using a handshake protocol for movement.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 9 A sampler of techniques",
+      "subsection": "9.1 Particle conservation",
+      "page": 77,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "CONSERVATION",
+      "GRAVITY",
+      "HANDSHAKE",
+      "STRUCTURED",
+      "ACCUMULATION",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 17,
+    "name": "TimeTunnel",
+    "description": "A second-order reversible rule summing the von Neumann neighborhood (center, north, south, east, west), applying a decision table (1 if sum is 1-4, 0 otherwise), and XORing with the previous state, producing turbulent, wave-like patterns.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 6 Second-order dynamics",
+      "subsection": "6.3 An impenetrable shield",
+      "page": 52,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "COUNTING",
+      "LOGICAL",
+      "DYNAMIC",
+      "WAVE",
+      "FRACTAL",
+      "BOOK",
+      "CLASSIC"
+    ]
+  }
+]

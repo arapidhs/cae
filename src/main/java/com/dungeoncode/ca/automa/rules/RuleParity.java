@@ -20,24 +20,6 @@ public class RuleParity extends AbstractRule<BooleanCell, BooleanState> {
 
     public RuleParity() {
         super(4);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
-//
-//                // Operation Types
-//                Tag.LOGICAL,       // Uses XOR operations for parity
-//
-//                // Behavior Types
-//                Tag.STRUCTURED,    // Creates organized, self-replicating patterns
-//                Tag.FRACTAL,        // Creates self-similar patterns that repeat at different scales
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     public RuleParity(int id) {

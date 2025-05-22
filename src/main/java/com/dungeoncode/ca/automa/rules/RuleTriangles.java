@@ -19,26 +19,6 @@ public class RuleTriangles extends RuleBooleanNeighborCount {
 
     public RuleTriangles() {
         super(7);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.MOORE,         // Uses 8 surrounding cells plus center
-//
-//                // Operation Types
-//                Tag.LOGICAL,       // Uses logical OR operation
-//                Tag.LOGICAL_OR,    // Specifically uses OR operation
-//
-//                // Behavior Types
-//                Tag.GROWTH,        // Implements growth patterns
-//                Tag.MONOTONIC,     // Shows unidirectional, non-reversible growth
-//                Tag.STRUCTURED,    // Creates organized square patterns
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

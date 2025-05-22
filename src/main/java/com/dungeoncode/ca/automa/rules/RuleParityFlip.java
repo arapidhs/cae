@@ -20,7 +20,6 @@ public class RuleParityFlip extends RuleParity {
 
     public RuleParityFlip() {
         super(16);
-        // getTags().add(Tag.REVERSIBLE);
     }
 
     /**

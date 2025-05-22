@@ -44,15 +44,15 @@ public class Constants {
     /**
      * File name of rules descriptors.
      */
-    public static final String DESCRIPTORS_FILE_RULES = "descriptors-rules.json";
+    public static final String DESCRIPTORS_FILE_RULES = "/data/descriptors-rules.json";
 
     /**
      * File name of configurations descriptors.
      */
-    public static final String DESCRIPTORS_FILE_CONFS = "descriptors-confs.json";
+    public static final String DESCRIPTORS_FILE_CONFS = "/data/descriptors-confs.json";
 
     /**
      * File name of initializers descriptors.
      */
-    public static final String DESCRIPTORS_FILE_INITS = "descriptors-inits.json";
+    public static final String DESCRIPTORS_FILE_INITS = "/data/descriptors-inits.json";
 }

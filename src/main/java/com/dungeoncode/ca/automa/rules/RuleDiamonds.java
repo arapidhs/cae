@@ -1,105 +1,65 @@
 package com.dungeoncode.ca.automa.rules;
 
 import com.dungeoncode.ca.core.Grid;
-import com.dungeoncode.ca.core.Rule;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
+
+import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * Implements the DIAMONDS rule for a cellular automaton, where a cell's next state is the logical OR of its
  * von Neumann neighborhood (center and four orthogonal cells: north, south, east, west). A single active cell
- * (seed) grows into a uniformly expanding diamond of active cells, demonstrating monotonic, unconstrained growth.
- * This rule is described in Chapter 5, Section 5.1 of <i>Cellular Automata Machines: A New Environment for
- * Modeling</i>.
+ * grows into a uniformly expanding diamond of active cells, demonstrating monotonic, unconstrained growth.
+ * Described in Chapter 5, Section 5.1 of <i>Cellular Automata Machines: A New Environment for Modeling</i>
+ * (MIT Press).
  *
- * @see Rule
+ * @see RuleBooleanNeighborCount
  * @see BooleanCell
  * @see BooleanState
  */
 public class RuleDiamonds extends RuleBooleanNeighborCount {
 
+    /**
+     * Constructs a new DIAMONDS rule with a fixed ID.
+     */
     public RuleDiamonds() {
         super(6);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.MOORE,         // Uses 8 surrounding cells plus center
-//
-//                // Operation Types
-//                Tag.LOGICAL,       // Uses logical OR operation
-//                Tag.LOGICAL_OR,    // Specifically uses OR operation
-//
-//                // Behavior Types
-//                Tag.GROWTH,        // Implements growth patterns
-//                Tag.MONOTONIC,     // Shows unidirectional, non-reversible growth
-//                Tag.STRUCTURED,    // Creates organized square patterns
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**
-     * Applies the DIAMONDS rule to compute the new state of a given cell in the grid. Uses the von Neumann
-     * neighborhood (center and four orthogonal cells: north, south, east, west) to perform a logical OR operation
-     * across all states. If any cell in the neighborhood is active (true), the center cell becomes active;
-     * otherwise, it remains inactive (false). This results in a growing diamond of active cells from a single seed.
+     * Applies the DIAMONDS rule to compute the new state of a cell. Performs a logical OR across the von Neumann
+     * neighborhood (center and four orthogonal cells: north, south, east, west). The cell becomes active (true)
+     * if any cell in the neighborhood is active, otherwise remains inactive (false). Updates the grid's
+     * intermediate state with the new state, echo, and neighbor count, producing a growing diamond pattern.
      *
-     * @param grid the {@link Grid} containing the cell and its neighbors
-     * @param cell the {@link BooleanCell} whose state is to be updated
+     * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
+     * @param cell the {@link BooleanCell} to update, must not be null
      * @return the new {@link BooleanState} of the cell
+     * @throws NullPointerException if grid or cell is null
      */
     @Override
-    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+    public BooleanState apply(@Nonnull Grid<BooleanCell, BooleanState> grid, @Nonnull BooleanCell cell) {
+        Objects.requireNonNull(grid, "Grid cannot be null");
+        Objects.requireNonNull(cell, "Cell cannot be null");
+
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
         int width = grid.getWidth();
         int height = grid.getHeight();
 
-        // Perform logical OR across the von Neumann neighborhood (center + 4 orthogonal cells)
-        boolean isActive = grid.getCell(x, y).getState().getValue();
-        // Center cell
-        // North neighbor
-        if (!isActive) {
-            int nx = x;
-            int ny = (y - 1 + height) % height;
-            if (grid.getCell(nx, ny).getState().getValue()) {
-                isActive = true;
-            }
-        }
-        // South neighbor
-        if (!isActive) {
-            int nx = x;
-            int ny = (y + 1) % height;
-            if (grid.getCell(nx, ny).getState().getValue()) {
-                isActive = true;
-            }
-        }
-        // West neighbor
-        if (!isActive) {
-            int nx = (x - 1 + width) % width;
-            int ny = y;
-            if (grid.getCell(nx, ny).getState().getValue()) {
-                isActive = true;
-            }
-        }
-        // East neighbor
-        if (!isActive) {
-            int nx = (x + 1) % width;
-            int ny = y;
-            if (grid.getCell(nx, ny).getState().getValue()) {
-                isActive = true;
-            }
-        }
+        // Logical OR across von Neumann neighborhood (center + 4 orthogonal cells)
+        boolean isActive = cell.getState().getValue() ||
+                grid.getCell(x, (y - 1 + height) % height).getState().getValue() || // North
+                grid.getCell(x, (y + 1) % height).getState().getValue() ||         // South
+                grid.getCell((x - 1 + width) % width, y).getState().getValue() ||  // West
+                grid.getCell((x + 1) % width, y).getState().getValue();            // East
 
         boolean echo = cell.getState().getValue();
         int liveCount = countLiveVonNeumannNeighbors(grid, x, y);
 
-        grid.getIntermediateStates()[y][x].set(isActive, echo, liveCount);
-        return grid.getIntermediateStates()[y][x];
+        BooleanState[][] intermediateStates = grid.getIntermediateStates();
+        intermediateStates[y][x].set(isActive, echo, liveCount);
+        return intermediateStates[y][x];
     }
-
 }

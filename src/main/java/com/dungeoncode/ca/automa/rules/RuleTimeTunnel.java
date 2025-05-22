@@ -19,26 +19,6 @@ public class RuleTimeTunnel extends AbstractRule<BooleanCell, BooleanState> {
 
     public RuleTimeTunnel() {
         super(17);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts live neighbors
-//                Tag.LOGICAL,       // Uses XOR operation
-//
-//                // Behavior Types
-//                Tag.DYNAMIC,       // Creates complex, evolving patterns
-//                Tag.WAVE,          // Creates wave-like patterns
-//                Tag.FRACTAL,       // Creates self-similar patterns at different scales
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

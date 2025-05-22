@@ -28,53 +28,6 @@ public class ConfRandomAnneal extends AbstractConfiguration<BooleanCell, Boolean
      */
     public ConfRandomAnneal() {
         super(19, new InitRandomBoolean(), List.of(new RuleRandomAnneal()));
-//        super(
-//                "Random Anneal Smoothing",
-//                "A cellular automaton modifying the 5MAJ majority voting rule with probabilistic transitions, using a " +
-//                        "von Neumann neighborhood (center, north, south, east, west). For marginal sums (2 or 3 out of 5), " +
-//                        "the state changes probabilistically (p=1/32), introducing thermal noise to smooth domain boundaries. " +
-//                        "Initialized with a random distribution of active and inactive cells (50% probability) in both the " +
-//                        "state and echo, it produces dynamic patterns with smoother domains, as described in Toffoli and " +
-//                        "Margolus (1987).",
-//                "Toffoli, T., & Margolus, N. (1987). Cellular Automata Machines: A New Environment for Modeling, " +
-//                        "Chapter 8, Section 8.3, p. 70. MIT Press. https://doi.org/10.7551/mitpress/1763.001.0001",
-//                70,
-//                Tag.PROBABILISTIC,  // Due to probabilistic transitions
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
-//
-//                // Operation Types
-//                Tag.VOTING,        // Uses majority voting with probabilistic transitions
-//
-//                // Behavior Types
-//                Tag.DYNAMIC,       // Creates dynamic patterns
-//                Tag.PATTERN_SHAPING, // Smooths domain boundaries
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
-//    /**
-//     * Configures the specified {@link Automaton} with a grid, rule, and interval for the RAND-ANNEAL automaton.
-//     * Creates a {@link Grid} with the given dimensions, initialized by {@link InitRandomBoolean}
-//     * with a random distribution of active and inactive cells (50% probability) in both the state and echo, and
-//     * applies the {@link RuleRandomAnneal} for state updates.
-//     *
-//     * @param automa         the {@link Automaton} to configure
-//     * @param width          the width (number of columns) of the grid
-//     * @param height         the height (number of rows) of the grid
-//     * @param intervalMillis the interval in milliseconds between automaton steps
-//     */
-//    @Override
-//    public void configure(Automaton<BooleanCell, BooleanState> automa, int width, int height, long intervalMillis) {
-//        Map<String, Object> config = new HashMap<>();
-//        Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, new InitRandomBoolean());
-//        config.put(CONF_GRID, grid);
-//        config.put(CONF_RULES, new RuleRandomAnneal());
-//        config.put(CONF_INTERVAL_MILLIS, intervalMillis);
-//        automa.configure(config);
-//    }
 }

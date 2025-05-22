@@ -3,8 +3,8 @@ package com.dungeoncode.ca.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 import static com.dungeoncode.ca.core.Constants.*;
@@ -71,19 +71,19 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Loads descriptors from the specified JSON file into the given descriptor map.
+     * Loads descriptors from the specified JSON resource file into the given descriptor map.
      *
-     * @param descriptorsFile the path to the JSON file containing descriptors
-     * @param descriptors     the map to store loaded descriptors, keyed by ID
+     * @param resourcePath the path to the JSON resource file containing descriptors
+     * @param descriptors  the map to store loaded descriptors, keyed by ID
      * @throws IllegalStateException if duplicate descriptor IDs are found in the JSON file
+     * @throws RuntimeException      if an I/O error occurs while loading the resource
      */
-    private void loadDescriptors(String descriptorsFile, Map<Integer, Descriptor> descriptors) {
-        try {
-            File file = new File(descriptorsFile);
-            if (file.exists()) {
+    public void loadDescriptors(String resourcePath, Map<Integer, Descriptor> descriptors) {
+        try (InputStream in = Repository.class.getResourceAsStream(resourcePath)) {
+            if (in != null) {
                 CollectionType listType = objectMapper.getTypeFactory()
                         .constructCollectionType(List.class, Descriptor.class);
-                List<Descriptor> loadedDescriptors = objectMapper.readValue(file, listType);
+                List<Descriptor> loadedDescriptors = objectMapper.readValue(in, listType);
 
                 // Check for duplicate IDs
                 Set<Integer> loadedIds = new HashSet<>();
@@ -100,10 +100,10 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
                     descriptors.put(descriptor.getId(), descriptor);
                 }
             } else {
-                System.out.println("No descriptors file found at: " + file.getAbsolutePath());
+                System.out.println("No descriptors resource found at: " + resourcePath);
             }
         } catch (IOException e) {
-            System.err.println("Error loading descriptors from " + descriptorsFile + ": " + e.getMessage());
+            throw new RuntimeException("Error loading descriptors from " + resourcePath + ": " + e.getMessage(), e);
         }
     }
 
@@ -196,4 +196,13 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
         Objects.requireNonNull(initializer, "Initializer cannot be null");
         this.initializers.add(initializer);
     }
+
+    public Collection<Descriptor> getConfDescriptors() {
+        return confDescriptors.values();
+    }
+
+    public Collection<Descriptor> getRuleDescriptors() {
+        return ruleDescriptors.values();
+    }
+
 }

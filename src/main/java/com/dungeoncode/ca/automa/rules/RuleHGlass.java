@@ -65,24 +65,6 @@ public class RuleHGlass extends AbstractRule<BooleanCell, BooleanState> {
 
     public RuleHGlass() {
         super(3);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
-//
-//                // Operation Types
-//                Tag.LOOKUP_TABLE,
-//                Tag.BITWISE,
-//
-//                // Behavior Types
-//                Tag.CHAOTIC,       // Can exhibit chaotic behavior
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**

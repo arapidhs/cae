@@ -4,11 +4,14 @@ import com.dungeoncode.ca.core.Grid;
 import com.dungeoncode.ca.core.impl.BooleanCell;
 import com.dungeoncode.ca.core.impl.BooleanState;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
  * Implements the BANKS rule for a cellular automaton, where a cell's state is updated based on its von Neumann
  * neighborhood (north, south, east, west, excluding the center) to "fill pockets, erase corners" in patterns of
- * active cells, enabling the construction of computing circuitry. This rule, proposed by Banks, is described in
- * Chapter 5, Section 5.5 of <i>Cellular Automata Machines: A New Environment for Modeling</i>.
+ * active cells, enabling computing circuitry construction. Proposed by Banks, this rule is described in
+ * Chapter 5, Section 5.5 of <i>Cellular Automata Machines: A New Environment for Modeling</i> (MIT Press).
  *
  * @see RuleBooleanNeighborCount
  * @see BooleanCell
@@ -16,40 +19,31 @@ import com.dungeoncode.ca.core.impl.BooleanState;
  */
 public class RuleBanks extends RuleBooleanNeighborCount {
 
+    /**
+     * Constructs a new BANKS rule with a fixed ID.
+     */
     public RuleBanks() {
         super(13);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors plus center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts live neighbors
-//                Tag.LOGICAL,       // Uses logical operations for pattern shaping
-//                Tag.PATTERN_SHAPING, // Specifically designed for pattern modification
-//
-//                // Source Type
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
     }
 
     /**
-     * Applies the BANKS rule to compute the new state of a given cell in the grid. Uses the von Neumann
-     * neighborhood (north, south, east, west, excluding the center) with the following transitions: if north and
-     * south neighbors differ, the cell becomes inactive; if exactly two neighbors are active and form a corner
-     * (e.g., north and west), the cell becomes inactive (erase corners); if they form a straight line (e.g., north
-     * and south), the cell becomes active (fill pockets); otherwise, the cell remains unchanged. This shapes patterns
-     * to support computing circuitry.
+     * Applies the BANKS rule to compute the new state of a given cell. Uses the von Neumann neighborhood
+     * (north, south, east, west, excluding the center). If north and south neighbors differ, the cell becomes
+     * inactive; if exactly two neighbors are active and form a corner (e.g., north and west), the cell becomes
+     * inactive (erase corners); if they form a straight line (e.g., north and south), the cell becomes active
+     * (fill pockets); otherwise, the cell remains unchanged.nmkj Updates the grid's intermediate state with the new
+     * state, echo, and neighbor count.
      *
-     * @param grid the {@link Grid} containing the cell and its neighbors
-     * @param cell the {@link BooleanCell} whose state is to be updated
+     * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
+     * @param cell the {@link BooleanCell} to update, must not be null
      * @return the new {@link BooleanState} of the cell
+     * @throws NullPointerException if grid or cell is null
      */
     @Override
-    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+    public BooleanState apply(@Nonnull Grid<BooleanCell, BooleanState> grid, @Nonnull BooleanCell cell) {
+        Objects.requireNonNull(grid, "Grid cannot be null");
+        Objects.requireNonNull(cell, "Cell cannot be null");
+
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
         int width = grid.getWidth();
@@ -91,5 +85,4 @@ public class RuleBanks extends RuleBooleanNeighborCount {
         grid.getIntermediateStates()[y][x].set(nextState, echo, liveNeighbors);
         return grid.getIntermediateStates()[y][x];
     }
-
 }

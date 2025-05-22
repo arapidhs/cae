@@ -19,32 +19,6 @@ public class RuleInkspot extends RuleBooleanNeighborCount {
 
     public RuleInkspot() {
         super(1);
-
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.MOORE,         // Uses 3x3 neighborhood including center
-//
-//                // Operation Types
-//                Tag.COUNTING,      // Counts exact number of neighbors
-//                Tag.SPREAD,
-//                Tag.LOGICAL,       // Uses logical OR operation
-//                Tag.LOGICAL_OR,    // Specifically uses logical OR operation
-//
-//                Tag.DETERMINISTIC,
-//
-//                // Behavior Types
-//                Tag.ORGANIC,       // New tag for rules that create organic patterns
-//                Tag.DYNAMIC,       // Changes over time
-//                Tag.PATTERN_SHAPING,       // Creates distinct patterns
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//
-//        );
     }
 
     /**

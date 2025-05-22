@@ -1,0 +1,107 @@
+[
+  {
+    "id": 13,
+    "name": "Banks Computer",
+    "description": "Cells update states to 'fill pockets, erase corners' in active cell patterns, enabling computing circuitry construction. Initialized with a random 50% active/inactive cell distribution, it creates a dynamic pattern evolution environment, producing structured computational patterns. Inspired by Banks' work, as detailed in Chapter 5, Section 5.5 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 18,
+    "name": "Exponential Candle Decay",
+    "description": "Simulates candles extinguished by random raindrops (1/32 probability), causing exponential decay of lit candles. Initialized with random 50% active (lit) and inactive (blown out) candles in state and echo fields, it creates a probabilistic decay pattern environment. Inspired by the CANDLE-RAIN rule in Chapter 8, Sections 8.1-8.2 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 2,
+    "name": "Game of Life with Echo",
+    "description": "Runs Conway's Game of Life with echoing to track state transitions, enhancing visualization of dynamic and stable patterns. Cells follow standard rules (live cells survive with 2 or 3 neighbors, die otherwise; dead cells activate with 3 neighbors), with echo recording recent changes. Initialized with random 50% live/dead cells, simulating a primeval soup, as inspired by Chapter 3, Section 3.1 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 6,
+    "name": "Diamond Expansion",
+    "description": "Cell states are the logical OR of von Neumann neighborhood, enabling a single active cell to grow into an expanding diamond. Initialized with 10 random active spots as seeds, it produces structured, monotonic diamond-shaped patterns, as described in Chapter 5, Section 5.1 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 24,
+    "name": "Genetic Drift Simulation",
+    "description": "Models gene diffusion with species IDs (1-4) via random neighbor state copying or handshaking, restricted by species compatibility. Initialized with random 10% active cells with species IDs, it creates mottled species diffusion patterns resembling genetic mixing, as described in Chapter 9, Section 9.4 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 3,
+    "name": "HGlass Pattern Generator",
+    "description": "Cell states evolve via a 32-bit lookup table using states of the cell and four orthogonal neighbors. Initialized with random 50% live/dead cells, simulating a primeval soup, it yields chaotic growth to structured, self-replicating patterns, as detailed in Chapter 4, Section 4.1 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 23,
+    "name": "Handshake Diffusion Model",
+    "description": "Models particle diffusion via handshake protocol, moving particles randomly in four directions. Initialized with a disk-shaped active cell region (radius based on grid size), it produces dynamic tongue-like patterns representing particle spread, as described in Chapter 9, Section 9.4 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 20,
+    "name": "Histogram Token Fall",
+    "description": "Simulates particle conservation with tokens falling downward in columns, piling above a static inhibition baseline to form a histogram. Initialized with random 50% active tokens (echo=false), except the bottom row (active, echo=true), it creates a structured particle dynamics environment, as inspired by the SAFE-PASS rule in Chapter 9, Section 9.1 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 1,
+    "name": "Inkspot Spread",
+    "description": "Cells activate (black) with exactly three active neighbors in their 3x3 Moore neighborhood or if already active, producing organic, spreading patterns on a toroidal grid. Initialized with a 5x5 central random state region as a seed, it creates dynamic, ink-like diffusion patterns, as outlined in Chapter 1, Section 1.2 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 9,
+    "name": "Lichen Growth",
+    "description": "Cells activate with 3, 7, or 8 live neighbors in their Moore neighborhood, forming constrained, irregular lichen-like patterns. Initialized with a 5x5 central random state seed, it produces structured, organic growth requiring a minimum seed size, as described in Chapter 5, Section 5.2 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 10,
+    "name": "Lichen Competition",
+    "description": "Cells activate with 3, 7, or 8 live neighbors, deactivate with 4, or remain unchanged in their Moore neighborhood, fostering competitive, unpredictable patterns. Initialized with a 5x5 central random state seed, it creates dynamic, lichen-like structures with intricate interactions, as inspired by Chapter 5, Section 5.3 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 11,
+    "name": "Majority Voting",
+    "description": "Cells adopt the majority state of their 3x3 Moore neighborhood (including center), activating with 5+ active cells, otherwise deactivating, forming stable, interpenetrating domains. Initialized with random 50% active/inactive cells, it creates a balanced domain consolidation environment, as based on Chapter 5, Section 5.4 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 8,
+    "name": "Single Neighbor Growth",
+    "description": "Cells activate with exactly one live neighbor in their Moore neighborhood, producing sparse, fractal-like patterns from a minimal seed. Initialized with a 3x3 central active region, it creates intricate, self-similar structures expanding slowly, as described in Chapter 5, Section 5.2 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 4,
+    "name": "Parity Patterns",
+    "description": "Cell states are determined by the parity (odd/even count) of live cells in their von Neumann neighborhood, computed as XOR. Initialized with a 17x17 central active square, it fosters structured, self-replicating fractal patterns with linear properties, as detailed in Chapter 4, Section 4.2 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 16,
+    "name": "Parity Flip Dynamics",
+    "description": "Extends PARITY with second-order dynamics, XORing the parity result (von Neumann neighborhood) with the previous state, creating history-dependent patterns. Initialized with a 17x17 central active square, it produces turbulent, fractal-like structures with four-fold symmetry, as described in Chapter 6, Section 6.2 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 19,
+    "name": "Random Anneal Smoothing",
+    "description": "Runs a probabilistic 5MAJ majority voting variant with 1/32 probability thermal noise for marginal cases, smoothing domain boundaries in a von Neumann neighborhood. Initialized with random 50% active/inactive cells in state and echo, it creates a chaotic domain evolution with refined, softened boundaries, as outlined in Chapter 8, Section 8.3 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 5,
+    "name": "Square Expansion",
+    "description": "Cell states are the logical OR of their Moore neighborhood, enabling a single active cell to grow into an expanding square. Initialized with 10 random active spots as seeds, it produces structured, monotonic square-shaped patterns, as described in Chapter 5, Section 5.1 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 17,
+    "name": "Time Tunnel Waves",
+    "description": "Second-order reversible rule sums the von Neumann neighborhood, applies a decision table (1 if sum 1-4, 0 otherwise), and XORs with the previous state, producing turbulent, wave-like patterns. Initialized with a 6x6 central active square (echo enabled), it fosters complex interference patterns with four-fold symmetry on a toroidal grid, as described in Chapter 6, Section 6.3 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 7,
+    "name": "Triangle Growth",
+    "description": "Cell states are the logical OR of a von Neumann neighborhood subset (north, west, center, east), causing a single active cell to grow into an expanding south-pointing triangle, breaking four-fold symmetry. Initialized with 10 random active spots as seeds, it produces monotonic, structured triangular patterns, as described in Chapter 5, Section 5.1 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 12,
+    "name": "Vichniac Anneal",
+    "description": "Variation of MAJORITY rule where cells activate with exactly 4 or 6+ live cells in their 3x3 Moore neighborhood (including center), otherwise deactivate, producing interpenetrating domains with dynamic, straightening boundaries modeling surface tension. Initialized with random 50% active/inactive cells, it creates a balanced domain evolution, as proposed by Gerard Vichniac in Chapter 5, Section 5.4 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 22,
+    "name": "Naive Particle Diffusion",
+    "description": "Models particle diffusion by randomly copying a neighboring cell's state in one of four directions within a von Neumann neighborhood. Initialized with a disk-shaped active cell region (radius based on grid size), it produces dynamic tongue-like patterns representing particle spread, as detailed in Chapter 9, Section 9.4 of Cellular Automata Machines: A New Environment for Modeling."
+  }
+]

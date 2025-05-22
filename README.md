@@ -1,4 +1,4 @@
-# Cellular Automata Simulator
+# Cellular Automata Engine
 
 A Java-based terminal application for simulating and visualizing cellular automata. The simulator supports various automaton configurations, with interactive controls and customizable visualizations.
 

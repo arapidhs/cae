@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -17,13 +16,13 @@ import java.util.Objects;
  * manages configuration selection, and launches simulations. Repeatedly displays the configuration
  * selection screen until the application terminates.
  */
-public class CellAuto {
+public class ViewMain {
 
     /** Logger for application events and errors. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CellAuto.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ViewMain.class);
 
     /** The view for selecting automaton configurations. */
-    private static AutomaView automaView;
+    private static View view;
 
     /** Flag indicating whether the application is running. */
     static boolean running;
@@ -53,8 +52,6 @@ public class CellAuto {
             repository.addConfiguration(new ConfMajority());
             repository.addConfiguration(new ConfVichniacAnneal());
             repository.addConfiguration(new ConfBanks());
-            repository.addConfiguration(new ConfBriansBrain());
-            repository.addConfiguration(new ConfGreenberg());
             repository.addConfiguration(new ConfParityFlip());
             repository.addConfiguration(new ConfTimeTunnel());
             repository.addConfiguration(new ConfCandleRain());
@@ -65,7 +62,7 @@ public class CellAuto {
             repository.addConfiguration(new ConfGeneticDrift());
 
             running = true;
-            automaView = new AutomaView(repository);
+            view = new View(repository);
             while (running) {
                 setup(repository);
             }
@@ -85,12 +82,12 @@ public class CellAuto {
     @SuppressWarnings("rawtypes")
     private static void setup(@Nonnull Repository repository) {
         Objects.requireNonNull(repository, "Repository cannot be null");
-        automaView.setup();
-        if (automaView.getSelectedConfId() > -1) {
-            Configuration conf = automaView.getSelectedConfiguration();
-            AutomaController<Cell<CellState<?>>, CellState<?>> automaController =
-                    new AutomaController<>(960, 960, 4, repository.getConfigurations(), conf);
-            automaController.run();
+        view.setup();
+        if (view.getSelectedConfId() > -1) {
+            Configuration conf = view.getSelectedConfiguration();
+            ViewEngine<Cell<CellState<?>>, CellState<?>> viewEngine =
+                    new ViewEngine<>(1080, 720, 4, repository.getConfigurations(), conf);
+            viewEngine.run();
         } else {
             System.exit(0);
         }

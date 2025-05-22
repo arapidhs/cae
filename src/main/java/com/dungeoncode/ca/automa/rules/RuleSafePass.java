@@ -18,26 +18,7 @@ public class RuleSafePass extends RuleBooleanNeighborCount {
 
     public RuleSafePass() {
         super(20);
-//        super(
-//                // Rule Type
-//                Tag.DETERMINISTIC,  // Rule is deterministic, no random elements
-//
-//                // Neighborhood Type
-//                Tag.VON_NEUMANN,   // Uses 4 orthogonal neighbors
-//
-//                // Operation Types
-//                Tag.CONSERVATION,  // Preserves token count
-//                Tag.GRAVITY,       // Implements downward movement
-//                Tag.HANDSHAKE,     // Uses handshake protocol for state exchange
-//
-//                // Behavior Types
-//                Tag.STRUCTURED,    // Creates organized histogram patterns
-//                Tag.ACCUMULATION,  // Accumulates tokens above baseline
-//
-//                // Source Types
-//                Tag.BOOK,
-//                Tag.CLASSIC
-//        );
+
     }
 
     /**
