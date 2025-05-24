@@ -62,6 +62,8 @@ public class ViewMain {
             repository.addConfiguration(new ConfGeneticDrift());
             repository.addConfiguration(new ConfSoilErosion());
 
+            repository.loadDescriptors();
+
             running = true;
             view = new View(repository);
             while (running) {
