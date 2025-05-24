@@ -61,6 +61,7 @@ public class ViewMain {
             repository.addConfiguration(new ConfHandshakeDiffusion());
             repository.addConfiguration(new ConfGeneticDrift());
             repository.addConfiguration(new ConfSoilErosion());
+            repository.addConfiguration(new ConfSoilErosionRandom());
 
             repository.loadDescriptors();
 

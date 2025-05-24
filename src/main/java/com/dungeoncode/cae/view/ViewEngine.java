@@ -82,6 +82,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfHandshakeDiffusion.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfGeneticDrift.class.getName(), rendererBooleanId);
         CELL_RENDERER.put(ConfSoilErosion.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfSoilErosionRandom.class.getName(), rendererBoolean);
 
     }
 

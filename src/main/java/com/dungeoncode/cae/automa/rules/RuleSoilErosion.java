@@ -28,6 +28,14 @@ public class RuleSoilErosion extends RuleBooleanNeighborCount {
     }
 
     /**
+     *
+     * @param id the id of the configuration.
+     */
+    public RuleSoilErosion(final int id ) {
+        super((id));
+    }
+
+    /**
      * Applies the SOIL-EROSION rule to compute the new state of a given cell. Checks the 3x3 Moore neighborhood
      * for at least one active neighbor in each direction (north: NW, N, NE; south: SW, S, SE; west: NW, W, SW;
      * east: NE, E, SE). If all directions have at least one active neighbor, the cell remains active (stable);

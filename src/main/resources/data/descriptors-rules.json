@@ -598,5 +598,32 @@
       "DECAY",
       "STABLE"
     ]
+  },
+  {
+    "id": 25,
+    "name": "Soil Erosion Random",
+    "description": "A probabilistic variant of SOIL-EROSION where a cell (soil, active=true) remains active if it has at least one active neighbor in each of the north, south, west, and east directions in its 3x3 Moore neighborhood, and becomes inactive (eroded) otherwise, updating with probability 1/512 to emulate asynchronous updates, reducing synchronous symmetries.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 9 A sampler of techniques",
+      "subsection": "9.5 Poisson updating",
+      "page": 90,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "PROBABILISTIC",
+      "MOORE",
+      "LOGICAL",
+      "LOGICAL_AND",
+      "DECAY",
+      "STABLE",
+      "RANDOM"
+    ]
   }
 ]
