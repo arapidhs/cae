@@ -64,8 +64,8 @@ public class RuleGameOfLife extends RuleBooleanNeighborCount {
         } else {
             newEcho = cell.getState().getValue();
         }
-        grid.getIntermediateStates()[y][x].set(newAlive, newEcho, liveCount);
-        return grid.getIntermediateStates()[y][x];
+        grid.getNextStates()[y][x].set(newAlive, newEcho, liveCount);
+        return grid.getNextStates()[y][x];
     }
 
 }

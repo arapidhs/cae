@@ -14,9 +14,9 @@ import java.util.Random;
  *
  * @see BooleanCell
  * @see BooleanState
- * @see InitIntermediateStatesBoolean
+ * @see InitNextStatesBoolean
  */
-public class InitRandomSpecies extends InitIntermediateStatesBoolean {
+public class InitRandomSpecies extends InitNextStatesBoolean {
 
     /**
      * The number of distinct species (1 to numSpecies).

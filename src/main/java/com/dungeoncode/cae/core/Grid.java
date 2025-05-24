@@ -31,9 +31,9 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
     private final GridInitializer<C, S> initializer;
 
     /**
-     * The 2D array storing intermediate states for the next grid update.
+     * The 2D array storing next states for the next grid update.
      */
-    private S[][] intermediateStates;
+    private S[][] nextStates;
 
     /**
      * Constructs a new grid with the specified dimensions and initializer.
@@ -64,24 +64,24 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Copies the intermediate state to the cell at the specified coordinates.
+     * Copies the next state to the cell at the specified coordinates.
      *
      * @param x the x-coordinate (column), zero-based
      * @param y the y-coordinate (row), zero-based
      * @throws IllegalArgumentException if the coordinates are out of bounds
-     * @throws IllegalStateException    if the cell or intermediate state at (x, y) is null
+     * @throws IllegalStateException    if the cell or next state at (x, y) is null
      */
     public void copyCellState(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             throw new IllegalArgumentException("Coordinates out of bounds: (" + x + ", " + y + ")");
         }
         C cell = grid[y][x];
-        S state = intermediateStates[y][x];
+        S state = nextStates[y][x];
         if (cell == null) {
             throw new IllegalStateException("Cannot set state: cell at (" + x + ", " + y + ") is null");
         }
         if (state == null) {
-            throw new IllegalStateException("Cannot set state: intermediate state at (" + x + ", " + y + ") is null");
+            throw new IllegalStateException("Cannot set state: next state at (" + x + ", " + y + ") is null");
         }
         cell.copyState(state);
     }
@@ -135,20 +135,20 @@ public class Grid<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Returns the 2D array of intermediate states for the next grid update.
+     * Returns the 2D array of next states for the next grid update.
      *
-     * @return the intermediate states array, or null if not set
+     * @return the next states array, or null if not set
      */
-    public S[][] getIntermediateStates() {
-        return intermediateStates;
+    public S[][] getNextStates() {
+        return nextStates;
     }
 
     /**
-     * Sets the 2D array of intermediate states for the next grid update.
+     * Sets the 2D array of next states for the next grid update.
      *
-     * @param intermediateStates the intermediate states array to set
+     * @param nextStates the next states array to set
      */
-    public void setIntermediateStates(S[][] intermediateStates) {
-        this.intermediateStates = intermediateStates;
+    public void setNextStates(S[][] nextStates) {
+        this.nextStates = nextStates;
     }
 }

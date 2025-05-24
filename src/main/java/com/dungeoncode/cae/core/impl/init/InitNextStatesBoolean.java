@@ -8,26 +8,26 @@ import com.dungeoncode.cae.core.impl.BooleanState;
 import javax.annotation.Nonnull;
 
 /**
- * Initializes the intermediate states array for a {@link Grid} in a cellular automaton with {@link BooleanState} objects.
- * Ensures each cell has a default {@link BooleanState} in the grid's intermediate states, used for rules requiring state buffering.
+ * Initializes the next states array for a {@link Grid} in a cellular automaton with {@link BooleanState} objects.
+ * Ensures each cell has a default {@link BooleanState} in the grid's next states, used for rules requiring state buffering.
  *
  * @see BooleanCell
  * @see BooleanState
  * @see AbstractGridInitializer
  */
-public class InitIntermediateStatesBoolean extends AbstractGridInitializer<BooleanCell, BooleanState> {
+public class InitNextStatesBoolean extends AbstractGridInitializer<BooleanCell, BooleanState> {
 
     /**
-     * Constructs a new intermediate states initializer with the specified ID.
+     * Constructs a new next states initializer with the specified ID.
      *
      * @param id the unique identifier for this initializer
      */
-    public InitIntermediateStatesBoolean(int id) {
+    public InitNextStatesBoolean(int id) {
         super(id);
     }
 
     /**
-     * Initializes the specified grid's intermediate states array with default {@link BooleanState} objects.
+     * Initializes the specified grid's next states array with default {@link BooleanState} objects.
      * Allocates a new array if none exists, populating each position with a new {@link BooleanState}.
      *
      * @param grid the {@link Grid} to initialize, must not be null
@@ -39,14 +39,14 @@ public class InitIntermediateStatesBoolean extends AbstractGridInitializer<Boole
         int width = grid.getWidth();
         int height = grid.getHeight();
 
-        if (grid.getIntermediateStates() == null) {
-            BooleanState[][] intermediateStates = new BooleanState[height][width];
+        if (grid.getNextStates() == null) {
+            BooleanState[][] nextStates = new BooleanState[height][width];
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    intermediateStates[y][x] = new BooleanState();
+                    nextStates[y][x] = new BooleanState();
                 }
             }
-            grid.setIntermediateStates(intermediateStates);
+            grid.setNextStates(nextStates);
         }
     }
 }

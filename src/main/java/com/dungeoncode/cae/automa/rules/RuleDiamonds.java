@@ -31,7 +31,7 @@ public class RuleDiamonds extends RuleBooleanNeighborCount {
      * Applies the DIAMONDS rule to compute the new state of a cell. Performs a logical OR across the von Neumann
      * neighborhood (center and four orthogonal cells: north, south, east, west). The cell becomes active (true)
      * if any cell in the neighborhood is active, otherwise remains inactive (false). Updates the grid's
-     * intermediate state with the new state, echo, and neighbor count, producing a growing diamond pattern.
+     * next state with the new state, echo, and neighbor count, producing a growing diamond pattern.
      *
      * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
      * @param cell the {@link BooleanCell} to update, must not be null
@@ -58,8 +58,8 @@ public class RuleDiamonds extends RuleBooleanNeighborCount {
         boolean echo = cell.getState().getValue();
         int liveCount = countLiveVonNeumannNeighbors(grid, x, y);
 
-        BooleanState[][] intermediateStates = grid.getIntermediateStates();
-        intermediateStates[y][x].set(isActive, echo, liveCount);
-        return intermediateStates[y][x];
+        BooleanState[][] nextStates = grid.getNextStates();
+        nextStates[y][x].set(isActive, echo, liveCount);
+        return nextStates[y][x];
     }
 }

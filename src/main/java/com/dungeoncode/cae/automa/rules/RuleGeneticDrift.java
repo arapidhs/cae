@@ -56,7 +56,7 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
      * Applies the GENETIC-DRIFT rule to compute the new state of a cell. Selects a random von Neumann neighbor
      * (north, south, east, west) and allows movement if the neighbor has no species (ID 0) or the same species ID,
      * respecting subgrid boundaries if enabled. Uses a copy mechanism (direct transfer) or handshake mechanism
-     * (mutual state exchange) for diffusion. Updates the grid's intermediate state with the new state, echo,
+     * (mutual state exchange) for diffusion. Updates the grid's next state with the new state, echo,
      * neighbor count, and species ID.
      *
      * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
@@ -130,8 +130,8 @@ public class RuleGeneticDrift extends RuleBooleanNeighborCount {
             }
         }
 
-        BooleanState[][] intermediateStates = grid.getIntermediateStates();
-        intermediateStates[y][x].set(newValue, newEcho, liveSum, newId);
-        return intermediateStates[y][x];
+        BooleanState[][] nextStates = grid.getNextStates();
+        nextStates[y][x].set(newValue, newEcho, liveSum, newId);
+        return nextStates[y][x];
     }
 }

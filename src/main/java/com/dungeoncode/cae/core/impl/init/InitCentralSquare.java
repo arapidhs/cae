@@ -5,6 +5,8 @@ import com.dungeoncode.cae.core.GridInitializer;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
 
+import javax.annotation.Nonnull;
+
 /**
  * Initializes a {@link Grid} by setting cells in a centered square region to active ({@code true}) states
  * and all other cells to inactive ({@code false}). The square region is defined by a half-side length offset
@@ -14,7 +16,7 @@ import com.dungeoncode.cae.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public class InitCentralSquare extends InitIntermediateStatesBoolean {
+public class InitCentralSquare extends InitNextStatesBoolean {
 
     /**
      * The half-side length offset from the grid's center, defining the size of the active square region.
@@ -47,7 +49,7 @@ public class InitCentralSquare extends InitIntermediateStatesBoolean {
      * @param grid the {@link Grid} to initialize
      */
     @Override
-    public void initializeGrid(Grid<BooleanCell, BooleanState> grid) {
+    public void initializeGrid(@Nonnull Grid<BooleanCell, BooleanState> grid) {
         super.initializeGrid(grid);
         int width = grid.getWidth();
         int height = grid.getHeight();

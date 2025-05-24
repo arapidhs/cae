@@ -44,8 +44,8 @@ public class RuleOneOutOfEight extends RuleBooleanNeighborCount {
         boolean isActive = liveNeighbors == 1;
 
         boolean echo = cell.getState().getValue();
-        grid.getIntermediateStates()[y][x].set(isActive || currentState, echo, liveNeighbors);
-        return grid.getIntermediateStates()[y][x];
+        grid.getNextStates()[y][x].set(isActive || currentState, echo, liveNeighbors);
+        return grid.getNextStates()[y][x];
     }
 
 }

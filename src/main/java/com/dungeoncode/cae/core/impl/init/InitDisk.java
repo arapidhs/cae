@@ -5,6 +5,8 @@ import com.dungeoncode.cae.core.GridInitializer;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
 
+import javax.annotation.Nonnull;
+
 /**
  * Initializes a {@link Grid} for a cellular automaton by forming a disk-shaped region of active cells centered in the
  * grid. Cells within the disk radius have their state (value) set to active ({@code true}), while all other cells are
@@ -15,7 +17,7 @@ import com.dungeoncode.cae.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public class InitDisk extends InitIntermediateStatesBoolean {
+public class InitDisk extends InitNextStatesBoolean {
 
     /**
      * The radius of the disk-shaped region, measured from the grid's center.
@@ -40,7 +42,7 @@ public class InitDisk extends InitIntermediateStatesBoolean {
      * @param grid the {@link Grid} to initialize
      */
     @Override
-    public void initializeGrid(Grid<BooleanCell, BooleanState> grid) {
+    public void initializeGrid(@Nonnull Grid<BooleanCell, BooleanState> grid) {
         super.initializeGrid(grid);
         int width = grid.getWidth();
         int height = grid.getHeight();

@@ -15,9 +15,9 @@ import java.util.Random;
  *
  * @see BooleanCell
  * @see BooleanState
- * @see InitIntermediateStatesBoolean
+ * @see InitNextStatesBoolean
  */
-public class InitHistogram extends InitIntermediateStatesBoolean {
+public class InitHistogram extends InitNextStatesBoolean {
 
     /**
      * Random number generator for state assignment.

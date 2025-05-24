@@ -46,8 +46,8 @@ public class RuleMajority extends RuleBooleanNeighborCount {
         boolean isActive = liveNeighbors >= 5;
 
         boolean echo = cell.getState().getValue();
-        grid.getIntermediateStates()[y][x].set(isActive, echo, liveNeighbors);
-        return grid.getIntermediateStates()[y][x];
+        grid.getNextStates()[y][x].set(isActive, echo, liveNeighbors);
+        return grid.getNextStates()[y][x];
     }
 
 }

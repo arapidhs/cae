@@ -30,7 +30,7 @@ public class RuleAnneal extends RuleBooleanNeighborCount {
     /**
      * Applies the ANNEAL rule to compute the new state of a given cell. Counts live cells in the 3x3 Moore
      * neighborhood (including the center). The cell becomes active (true) if the count is exactly 4 or 6 or more,
-     * otherwise inactive (false). Updates the grid's intermediate state with the new state, echo, and neighbor count.
+     * otherwise inactive (false). Updates the grid's next state with the new state, echo, and neighbor count.
      *
      * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
      * @param cell the {@link BooleanCell} to update, must not be null
@@ -56,8 +56,8 @@ public class RuleAnneal extends RuleBooleanNeighborCount {
         boolean isActive = liveNeighbors == 4 || liveNeighbors >= 6;
         boolean echo = cell.getState().getValue();
 
-        BooleanState[][] intermediateStates = grid.getIntermediateStates();
-        intermediateStates[y][x].set(isActive, echo, liveNeighbors);
-        return intermediateStates[y][x];
+        BooleanState[][] nextStates = grid.getNextStates();
+        nextStates[y][x].set(isActive, echo, liveNeighbors);
+        return nextStates[y][x];
     }
 }

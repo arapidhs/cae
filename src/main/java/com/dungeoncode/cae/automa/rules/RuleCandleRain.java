@@ -34,7 +34,7 @@ public class RuleCandleRain extends AbstractRule<BooleanCell, BooleanState> {
     /**
      * Applies the CANDLE-RAIN rule to compute the new state of a cell. A candle is blown out (false) if a raindrop
      * is generated (1/32 probability); otherwise, it retains its state. The echo tracks the previous state. Updates
-     * the grid's intermediate state with the new state, echo, and zero neighbor count.
+     * the grid's next state with the new state, echo, and zero neighbor count.
      *
      * @param grid the {@link Grid} containing the cell, must not be null
      * @param cell the {@link BooleanCell} to update, must not be null
@@ -57,8 +57,8 @@ public class RuleCandleRain extends AbstractRule<BooleanCell, BooleanState> {
         // Rule: blow out candle if raindrop present, otherwise retain state
         boolean newValue = currentState.getValue() && !raindrop;
 
-        BooleanState[][] intermediateStates = grid.getIntermediateStates();
-        intermediateStates[y][x].set(newValue, echo, 0);
-        return intermediateStates[y][x];
+        BooleanState[][] nextStates = grid.getNextStates();
+        nextStates[y][x].set(newValue, echo, 0);
+        return nextStates[y][x];
     }
 }

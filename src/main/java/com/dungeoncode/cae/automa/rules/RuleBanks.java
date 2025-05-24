@@ -31,7 +31,7 @@ public class RuleBanks extends RuleBooleanNeighborCount {
      * (north, south, east, west, excluding the center). If north and south neighbors differ, the cell becomes
      * inactive; if exactly two neighbors are active and form a corner (e.g., north and west), the cell becomes
      * inactive (erase corners); if they form a straight line (e.g., north and south), the cell becomes active
-     * (fill pockets); otherwise, the cell remains unchanged.nmkj Updates the grid's intermediate state with the new
+     * (fill pockets); otherwise, the cell remains unchanged.nmkj Updates the grid's next state with the new
      * state, echo, and neighbor count.
      *
      * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
@@ -82,7 +82,7 @@ public class RuleBanks extends RuleBooleanNeighborCount {
             nextState = true; // Corner configuration: erase corner (cell becomes inactive)
         }
 
-        grid.getIntermediateStates()[y][x].set(nextState, echo, liveNeighbors);
-        return grid.getIntermediateStates()[y][x];
+        grid.getNextStates()[y][x].set(nextState, echo, liveNeighbors);
+        return grid.getNextStates()[y][x];
     }
 }

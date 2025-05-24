@@ -45,8 +45,8 @@ public class RuleLichens extends RuleBooleanNeighborCount {
 
 
         boolean echo = cell.getState().getValue();
-        grid.getIntermediateStates()[y][x].set(isActive || currentState, echo, liveCount);
-        return grid.getIntermediateStates()[y][x];
+        grid.getNextStates()[y][x].set(isActive || currentState, echo, liveCount);
+        return grid.getNextStates()[y][x];
     }
 
 }

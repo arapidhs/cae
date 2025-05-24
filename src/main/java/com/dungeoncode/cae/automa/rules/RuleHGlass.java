@@ -109,8 +109,8 @@ public class RuleHGlass extends AbstractRule<BooleanCell, BooleanState> {
         int liveCount = (center ? 1 : 0) + (north ? 1 : 0) + (south ? 1 : 0) + (west ? 1 : 0) + (east ? 1 : 0);
 
         // Look up the new state in the rule table
-        grid.getIntermediateStates()[y][x].set(RULE_TABLE[index], cell.getState().getValue(), liveCount);
-        return grid.getIntermediateStates()[y][x];
+        grid.getNextStates()[y][x].set(RULE_TABLE[index], cell.getState().getValue(), liveCount);
+        return grid.getNextStates()[y][x];
     }
 
 }

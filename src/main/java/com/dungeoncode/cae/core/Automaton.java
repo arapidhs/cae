@@ -124,10 +124,11 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
                     rule.apply(grid, cell);
                 }
             }
-        }
-        for (int y = 0; y < grid.getHeight(); y++) {
-            for (int x = 0; x < grid.getWidth(); x++) {
-                grid.copyCellState(x, y);
+
+            for (int y = 0; y < grid.getHeight(); y++) {
+                for (int x = 0; x < grid.getWidth(); x++) {
+                    grid.copyCellState(x, y);
+                }
             }
         }
     }

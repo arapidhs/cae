@@ -29,7 +29,7 @@ public class RuleSquares extends RuleBooleanNeighborCount {
     /**
      * Applies the SQUARES rule to compute the new state of a cell. Performs a logical OR across the Moore
      * neighborhood (center and eight surrounding cells). The cell becomes active (true) if any cell in the
-     * neighborhood is active, otherwise remains inactive (false). Updates the grid's intermediate state with
+     * neighborhood is active, otherwise remains inactive (false). Updates the grid's next state with
      * the new state, echo, and neighbor count, producing a growing square pattern.
      *
      * @param grid the {@link Grid} containing the cell and its neighbors, must not be null
@@ -62,8 +62,8 @@ public class RuleSquares extends RuleBooleanNeighborCount {
         boolean echo = cell.getState().getValue();
         int liveCount = countLiveMooreNeighbors(grid, x, y);
 
-        BooleanState[][] intermediateStates = grid.getIntermediateStates();
-        intermediateStates[y][x].set(isActive, echo, liveCount);
-        return intermediateStates[y][x];
+        BooleanState[][] nextStates = grid.getNextStates();
+        nextStates[y][x].set(isActive, echo, liveCount);
+        return nextStates[y][x];
     }
 }

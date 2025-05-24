@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.GridInitializer;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class InitRandomBoolean extends InitIntermediateStatesBoolean {
+public class InitRandomBoolean extends InitNextStatesBoolean {
 
     public InitRandomBoolean() {
         super(3);
@@ -30,7 +31,7 @@ public class InitRandomBoolean extends InitIntermediateStatesBoolean {
      * @param grid the grid to initialize
      */
     @Override
-    public void initializeGrid(Grid<BooleanCell, BooleanState> grid) {
+    public void initializeGrid(@Nonnull Grid<BooleanCell, BooleanState> grid) {
         super.initializeGrid(grid);
         Random rnd = new Random();
         for (int y = 0; y < grid.getHeight(); y++) {
