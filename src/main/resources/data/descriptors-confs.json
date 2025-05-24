@@ -103,5 +103,10 @@
     "id": 22,
     "name": "Naive Particle Diffusion",
     "description": "Models particle diffusion by randomly copying a neighboring cell's state in one of four directions within a von Neumann neighborhood. Initialized with a disk-shaped active cell region (radius based on grid size), it produces dynamic tongue-like patterns representing particle spread, as detailed in Chapter 9, Section 9.4 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 25,
+    "name": "Soil Erosion Simulation",
+    "description": "Cells (soil, active=true) remain active if supported by at least one active neighbor in each of the north, south, west, and east directions in their 3x3 Moore neighborhood, otherwise becoming inactive (eroded). Initialized with a random distribution of 83% active cells to simulate solid soil with sparse holes, it models soil stability and erosion, producing stable or growing holes based on initial conditions, as detailed in Chapter 9, Section 9.5 of Cellular Automata Machines: A New Environment for Modeling."
   }
 ]

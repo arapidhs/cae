@@ -61,6 +61,7 @@ public enum Tag {
     LOCALIZED ("Localized", "Initial configurations with activity confined to a specific region"),
     BASELINE ("Baseline", "Initial configurations with a fixed region acting as a boundary or inhibitor"),
     SPARSE ("Sparse", "Initial configurations with widely distributed, isolated active cells"),
+    DENSITY_CONTROLLED ("Density Controlled", "Initial configurations with adjustable probability or density of active cells"),
 
     // Source Types
     BOOK("Book", "Configurations sourced from a book or academic publication"),

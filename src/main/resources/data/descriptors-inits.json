@@ -60,13 +60,13 @@
     ]
   },
   {
-    "id": 9,
-    "name": "Random Spots Placement",
-    "description": "Initializes a grid by placing a specified number of active cells at random positions, with all other cells inactive, creating sparse patterns with isolated active regions.",
+    "id": 10,
+    "name": "Random Boolean Probability",
+    "description": "Initializes a grid with a random distribution of active and inactive cells based on a specified probability for active cells, creating varied initial patterns for rules like SOIL-EROSION.",
     "tags": [
       "PROBABILISTIC",
       "RANDOM",
-      "SPARSE"
+      "DENSITY_CONTROLLED"
     ]
   }
 ]

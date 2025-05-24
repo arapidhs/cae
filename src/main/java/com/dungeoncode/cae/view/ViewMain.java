@@ -60,6 +60,7 @@ public class ViewMain {
             repository.addConfiguration(new ConfNaiveDiffusion());
             repository.addConfiguration(new ConfHandshakeDiffusion());
             repository.addConfiguration(new ConfGeneticDrift());
+            repository.addConfiguration(new ConfSoilErosion());
 
             running = true;
             view = new View(repository);
