@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomBoolean;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ConfHglass extends AbstractConfiguration<BooleanCell, BooleanState>
      * lookup table, and cites the relevant source.
      */
     public ConfHglass() {
-        super(3, new InitRandomBoolean(), List.of(new RuleHGlass()));
+        super(3, new InitRandomBoolean(), List.of(new RuleHGlass()), Dimension.TWO);
     }
 
 }

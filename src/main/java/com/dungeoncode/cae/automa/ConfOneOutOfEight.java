@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 
 import java.util.List;
@@ -27,7 +28,8 @@ public class ConfOneOutOfEight extends AbstractConfiguration<BooleanCell, Boolea
      * growth of active cells, and cites the book by Toffoli and Margolus.
      */
     public ConfOneOutOfEight() {
-        super(8, new InitCentralSquare(1), List.of(new RuleOneOutOfEight()));
+        super(8, new InitCentralSquare(1),
+                List.of(new RuleOneOutOfEight()), Dimension.TWO);
     }
 
 }

@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomBoolean;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class ConfMajority extends AbstractConfiguration<BooleanCell, BooleanStat
      * interpenetrating domains, and cites the book by Toffoli and Margolus.
      */
     public ConfMajority() {
-        super(11, new InitRandomBoolean(), List.of(new RuleMajority()));
+        super(11, new InitRandomBoolean(), List.of(new RuleMajority()), Dimension.TWO);
     }
 
 }

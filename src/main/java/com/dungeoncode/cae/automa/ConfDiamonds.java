@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 import com.dungeoncode.cae.core.impl.init.InitSpots;
 
@@ -28,7 +29,7 @@ public class ConfDiamonds extends AbstractConfiguration<BooleanCell, BooleanStat
      * of active diamonds, and cites the book by Toffoli and Margolus.
      */
     public ConfDiamonds() {
-        super(6, new InitSpots(10), List.of(new RuleDiamonds()));
+        super(6, new InitSpots(10), List.of(new RuleDiamonds()), Dimension.TWO);
     }
 
 }

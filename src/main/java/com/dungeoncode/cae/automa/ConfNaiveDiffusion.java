@@ -6,6 +6,7 @@ import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitDisk;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.dungeoncode.cae.core.Constants.*;
+import static com.dungeoncode.cae.core.impl.Dimension.TWO;
 
 /**
  * Configures an {@link Automaton} to run the NAIVE-DIFFUSION cellular automaton, modeling diffusion of particles by
@@ -32,7 +34,7 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
      * and cites the book by Toffoli and Margolus.
      */
     public ConfNaiveDiffusion() {
-        super(22, null, List.of(new RuleNaiveDiffusion()));
+        super(22, null, List.of(new RuleNaiveDiffusion()), TWO);
     }
 
     /**
@@ -52,6 +54,7 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
         setGridInitializer(initDisk);
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, initDisk);
         config.put(CONF_GRID, grid);
+        config.put(CONF_DIMENSION, TWO);
         config.put(CONF_RULES, getRules());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automaton.configure(config);

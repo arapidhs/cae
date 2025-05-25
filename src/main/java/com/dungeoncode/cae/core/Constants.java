@@ -11,6 +11,8 @@ public class Constants {
      */
     public static final String CONF_GRID = "grid";
 
+    public static final String CONF_DIMENSION = "dimension";
+
     /**
      * Key for the rule configuration parameter.
      */

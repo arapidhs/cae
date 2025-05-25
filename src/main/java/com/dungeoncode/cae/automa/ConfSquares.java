@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 import com.dungeoncode.cae.core.impl.init.InitSpots;
 
@@ -28,7 +29,7 @@ public class ConfSquares extends AbstractConfiguration<BooleanCell, BooleanState
      * of active squares, and cites the book by Toffoli and Margolus.
      */
     public ConfSquares() {
-        super(5, new InitSpots(10), List.of(new RuleSquares()));
+        super(5, new InitSpots(10), List.of(new RuleSquares()), Dimension.TWO );
     }
 
 }

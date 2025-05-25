@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomBoolean;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class ConfCandleRain extends AbstractConfiguration<BooleanCell, BooleanSt
      * and cites the book by Toffoli and Margolus.
      */
     public ConfCandleRain() {
-        super(18, new InitRandomBoolean(), List.of(new RuleCandleRain()));
+        super(18, new InitRandomBoolean(), List.of(new RuleCandleRain()), Dimension.TWO);
     }
 
 }

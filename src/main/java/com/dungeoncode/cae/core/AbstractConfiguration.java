@@ -1,5 +1,7 @@
 package com.dungeoncode.cae.core;
 
+import com.dungeoncode.cae.core.impl.Dimension;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,11 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
     private final List<Rule<C, S>> rules;
 
     /**
+     * The dimension of the configuration..
+     */
+    private final Dimension dimension;
+
+    /**
      * The initializer used to populate the grid with cells and states.
      */
     private GridInitializer<C, S> gridInitializer;
@@ -38,11 +45,13 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
      * @param id              the unique identifier for this configuration
      * @param gridInitializer the {@link GridInitializer} to initialize the grid
      * @param rules           the list of {@link Rule} objects for state updates
+     * @param dimension       the dimension of the configuration
      * @throws NullPointerException if rules is null
      */
-    protected AbstractConfiguration(int id, GridInitializer<C, S> gridInitializer, List<Rule<C, S>> rules) {
+    protected AbstractConfiguration(int id, GridInitializer<C, S> gridInitializer, List<Rule<C, S>> rules, Dimension dimension) {
         Objects.requireNonNull(rules, "Rules cannot be null");
         this.id = id;
+        this.dimension = dimension;
         this.gridInitializer = gridInitializer;
         this.rules = rules;
     }
@@ -77,6 +86,16 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
     }
 
     /**
+     * Returns the dimension of the configuration.
+     *
+     * @return the {@link Dimension} of the configuration.
+     */
+    @Override
+    public Dimension getDimension() {
+        return dimension;
+    }
+
+    /**
      * Configures the specified {@link Automaton} with a grid, rules, and update interval.
      * Creates a {@link Grid} with the given dimensions, initialized by the configured
      * {@link GridInitializer}, and applies the configured list of {@link Rule} objects
@@ -92,6 +111,7 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
         Map<String, Object> config = new HashMap<>();
         Grid<C, S> grid = new Grid<>(width, height, getGridInitializer());
         config.put(CONF_GRID, grid);
+        config.put(CONF_DIMENSION, dimension);
         config.put(CONF_RULES, getRules());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automaton.configure(config);

@@ -4,6 +4,7 @@ import com.dungeoncode.cae.automa.rules.RuleOneDRand;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitOneDRandom;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ConfOneDRand extends AbstractConfiguration<BooleanCell, BooleanStat
      * Constructs a new ONED-RAND configuration with a random initializer for row 0 (default 50% density for all regions).
      */
     public ConfOneDRand() {
-        super(28, new InitOneDRandom(0.5, 0.5, 0.5), List.of(new RuleOneDRand()));
+        super(28, new InitOneDRandom(0.5, 0.5, 0.5),
+                List.of(new RuleOneDRand()), Dimension.ONE);
     }
 }

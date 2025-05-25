@@ -1,5 +1,7 @@
 package com.dungeoncode.cae.core;
 
+import com.dungeoncode.cae.core.impl.Dimension;
+
 import java.util.List;
 
 /**
@@ -31,6 +33,13 @@ public interface Configuration<C extends Cell<S>, S extends CellState<?>> {
      * @return an unmodifiable list of {@link Rule} objects for state transitions
      */
     List<Rule<C, S>> getRules();
+
+    /**
+     * Returns the dimension of the configuration.
+     *
+     * @return the {@link Dimension} of the configuration.
+     */
+    Dimension getDimension();
 
     /**
      * Configures the specified {@link Automaton} with the given grid dimensions and update interval.

@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 
 import java.util.List;
@@ -28,7 +29,8 @@ public class ConfTimeTunnel extends AbstractConfiguration<BooleanCell, BooleanSt
      * patterns, and cites the book by Toffoli and Margolus.
      */
     public ConfTimeTunnel() {
-        super(17, new InitCentralSquare(3, true), List.of(new RuleTimeTunnel()));
+        super(17, new InitCentralSquare(3, true),
+                List.of(new RuleTimeTunnel()), Dimension.TWO);
     }
 
 }

@@ -1,8 +1,10 @@
 package com.dungeoncode.cae.core;
 
+import com.dungeoncode.cae.core.impl.Dimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -29,6 +31,11 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
      * The grid holding the current state of cells.
      */
     private Grid<C, S> grid;
+
+    /**
+     * The dimension of the automaton.
+     */
+    private Dimension dimension;
 
     /**
      * The list of rules applied to update cell states.
@@ -80,6 +87,7 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
      */
     public void configure(Map<String, Object> config) {
         this.grid = (Grid<C, S>) config.get(CONF_GRID);
+        this.dimension= (Dimension) config.get(CONF_DIMENSION);
         this.rules = (List<Rule<C, S>>) config.get(CONF_RULES);
         this.intervalMillis = Long.parseLong(String.valueOf(config.get(CONF_INTERVAL_MILLIS)));
         this.step = 0;
@@ -125,8 +133,8 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
     public void step() {
         step++;
         for (Rule<C, S> rule : rules) {
-            for (int x = 0; x < grid.getWidth(); x++) {
-                for (int y = 0; y < grid.getHeight(); y++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                for (int x = 0; x < grid.getWidth(); x++) {
                     C cell = grid.getCell(x, y);
                     rule.apply(grid, cell, step);
                 }
@@ -137,6 +145,7 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
                     grid.copyCellState(x, y);
                 }
             }
+
         }
     }
 

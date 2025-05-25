@@ -4,6 +4,7 @@ import com.dungeoncode.cae.automa.rules.RuleCyclicRank;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomSpecies;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ConfCyclicRank extends AbstractConfiguration<BooleanCell, BooleanSt
      * Constructs a new CYCLIC-RANK configuration with a random initializer (4 states, 25% population).
      */
     public ConfCyclicRank() {
-        super(27, new InitRandomSpecies(4, 100), List.of(new RuleCyclicRank()));
+        super(27, new InitRandomSpecies(4, 100),
+                List.of(new RuleCyclicRank()), Dimension.TWO);
     }
 }

@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 import com.dungeoncode.cae.core.impl.init.InitSpots;
 
@@ -28,7 +29,7 @@ public class ConfTriangles extends AbstractConfiguration<BooleanCell, BooleanSta
      * of active triangles pointing south, and cites the book by Toffoli and Margolus.
      */
     public ConfTriangles() {
-        super(7, new InitSpots(10), List.of(new RuleTriangles()));
+        super(7, new InitSpots(10), List.of(new RuleTriangles()), Dimension.TWO);
     }
 
 }

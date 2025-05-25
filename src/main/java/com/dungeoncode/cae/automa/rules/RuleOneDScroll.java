@@ -41,7 +41,6 @@ public abstract class RuleOneDScroll extends RuleBooleanNeighborCount {
 
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
-        int width = grid.getWidth();
         int height = grid.getHeight();
         BooleanState currentState = cell.getState();
         boolean currentValue = currentState.getValue();
@@ -57,7 +56,7 @@ public abstract class RuleOneDScroll extends RuleBooleanNeighborCount {
         if (step < height) {
             // Early steps: compute row t (step t) using row t-1, no shifting
             if (y == targetRow && targetRow > 0) {
-                newValue = computeNewState(grid, x, y-1, width);
+                newValue = computeNewState(grid, x, y, step);
             } else if (y > targetRow) {
                 // Rows below target are inactive
                 newValue = false;
@@ -70,7 +69,7 @@ public abstract class RuleOneDScroll extends RuleBooleanNeighborCount {
                 newValue = grid.getCell(x, y + 1).getState().getValue();
             } else if (y == height - 1) {
                 // Compute bottom row using row height-1
-                newValue = computeNewState(grid, x, y, width);
+                newValue = computeNewState(grid, x, y+1, step);
             }
         }
 

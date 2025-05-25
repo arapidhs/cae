@@ -6,6 +6,7 @@ import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomSpecies;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.dungeoncode.cae.core.Constants.*;
+import static com.dungeoncode.cae.core.impl.Dimension.TWO;
 
 /**
  * Configures an Automaton to run the GENETIC-DRIFT cellular automaton, modeling diffusion of genes with species IDs.
@@ -22,7 +24,7 @@ import static com.dungeoncode.cae.core.Constants.*;
 public class ConfGeneticDrift extends AbstractConfiguration<BooleanCell, BooleanState> {
 
     public ConfGeneticDrift() {
-        super(24, null, List.of(new RuleGeneticDrift()));
+        super(24, null, List.of(new RuleGeneticDrift()), TWO);
     }
 
     @Override
@@ -33,6 +35,7 @@ public class ConfGeneticDrift extends AbstractConfiguration<BooleanCell, Boolean
         setGridInitializer(initRandomSpecies);
         Grid<BooleanCell, BooleanState> grid = new Grid<>(width, height, initRandomSpecies);
         config.put(CONF_GRID, grid);
+        config.put(CONF_DIMENSION, TWO);
         config.put(CONF_RULES, getRules());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automaton.configure(config);

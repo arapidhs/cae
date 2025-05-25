@@ -4,6 +4,7 @@ import com.dungeoncode.cae.automa.rules.RuleRandomWalk;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitOneDRandom;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ConfRandomWalk extends AbstractConfiguration<BooleanCell, BooleanSt
      * Constructs a new RANDOM-WALK configuration with a random initializer for row 0 (5% density for all regions).
      */
     public ConfRandomWalk() {
-        super(30, new InitOneDRandom(0.05, 0.05, 0.05), List.of(new RuleRandomWalk()));
+        super(30, new InitOneDRandom(0.10, 0.25, 0.05),
+                List.of(new RuleRandomWalk()), Dimension.ONE);
     }
 }

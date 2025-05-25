@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomBoolean;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class ConfRandomAnneal extends AbstractConfiguration<BooleanCell, Boolean
      * cites the book by Toffoli and Margolus.
      */
     public ConfRandomAnneal() {
-        super(19, new InitRandomBoolean(), List.of(new RuleRandomAnneal()));
+        super(19, new InitRandomBoolean(), List.of(new RuleRandomAnneal()), Dimension.TWO);
     }
 
 }

@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralBlob;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 
@@ -29,7 +30,8 @@ public class ConfLichensWithDeath extends AbstractConfiguration<BooleanCell, Boo
      * unpredictable patterns, and cites the book by Toffoli and Margolus.
      */
     public ConfLichensWithDeath() {
-        super(10, new InitCentralBlob(2, 2), List.of(new RuleLichensWithDeath()));
+        super(10, new InitCentralBlob(2, 2),
+                List.of(new RuleLichensWithDeath()), Dimension.TWO);
     }
 
 }

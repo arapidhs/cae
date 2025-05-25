@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomBoolean;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ConfGameOfLife extends AbstractConfiguration<BooleanCell, BooleanSt
      * transition tracking, and cites the relevant source.
      */
     public ConfGameOfLife() {
-        super(2, new InitRandomBoolean(), List.of(new RuleGameOfLife(false)));
+        super(2, new InitRandomBoolean(), List.of(new RuleGameOfLife(false)), Dimension.TWO);
     }
 
 }

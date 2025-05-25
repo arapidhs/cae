@@ -4,6 +4,7 @@ import com.dungeoncode.cae.automa.rules.RuleSoilErosionRandom;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomBooleanProbability;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class ConfSoilErosionRandom extends AbstractConfiguration<BooleanCell, Bo
      * Constructs a new SOIL-EROSION-RANDOM configuration with a random initializer (83% active cells).
      */
     public ConfSoilErosionRandom() {
-        super(26, new InitRandomBooleanProbability(0.83), List.of(new RuleSoilErosionRandom()));
+        super(26, new InitRandomBooleanProbability(0.83),
+                List.of(new RuleSoilErosionRandom()), Dimension.TWO);
     }
 }

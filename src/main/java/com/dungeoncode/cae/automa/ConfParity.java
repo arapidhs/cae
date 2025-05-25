@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 import com.dungeoncode.cae.core.impl.init.InitRandomBoolean;
 
@@ -28,7 +29,7 @@ public class ConfParity extends AbstractConfiguration<BooleanCell, BooleanState>
      * driven by neighborhood parity, and cites the book by Toffoli and Margolus.
      */
     public ConfParity() {
-        super(4, new InitCentralSquare(8), List.of(new RuleParity()));
+        super(4, new InitCentralSquare(8), List.of(new RuleParity()), Dimension.TWO );
     }
 
 }

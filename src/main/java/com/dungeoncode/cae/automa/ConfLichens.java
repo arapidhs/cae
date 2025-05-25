@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralBlob;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 
@@ -28,7 +29,7 @@ public class ConfLichens extends AbstractConfiguration<BooleanCell, BooleanState
      * of active cells, and cites the book by Toffoli and Margolus.
      */
     public ConfLichens() {
-        super(9, new InitCentralBlob(2, 2), List.of(new RuleLichens()));
+        super(9, new InitCentralBlob(2, 2), List.of(new RuleLichens()), Dimension.TWO);
     }
 
 }

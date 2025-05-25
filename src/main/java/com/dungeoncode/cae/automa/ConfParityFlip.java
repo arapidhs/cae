@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class ConfParityFlip extends AbstractConfiguration<BooleanCell, BooleanSt
      * PARITY rule, and cites the book by Toffoli and Margolus.
      */
     public ConfParityFlip() {
-        super(16, new InitCentralSquare(8), List.of(new RuleParityFlip()));
+        super(16, new InitCentralSquare(8), List.of(new RuleParityFlip()), Dimension.TWO);
     }
 
 }

@@ -34,23 +34,24 @@ public class RuleRandomWalk extends RuleOneDScroll {
      * true if the left neighbor (row y-1) has a particle and moves right, or the right neighbor has a particle and moves
      * left, based on a random decision. Uses toroidal wrapping for left/right edges. No collision detection.
      *
-     * @param grid  the {@link Grid} containing the cell and its neighbors
-     * @param x     the x-coordinate of the cell
-     * @param y     the y-coordinate of the cell (target row)
-     * @param width the grid width for toroidal wrapping
+     * @param grid the {@link Grid} containing the cell and its neighbors
+     * @param x    the x-coordinate of the cell
+     * @param y    the y-coordinate of the cell (target row)
+     * @param step the current step
      * @return the new boolean state
      */
     @Override
-    protected boolean computeNewState(Grid<BooleanCell, BooleanState> grid, int x, int y, int width) {
+    protected boolean computeNewState(Grid<BooleanCell, BooleanState> grid, int x, int y, int step) {
 
+        int width = grid.getWidth();
         boolean currentValue = grid.getCell((x + width) % width, y).getState().getValue();
         if( currentValue ) {
             return false;
         }
 
         // Get neighbor states from row above (y-1)
-        boolean left = grid.getCell((x - 1 + width) % width, y).getState().getValue();
-        boolean right = grid.getCell((x + 1) % width, y).getState().getValue();
+        boolean left = grid.getCell((x - 1 + width) % width, y-1).getState().getValue();
+        boolean right = grid.getCell((x + 1) % width, y-1).getState().getValue();
 
         // Random direction: true = right, false = left
         boolean moveRight = random.nextBoolean();

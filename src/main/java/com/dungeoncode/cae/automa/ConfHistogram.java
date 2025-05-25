@@ -5,6 +5,7 @@ import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitHistogram;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ConfHistogram extends AbstractConfiguration<BooleanCell, BooleanSta
      * creation, and cites the book by Toffoli and Margolus.
      */
     public ConfHistogram() {
-        super(20, new InitHistogram(), List.of(new RuleSafePass()));
+        super(20, new InitHistogram(), List.of(new RuleSafePass()), Dimension.TWO);
     }
 
 }

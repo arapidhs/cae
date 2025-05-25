@@ -678,7 +678,7 @@
   {
     "id": 27,
     "name": "One-Dimensional Random",
-    "description": "A one-dimensional rule where row t at step t computes each cell's state as the XOR of west, center, and east neighbors from row t-1, forming a random-number generator. The 2D grid stores spacetime history, scrolling up when full, with toroidal left/right wrapping.",
+    "description": "A one-dimensional rule where each cell's state as the XOR of west, center, and east neighbors from row t-1, forming a random-number generator. The 2D grid stores spacetime history, scrolling up when full, with toroidal left/right wrapping.",
     "citation": {
       "title": "Cellular Automata Machines",
       "subtitle": "A New Environment for Modeling",
@@ -694,33 +694,6 @@
     },
     "tags": [
       "DETERMINISTIC",
-      "VON_NEUMANN",
-      "LOGICAL",
-      "LOGICAL_XOR",
-      "ONE_DIMENSIONAL"
-    ]
-  },
-  {
-    "id": 28,
-    "name": "Scarves",
-    "description": "A one-dimensional rule where row t at step t sets a cell's state to true if exactly two of its four neighbors (west, east, west-of-west, east-of-east) from row t-1 are active, else false, using a 2D grid to store spacetime history with scrolling when full and toroidal left/right wrapping.",
-    "citation": {
-      "title": "Cellular Automata Machines",
-      "subtitle": "A New Environment for Modeling",
-      "section": "Chapter 9 A sampler of techniques",
-      "subsection": "9.7 One-dimensional cellular automata",
-      "page": 97,
-      "year": 1987,
-      "place": null,
-      "publisher": "MIT Press",
-      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
-      "doi": "10.7551/mitpress/1763.001.0001",
-      "authors": ["Tommaso Toffoli", "Norman Margolus"]
-    },
-    "tags": [
-      "DETERMINISTIC",
-      "VON_NEUMANN",
-      "EXTENDED_NEIGHBORHOOD",
       "LOGICAL",
       "LOGICAL_XOR",
       "ONE_DIMENSIONAL"
@@ -729,7 +702,7 @@
   {
     "id": 29,
     "name": "Random Walk",
-    "description": "A one-dimensional rule where particles in row t at step t move left or right randomly with no collision detection, erasing the current particle and copying from the left neighbor (if moving right) or right neighbor (if moving left) based on a random decision. The 2D grid stores spacetime history, scrolling up when full with toroidal left/right wrapping.",
+    "description": "A one-dimensional rule where particles in move left or right randomly with no collision detection, erasing the current particle and copying from the left neighbor (if moving right) or right neighbor (if moving left) based on a random decision. The 2D grid stores spacetime history, scrolling up when full with toroidal left/right wrapping.",
     "citation": {
       "title": "Cellular Automata Machines",
       "subtitle": "A New Environment for Modeling",
@@ -745,7 +718,6 @@
     },
     "tags": [
       "PROBABILISTIC",
-      "VON_NEUMANN",
       "RANDOM",
       "ONE_DIMENSIONAL",
       "PARTICLE_MOVEMENT"
