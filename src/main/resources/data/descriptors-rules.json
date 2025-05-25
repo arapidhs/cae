@@ -725,5 +725,30 @@
       "LOGICAL_XOR",
       "ONE_DIMENSIONAL"
     ]
+  },
+  {
+    "id": 29,
+    "name": "Random Walk",
+    "description": "A one-dimensional rule where particles in row t at step t move left or right randomly with no collision detection, erasing the current particle and copying from the left neighbor (if moving right) or right neighbor (if moving left) based on a random decision. The 2D grid stores spacetime history, scrolling up when full with toroidal left/right wrapping.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 10 Identity and motion",
+      "subsection": "10.1 A random walk",
+      "page": 102,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "PROBABILISTIC",
+      "VON_NEUMANN",
+      "RANDOM",
+      "ONE_DIMENSIONAL",
+      "PARTICLE_MOVEMENT"
+    ]
   }
 ]

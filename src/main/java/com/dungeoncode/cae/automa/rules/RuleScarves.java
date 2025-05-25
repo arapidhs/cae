@@ -7,7 +7,7 @@ import com.dungeoncode.cae.core.impl.BooleanState;
 /**
  * Implements the SCARVES rule for a one-dimensional cellular automaton, a second-order reversible rule where a cell
  * flips its past state (echo) if exactly two of its four neighbors (west, east, west-of-west, east-of-east) from the
- * row above are active. The 2D grid stores spacetime history, computing row t at step t, scrolling up when full with
+ * row above are active. The 2D grid stores spacetime history, computing row t at step t, scrolling up when full of
  * toroidal left/right wrapping. Described in Chapter 9, Section 9.7 of <i>Cellular Automata Machines: A New Environment
  * for Modeling</i> (MIT Press).
  *

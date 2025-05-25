@@ -66,6 +66,7 @@ public enum Tag {
     DENSITY_CONTROLLED ("Density Controlled", "Initial configurations with adjustable probability or density of active cells"),
     SELF_ORGANIZING ("Self-Organizing", "Patterns that spontaneously form organized structures from random initial conditions"),
     SPIRAL ("Spiral", "Patterns forming spiral or swirling structures"),
+    PARTICLE_MOVEMENT ("Particle Movement", "Rules modeling the movement of particles across the grid, often with random or directed motion"),
 
     // Source Types
     BOOK("Book", "Configurations sourced from a book or academic publication"),
@@ -110,7 +111,7 @@ public enum Tag {
     public static final EnumSet<Tag> BEHAVIOR_TYPES = EnumSet.of(
             GROWTH, OSCILLATION, CHAOTIC, STABLE, WAVE, PATTERN_SHAPING, NEURAL, DECAY, MONOTONIC,
             HOLLOW, ACCUMULATION, ORGANIC, COMPETITIVE, DOMAIN, FRACTAL, LOCALIZED, BASELINE, SPARSE,
-            DENSITY_CONTROLLED, SELF_ORGANIZING, SPIRAL
+            DENSITY_CONTROLLED, SELF_ORGANIZING, SPIRAL, PARTICLE_MOVEMENT
     );
 
     /**

@@ -86,6 +86,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfCyclicRank.class.getName(), rendererBooleanId);
         CELL_RENDERER.put(ConfOneDRand.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfScarves.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfRandomWalk.class.getName(), rendererBoolean);
 
     }
 
