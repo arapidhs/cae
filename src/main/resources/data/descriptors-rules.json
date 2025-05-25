@@ -625,5 +625,31 @@
       "STABLE",
       "RANDOM"
     ]
+  },
+  {
+    "id": 26,
+    "name": "Cyclic Rank",
+    "description": "A rule where cells have one of four cyclic states (id=0,1,2,3) and adopt the state of a randomly selected von Neumann neighbor if it is the next in the cycle (0→1→2→3→0), creating self-organizing spiral patterns. Uses BooleanState id for states, with value=true for active cells.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 9 A sampler of techniques",
+      "subsection": "9.6 Asynchronous deterministic computation",
+      "page": 90,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "RANDOM",
+      "SPIRAL",
+      "STATE_MACHINE",
+      "SELF_ORGANIZING"
+    ]
   }
 ]

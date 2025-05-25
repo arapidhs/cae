@@ -62,6 +62,8 @@ public enum Tag {
     BASELINE ("Baseline", "Initial configurations with a fixed region acting as a boundary or inhibitor"),
     SPARSE ("Sparse", "Initial configurations with widely distributed, isolated active cells"),
     DENSITY_CONTROLLED ("Density Controlled", "Initial configurations with adjustable probability or density of active cells"),
+    SELF_ORGANIZING ("Self-Organizing", "Patterns that spontaneously form organized structures from random initial conditions"),
+    SPIRAL ("Spiral", "Patterns forming spiral or swirling structures"),
 
     // Source Types
     BOOK("Book", "Configurations sourced from a book or academic publication"),
@@ -105,7 +107,8 @@ public enum Tag {
      */
     public static final EnumSet<Tag> BEHAVIOR_TYPES = EnumSet.of(
             GROWTH, OSCILLATION, CHAOTIC, STABLE, WAVE, PATTERN_SHAPING, NEURAL, DECAY, MONOTONIC,
-            HOLLOW, ACCUMULATION, ORGANIC, COMPETITIVE, DOMAIN, FRACTAL, LOCALIZED, BASELINE, SPARSE
+            HOLLOW, ACCUMULATION, ORGANIC, COMPETITIVE, DOMAIN, FRACTAL, LOCALIZED, BASELINE, SPARSE,
+            DENSITY_CONTROLLED, SELF_ORGANIZING, SPIRAL
     );
 
     /**

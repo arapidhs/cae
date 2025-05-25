@@ -48,7 +48,7 @@ public class RendererBooleanId implements StateRenderer<BooleanState> {
                 case 2 -> TextColor.ANSI.GREEN;
                 case 3 -> TextColor.ANSI.BLUE;
                 case 4 -> TextColor.ANSI.YELLOW;
-                default -> TextColor.ANSI.BLACK_BRIGHT; // For id=0 or other ids
+                default -> TextColor.ANSI.BLACK; // For id=0 or other ids
             };
         } else if (state.isEcho()) {
             color = TextColor.ANSI.MAGENTA;
