@@ -38,6 +38,7 @@ public class RuleScarves extends RuleOneDScroll {
     @Override
     protected boolean computeNewState(Grid<BooleanCell, BooleanState> grid, int x, int y, int width) {
         // Get neighbor states from row above (y-1)
+        boolean currentValue = grid.getCell((x + width) % width, y).getState().getValue();
         boolean west = grid.getCell((x - 1 + width) % width, y).getState().getValue();
         boolean east = grid.getCell((x + 1) % width, y).getState().getValue();
         boolean westOfWest = grid.getCell((x - 2 + width) % width, y).getState().getValue();
@@ -47,7 +48,9 @@ public class RuleScarves extends RuleOneDScroll {
         int activeCount = (west ? 1 : 0) + (east ? 1 : 0) + (westOfWest ? 1 : 0) + (eastOfEast ? 1 : 0);
 
         // Flip past state if exactly two neighbors are active
-        return activeCount == 2;
+        if(activeCount==2)
+            return !currentValue;
+        return currentValue;
     }
 
 }
