@@ -123,5 +123,10 @@
     "id": 28,
     "name": "One-Dimensional Random Generator",
     "description": "Row t at step t computes each cell's state as the XOR of west, center, and east neighbors from row t-1, forming a random-number generator. Initialized with random boolean states in row 0 using region-specific densities probabilities, the 2D grid stores spacetime history, scrolling up when full with toroidal left/right wrapping, as detailed in Chapter 9, Section 9.7 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 29,
+    "name": "Scarves Pattern Generator",
+    "description": "Sets a cell's state to true if exactly two of its four neighbors (west, east, west-of-west, east-of-east) from row t-1 are active, else false, forming a one-dimensional automaton. Initialized with random boolean states in row 0 using region-specific density probabilities, the 2D grid stores spacetime history, scrolling up when full with toroidal left/right wrapping, as detailed in Chapter 9, Section 9.7 of Cellular Automata Machines: A New Environment for Modeling."
   }
 ]

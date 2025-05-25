@@ -699,5 +699,31 @@
       "LOGICAL_XOR",
       "ONE_DIMENSIONAL"
     ]
+  },
+  {
+    "id": 28,
+    "name": "Scarves",
+    "description": "A one-dimensional rule where row t at step t sets a cell's state to true if exactly two of its four neighbors (west, east, west-of-west, east-of-east) from row t-1 are active, else false, using a 2D grid to store spacetime history with scrolling when full and toroidal left/right wrapping.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 9 A sampler of techniques",
+      "subsection": "9.7 One-dimensional cellular automata",
+      "page": 97,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "EXTENDED_NEIGHBORHOOD",
+      "LOGICAL",
+      "LOGICAL_XOR",
+      "ONE_DIMENSIONAL"
+    ]
   }
 ]
