@@ -22,8 +22,9 @@ public interface Rule<C extends Cell<S>, S extends CellState<?>> {
      *
      * @param grid the {@link Grid} containing the cell and its neighbors
      * @param cell the {@link Cell} whose state is to be updated
+     * @param step the current step
      * @return the new state of the cell, of type {@code S}
      */
-    S apply(Grid<C, S> grid, C cell);
+    S apply(Grid<C, S> grid, C cell, int step);
 
 }

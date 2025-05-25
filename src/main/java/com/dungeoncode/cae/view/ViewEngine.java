@@ -84,6 +84,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfSoilErosion.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfSoilErosionRandom.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfCyclicRank.class.getName(), rendererBooleanId);
+        CELL_RENDERER.put(ConfOneDRand.class.getName(), rendererBoolean);
 
     }
 
@@ -275,6 +276,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         configuration.configure(automaton, width, height, intervalMillis);
         renderer = new GridRenderer<>(screen, CELL_RENDERER.get(configuration.getClass().getName()));
         automaton.setGridConsumer(renderer);
+        automaton.resetStep();
     }
 
     /**
@@ -411,6 +413,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
                                 if (automaton.isRunning()) {
                                     automaton.stop();
                                 }
+                                automaton.resetStep();
                                 automaton.getGrid().initialize();
                                 if (wasRunning) {
                                     automaton.resume();

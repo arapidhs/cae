@@ -38,11 +38,12 @@ public class RuleCandleRain extends AbstractRule<BooleanCell, BooleanState> {
      *
      * @param grid the {@link Grid} containing the cell, must not be null
      * @param cell the {@link BooleanCell} to update, must not be null
+     * @param step the current step
      * @return the new {@link BooleanState} of the cell
      * @throws NullPointerException if grid or cell is null
      */
     @Override
-    public BooleanState apply(@Nonnull Grid<BooleanCell, BooleanState> grid, @Nonnull BooleanCell cell) {
+    public BooleanState apply(@Nonnull Grid<BooleanCell, BooleanState> grid, @Nonnull BooleanCell cell, int step) {
         Objects.requireNonNull(grid, "Grid cannot be null");
         Objects.requireNonNull(cell, "Cell cannot be null");
 

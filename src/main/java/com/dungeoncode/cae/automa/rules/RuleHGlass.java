@@ -74,10 +74,11 @@ public class RuleHGlass extends AbstractRule<BooleanCell, BooleanState> {
      *
      * @param grid the grid containing the cell
      * @param cell the cell to evaluate
+     * @param step the current step
      * @return the next state of the cell
      */
     @Override
-    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell, int step) {
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
         int width = grid.getWidth();

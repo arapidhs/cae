@@ -5,6 +5,7 @@
     "description": "Initializes a grid with a centered rectangular region of random boolean states (active/inactive), with all other cells inactive, creating a localized blob of activity for cellular automata experiments.",
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "RANDOM",
       "LOCALIZED"
     ]
@@ -15,6 +16,7 @@
     "description": "Initializes a grid with a centered square region of active states, with all other cells inactive, creating a localized active area for cellular automata experiments.",
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "LOCALIZED"
     ]
   },
@@ -24,6 +26,7 @@
     "description": "Initializes a grid with a disk-shaped region of active cells centered in the grid, with all other cells inactive, suitable for diffusion experiments like NAIVE-DIFFUSION.",
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "LOCALIZED"
     ]
   },
@@ -33,6 +36,7 @@
     "description": "Initializes a grid with a random distribution of active and inactive cells (50% probability, echo=false) and a fixed active baseline at the bottom row (value=true, echo=true) for inhibition, suitable for rules like SAFE-PASS.",
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "RANDOM",
       "LOCALIZED",
       "BASELINE"
@@ -44,6 +48,7 @@
     "description": "Initializes a grid with a random distribution of live and dead cells (50% probability each), creating a chaotic initial configuration for cellular automata experiments.",
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "RANDOM",
       "CHAOTIC"
     ]
@@ -54,6 +59,7 @@
     "description": "Initializes a grid with a random distribution of active cells (up to a specified population) assigned species IDs (1 to numSpecies), with remaining cells inactive (ID 0), designed for species-based cellular automata rules.",
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "RANDOM",
       "SPECIES",
       "CHAOTIC"
@@ -65,7 +71,19 @@
     "description": "Initializes a grid with a random distribution of active and inactive cells based on a specified probability for active cells, creating varied initial patterns for rules like SOIL-EROSION.",
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "RANDOM",
+      "DENSITY_CONTROLLED"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "One-Dimensional Random",
+    "description": "Initializes a grid for a one-dimensional cellular automaton with random boolean states in row 0, using region-specific density probabilities for west, center, and east segments. Other rows are inactive, suitable for rules like ONED-RAND.",
+    "tags": [
+      "PROBABILISTIC",
+      "RANDOM",
+      "ONE_DIMENSIONAL",
       "DENSITY_CONTROLLED"
     ]
   }

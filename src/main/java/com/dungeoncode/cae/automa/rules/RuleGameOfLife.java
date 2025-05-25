@@ -41,10 +41,11 @@ public class RuleGameOfLife extends RuleBooleanNeighborCount {
      *
      * @param grid the grid containing the cell
      * @param cell the cell to evaluate
+     * @param step the current step
      * @return the next state of the cell, including its boolean value and echo flag
      */
     @Override
-    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell, int step) {
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
 

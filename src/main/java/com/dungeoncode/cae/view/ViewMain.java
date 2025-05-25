@@ -63,6 +63,7 @@ public class ViewMain {
             repository.addConfiguration(new ConfSoilErosion());
             repository.addConfiguration(new ConfSoilErosionRandom());
             repository.addConfiguration(new ConfCyclicRank());
+            repository.addConfiguration(new ConfOneDRand());
 
             repository.loadDescriptors();
 

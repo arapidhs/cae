@@ -27,10 +27,11 @@ public class RuleInkspot extends RuleBooleanNeighborCount {
      *
      * @param grid the {@link Grid} containing the cell and its neighbors
      * @param cell the {@link BooleanCell} whose state is to be updated
+     * @param step the current step
      * @return a new {@link BooleanState} representing the updated state
      */
     @Override
-    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell, int step) {
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
         int liveCount = countLiveMooreNeighbors(grid, x, y);

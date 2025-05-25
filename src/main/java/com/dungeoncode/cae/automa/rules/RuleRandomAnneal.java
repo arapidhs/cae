@@ -32,10 +32,11 @@ public class RuleRandomAnneal extends RuleBooleanNeighborCount {
      *
      * @param grid the {@link Grid} containing the cell and its neighbors
      * @param cell the {@link BooleanCell} whose state is to be updated
+     * @param step the current step
      * @return the new {@link BooleanState} of the cell
      */
     @Override
-    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell) {
+    public BooleanState apply(Grid<BooleanCell, BooleanState> grid, BooleanCell cell, int step) {
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
         int width = grid.getWidth();

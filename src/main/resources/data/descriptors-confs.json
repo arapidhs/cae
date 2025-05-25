@@ -118,5 +118,10 @@
     "id": 27,
     "name": "Cyclic Rank Spirals",
     "description": "Cells with one of four cyclic states (id=0,1,2,3) adopt the state of a randomly selected von Neumann neighbor if it is the next in the cycle (0→1→2→3→0), using BooleanState id for states and value=true for active cells. Initialized with a random distribution of 25% active cells across four states, it produces self-organizing spiral patterns, as detailed in Chapter 9, Section 9.6 of Cellular Automata Machines: A New Environment for Modeling."
+  },
+  {
+    "id": 28,
+    "name": "One-Dimensional Random Generator",
+    "description": "Row t at step t computes each cell's state as the XOR of west, center, and east neighbors from row t-1, forming a random-number generator. Initialized with random boolean states in row 0 using region-specific densities probabilities, the 2D grid stores spacetime history, scrolling up when full with toroidal left/right wrapping, as detailed in Chapter 9, Section 9.7 of Cellular Automata Machines: A New Environment for Modeling."
   }
 ]

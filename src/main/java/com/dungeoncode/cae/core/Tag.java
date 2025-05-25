@@ -13,6 +13,8 @@ public enum Tag {
     SECOND_ORDER("Second Order", "Rules using previous states (via echo) alongside current states"),
     TOTALISTIC("Totalistic", "Rules where transitions depend on the sum of neighbor states"),
     REVERSIBLE("Reversible", "Rules allowing backward state reconstruction without information loss"),
+    ONE_DIMENSIONAL("One-Dimensional", "Rules operating in one spatial dimension, often using a 2D grid to display temporal history"),
+    TWO_DIMENSIONAL("Two-Dimensional", "Rules operating in two spatial dimensions, using a 2D grid for both spatial and state interactions"),
 
     // Neighborhood Types
     VON_NEUMANN("Von Neumann", "Four orthogonal neighbors (North, South, East, West)"),
@@ -83,7 +85,7 @@ public enum Tag {
      * Tags for rule types, defining the nature of state transitions.
      */
     public static final EnumSet<Tag> RULE_TYPES = EnumSet.of(
-            DETERMINISTIC, PROBABILISTIC, SECOND_ORDER, TOTALISTIC, REVERSIBLE
+            DETERMINISTIC, PROBABILISTIC, SECOND_ORDER, TOTALISTIC, REVERSIBLE, ONE_DIMENSIONAL, TWO_DIMENSIONAL
     );
 
     /**

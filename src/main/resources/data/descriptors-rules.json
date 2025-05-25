@@ -18,6 +18,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "COUNTING",
       "LOGICAL",
@@ -45,6 +46,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "COUNTING",
       "PATTERN_SHAPING",
@@ -74,6 +76,7 @@
     },
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "DYNAMIC",
       "DECAY",
       "LOGICAL",
@@ -100,6 +103,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "LOGICAL",
       "LOGICAL_OR",
@@ -129,6 +133,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "LOGICAL",
       "LOGICAL_OR",
@@ -158,6 +163,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "LOGICAL",
       "LOGICAL_OR",
@@ -187,6 +193,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "COUNTING",
       "STABLE",
       "OSCILLATION",
@@ -214,6 +221,7 @@
     },
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "HANDSHAKE",
       "DIFFUSION",
@@ -243,6 +251,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "LOOKUP_TABLE",
       "BITWISE",
@@ -270,6 +279,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "COUNTING",
       "SPREAD",
@@ -301,6 +311,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "COUNTING",
       "GROWTH",
@@ -330,6 +341,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "COUNTING",
       "GROWTH",
@@ -362,6 +374,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "COUNTING",
       "VOTING",
@@ -392,6 +405,7 @@
     },
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "DIFFUSION",
       "RANDOM",
@@ -422,6 +436,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "COUNTING",
       "LOGICAL",
@@ -451,6 +466,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "LOGICAL",
       "STRUCTURED",
@@ -478,6 +494,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "LOGICAL",
       "REVERSIBLE",
@@ -506,6 +523,7 @@
     },
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "COUNTING",
       "VOTING",
@@ -534,6 +552,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "CONSERVATION",
       "GRAVITY",
@@ -563,6 +582,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "COUNTING",
       "LOGICAL",
@@ -592,6 +612,7 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "LOGICAL",
       "LOGICAL_AND",
@@ -618,6 +639,7 @@
     },
     "tags": [
       "PROBABILISTIC",
+      "TWO_DIMENSIONAL",
       "MOORE",
       "LOGICAL",
       "LOGICAL_AND",
@@ -645,11 +667,37 @@
     },
     "tags": [
       "DETERMINISTIC",
+      "TWO_DIMENSIONAL",
       "VON_NEUMANN",
       "RANDOM",
       "SPIRAL",
       "STATE_MACHINE",
       "SELF_ORGANIZING"
+    ]
+  },
+  {
+    "id": 27,
+    "name": "One-Dimensional Random",
+    "description": "A one-dimensional rule where row t at step t computes each cell's state as the XOR of west, center, and east neighbors from row t-1, forming a random-number generator. The 2D grid stores spacetime history, scrolling up when full, with toroidal left/right wrapping.",
+    "citation": {
+      "title": "Cellular Automata Machines",
+      "subtitle": "A New Environment for Modeling",
+      "section": "Chapter 9 A sampler of techniques",
+      "subsection": "9.7 One-dimensional cellular automata",
+      "page": 94,
+      "year": 1987,
+      "place": null,
+      "publisher": "MIT Press",
+      "url": "https://direct.mit.edu/books/monograph/4258/Cellular-Automata-MachinesA-New-Environment-for",
+      "doi": "10.7551/mitpress/1763.001.0001",
+      "authors": ["Tommaso Toffoli", "Norman Margolus"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "LOGICAL",
+      "LOGICAL_XOR",
+      "ONE_DIMENSIONAL"
     ]
   }
 ]

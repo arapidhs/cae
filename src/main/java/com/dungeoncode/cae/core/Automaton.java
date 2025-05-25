@@ -56,6 +56,11 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
     private ScheduledExecutorService executor;
 
     /**
+     * Current step of the automaton.
+     */
+    private int step;
+
+    /**
      * Constructs a new automaton with a single-threaded executor for periodic updates.
      */
     public Automaton() {
@@ -77,6 +82,7 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
         this.grid = (Grid<C, S>) config.get(CONF_GRID);
         this.rules = (List<Rule<C, S>>) config.get(CONF_RULES);
         this.intervalMillis = Long.parseLong(String.valueOf(config.get(CONF_INTERVAL_MILLIS)));
+        this.step = 0;
     }
 
     /**
@@ -117,11 +123,12 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
      * Rules are applied sequentially to each cell, and updated states are copied back to the grid.
      */
     public void step() {
+        step++;
         for (Rule<C, S> rule : rules) {
             for (int x = 0; x < grid.getWidth(); x++) {
                 for (int y = 0; y < grid.getHeight(); y++) {
                     C cell = grid.getCell(x, y);
-                    rule.apply(grid, cell);
+                    rule.apply(grid, cell, step);
                 }
             }
 
@@ -210,4 +217,12 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
             this.executor = Executors.newSingleThreadScheduledExecutor();
         }
     }
+
+    /**
+     * Sets automaton step to 0.
+     */
+    public void resetStep() {
+        this.step = 0;
+    }
+
 }
