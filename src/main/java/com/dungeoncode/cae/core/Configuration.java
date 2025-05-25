@@ -1,7 +1,5 @@
 package com.dungeoncode.cae.core;
 
-import com.dungeoncode.cae.core.impl.Dimension;
-
 import java.util.List;
 
 /**

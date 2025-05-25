@@ -1,6 +1,6 @@
 package com.dungeoncode.cae.view;
 
-import com.dungeoncode.cae.automa.*;
+import com.dungeoncode.cae.automa.conf.*;
 import com.dungeoncode.cae.core.*;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;

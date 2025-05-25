@@ -1,6 +1,6 @@
 package com.dungeoncode.cae.view;
 
-import com.dungeoncode.cae.automa.*;
+import com.dungeoncode.cae.automa.conf.*;
 import com.dungeoncode.cae.core.Cell;
 import com.dungeoncode.cae.core.CellState;
 import com.dungeoncode.cae.core.Configuration;
