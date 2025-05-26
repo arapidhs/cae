@@ -138,5 +138,10 @@
     "id": 32,
     "name": "One or Four Neighbors Pattern",
     "description": "A cell becomes active (black) if exactly one or all four of its von Neumann neighbors (north, south, east, west) are active, otherwise retaining its current state, forming a two-dimensional automaton. Initialized with a 3x3 square of active cells in the center, the grid produces sparse, structured patterns, as detailed in Section 5, Subsection 'Cellular Automata' of A New Kind of Science by Stephen Wolfram."
+  },
+  {
+    "id": 33,
+    "name": "Von Neumann Neighbor State Pattern",
+    "description": "A cell’s state is determined by the number of active von Neumann neighbors (0-4) and its own state, using a 10-bit code number (0-1023) to define outputs: bits 0-1 for 4 neighbors (center active/inactive), bits 2-3 for 3 neighbors, bits 4-5 for 2 neighbors, bits 6-7 for 1 neighbor, and bits 8-9 for 0 neighbors, forming a two-dimensional automaton. Initialized with a single active cell in the center, the grid produces structured patterns, as detailed in Section 5, Subsection 'Cellular Automata' of A New Kind of Science by Stephen Wolfram."
   }
 ]

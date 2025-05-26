@@ -861,5 +861,29 @@
       "TWO_DIMENSIONAL",
       "BOOK"
     ]
+  },
+  {
+    "id": 32,
+    "name": "Von Neumann Neighbor State",
+    "description": "A two-dimensional rule where a cell’s state is determined by the number of active von Neumann neighbors (0-4) and its own state, using a 10-bit code number (0-1023) to define outputs: bits 0-1 for 4 neighbors (center active/inactive), bits 2-3 for 3 neighbors, bits 4-5 for 2 neighbors, bits 6-7 for 1 neighbor, and bits 8-9 for 0 neighbors. Produces structured patterns from a single active cell.",
+    "citation": {
+      "title": "A New Kind of Science",
+      "subtitle": null,
+      "section": "5. Two Dimensions and Beyond",
+      "subsection": "Cellular Automata",
+      "page": 172,
+      "year": 2002,
+      "place": null,
+      "publisher": "Wolfram Media",
+      "url": "https://www.wolframscience.com/nks/",
+      "doi": null,
+      "authors": ["Stephen Wolfram"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "FRACTAL",
+      "TWO_DIMENSIONAL"
+    ]
   }
 ]

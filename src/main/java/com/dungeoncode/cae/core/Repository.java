@@ -106,7 +106,7 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
                     descriptors.put(descriptor.getId(), descriptor);
                 }
             } else {
-                System.out.println("No descriptors resource found at: " + resourcePath);
+                throw new IllegalArgumentException("No descriptors resource found at: " + resourcePath);
             }
         } catch (IOException e) {
             throw new RuntimeException("Error loading descriptors from " + resourcePath + ": " + e.getMessage(), e);

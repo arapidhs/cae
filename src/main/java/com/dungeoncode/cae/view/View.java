@@ -1,6 +1,8 @@
 package com.dungeoncode.cae.view;
 
 import com.dungeoncode.cae.automa.conf.ConfElementaryCA;
+import com.dungeoncode.cae.automa.conf.ConfVonNeumannNeighborState;
+import com.dungeoncode.cae.automa.rule.RuleElementaryCA;
 import com.dungeoncode.cae.core.*;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
@@ -181,6 +183,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
                 .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
         Panel mainPanel = new Panel(new LinearLayout(Direction.VERTICAL));
         Panel ecaPanel = new Panel(new LinearLayout(Direction.HORIZONTAL)); // Elementary Cellular Automata Panel
+        Panel ttlNPanel = new Panel(new LinearLayout(Direction.HORIZONTAL)); // Totalistic von Neumann panel
         Panel centerPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
         Panel buttonsPanel = new Panel(new LinearLayout(Direction.HORIZONTAL))
                 .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
@@ -203,13 +206,32 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
             ecaActionListBox.addItem(String.valueOf(i), new Runnable() {
                 @Override
                 public void run() {
+                    selectedConfId = -1;
                     selectedConfiguration = (Configuration<C, S>) new ConfElementaryCA(ruleNumber);
                     close();
                 }
             });
         }
+        if ( selectedConfiguration instanceof ConfElementaryCA){
+            final RuleElementaryCA csRule = (RuleElementaryCA) selectedConfiguration.getRules().get(0);
+            ecaActionListBox.setSelectedIndex(csRule.getRuleNumber());
+        }
+
         ecaPanel.addComponent(new Label("Rule"));
         ecaPanel.addComponent(ecaActionListBox);
+
+        Label codeLabel = new Label("Code (128-1023)");
+        TextBox codeBox = new TextBox();
+        Button ttlNButton = new Button("Run", () -> {
+            selectedConfId = -1;
+            int code = Integer.parseInt(codeBox.getText());
+            selectedConfiguration = (Configuration<C, S>) new ConfVonNeumannNeighborState(code);
+            close();
+        });
+        ttlNPanel.addComponent(codeLabel);
+        ttlNPanel.addComponent(codeBox);
+        ttlNPanel.addComponent(ttlNButton);
+
         // Configuration list
         MyRadioBoxList configList = new MyRadioBoxList();
         configList.setPreferredSize(new TerminalSize(30, 35));
@@ -259,14 +281,24 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         // Layout assembly
         mainPanel.addComponent(topPanel);
         mainPanel.addComponent(ecaPanel.withBorder(Borders.singleLineBevel("Elementary Cellular Automata")));
+        mainPanel.addComponent(ttlNPanel.withBorder(Borders.singleLineBevel("Totalistic Von Neumann Automata")));
         mainPanel.addComponent(centerPanel);
         mainPanel.addComponent(buttonsPanel);
         rootPanel.addComponent(mainPanel);
         window.setComponent(rootPanel);
 
+        if ( selectedConfiguration instanceof ConfElementaryCA){
+            System.out.println(selectedConfiguration.getClass().getName());
+            final RuleElementaryCA csRule = (RuleElementaryCA) selectedConfiguration.getRules().get(0);
+            ecaActionListBox.setSelectedIndex(csRule.getRuleNumber());
+            ecaActionListBox.takeFocus();
+        }
+        if ( selectedConfId > -1){
+            configList.takeFocus();
+        }
+
         // Launch the GUI
         textGUI.addWindowAndWait(window);
-
 
     }
 

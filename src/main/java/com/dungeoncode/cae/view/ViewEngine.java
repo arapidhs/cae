@@ -1,6 +1,8 @@
 package com.dungeoncode.cae.view;
 
 import com.dungeoncode.cae.automa.conf.*;
+import com.dungeoncode.cae.automa.rule.RuleElementaryCA;
+import com.dungeoncode.cae.automa.rule.RuleVonNeumannNeighborState;
 import com.dungeoncode.cae.core.*;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
@@ -91,6 +93,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfRandomWalk.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfOneOrFour.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfElementaryCA.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfVonNeumannNeighborState.class.getName(), rendererBoolean);
 
     }
 
@@ -805,8 +808,21 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
      * Stops the current automaton, updates the configuration, reconfigures the automaton, and restarts it.
      */
     public void startNextAutoma() {
-        int i = configurations.indexOf(configuration);
-        this.configuration = (Configuration<C, S>) configurations.get((i + 1) % configurations.size());
+        if (configuration instanceof ConfVonNeumannNeighborState){
+            RuleVonNeumannNeighborState csRule = (RuleVonNeumannNeighborState) configuration.getRules().get(0);
+            int codeNumber = csRule.getCodeNumber();
+            codeNumber = (codeNumber+1+1024)%(1024);
+            codeNumber=Math.max(codeNumber,128);
+            csRule.setCodeNumber(codeNumber);
+        } else if (configuration instanceof ConfElementaryCA){
+            RuleElementaryCA csRule = (RuleElementaryCA) configuration.getRules().get(0);
+            int ruleNumber = csRule.getRuleNumber();
+            ruleNumber = (ruleNumber+1+256)%256;
+            csRule.setRuleNumber(ruleNumber);
+        } else {
+            int i = configurations.indexOf(configuration);
+            this.configuration = (Configuration<C, S>) configurations.get((i + 1) % configurations.size());
+        }
         automaton.stop();
         configureAutoma();
         automaton.start();
@@ -817,8 +833,23 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
      * Stops the current automaton, updates the configuration, reconfigures the automaton, and restarts it.
      */
     public void startPreviousAutoma() {
-        int i = configurations.indexOf(configuration);
-        this.configuration = (Configuration<C, S>) configurations.get((i - 1 + configurations.size()) % configurations.size());
+        if (configuration instanceof ConfVonNeumannNeighborState){
+            RuleVonNeumannNeighborState csRule = (RuleVonNeumannNeighborState) configuration.getRules().get(0);
+            int codeNumber = csRule.getCodeNumber();
+            codeNumber = (codeNumber-1+1024)%(1024);
+            if (codeNumber < 128) {
+                codeNumber = 1023;
+            }
+            csRule.setCodeNumber(codeNumber);
+        } else if (configuration instanceof ConfElementaryCA){
+            RuleElementaryCA csRule = (RuleElementaryCA) configuration.getRules().get(0);
+            int ruleNumber = csRule.getRuleNumber();
+            ruleNumber = (ruleNumber-1+256)%256;
+            csRule.setRuleNumber(ruleNumber);
+        } else {
+            int i = configurations.indexOf(configuration);
+            this.configuration = (Configuration<C, S>) configurations.get((i - 1 + configurations.size()) % configurations.size());
+        }
         automaton.stop();
         configureAutoma();
         automaton.start();

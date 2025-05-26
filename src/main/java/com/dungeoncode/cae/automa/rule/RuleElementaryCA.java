@@ -19,7 +19,7 @@ public class RuleElementaryCA extends RuleOneDScroll {
     /**
      * The rule number (0-255) defining the ECA's output table.
      */
-    private final int ruleNumber;
+    private int ruleNumber;
 
     /**
      * Constructs a new elementary cellular automaton rule with the specified rule number.
@@ -59,5 +59,13 @@ public class RuleElementaryCA extends RuleOneDScroll {
 
         // Get output from rule number's binary representation (bit at index)
         return ((ruleNumber >> index) & 1) == 1;
+    }
+
+    public int getRuleNumber() {
+        return ruleNumber;
+    }
+
+    public void setRuleNumber(int ruleNumber) {
+        this.ruleNumber = ruleNumber;
     }
 }
