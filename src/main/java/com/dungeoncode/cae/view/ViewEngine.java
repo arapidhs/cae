@@ -320,6 +320,18 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
             swingTerminalFrame.setResizable(false);
             swingTerminalFrame.setLocationRelativeTo(null);
             swingTerminalFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+            // Add window listener to handle frame closing
+            swingTerminalFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    if (automaton != null && automaton.isRunning()) {
+                        automaton.stop();
+                    }
+                    closeTerminal();
+                }
+            });
+
         }
         screen = new TerminalScreen(terminal);
         screen.setCursorPosition(null);
