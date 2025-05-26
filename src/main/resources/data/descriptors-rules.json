@@ -885,5 +885,29 @@
       "FRACTAL",
       "TWO_DIMENSIONAL"
     ]
+  },
+  {
+    "id": 33,
+    "name": "Fredkin Modulo 2 Neighbor Rule",
+    "description": "A two-dimensional rule, invented by Edward Fredkin, where a cell becomes active if the sum of its active von Neumann neighbors is odd (1 or 3), or inactive if even (0, 2, or 4), producing dynamic patterns from a random initial distribution of active cells.",
+    "citation": {
+      "title": "Information Processing and Transmission in Cellular Automata",
+      "subtitle": null,
+      "section": "Previous Work",
+      "subsection": null,
+      "page": 11,
+      "year": 1971,
+      "place": null,
+      "publisher": "Massachusetts Institute of Technology",
+      "url": "https://dspace.mit.edu/handle/1721.1/12576",
+      "doi": null,
+      "authors": ["Edwin Roger Banks"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "COUNTING",
+      "TWO_DIMENSIONAL"
+    ]
   }
 ]

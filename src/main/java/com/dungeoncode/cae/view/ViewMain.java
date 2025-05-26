@@ -70,6 +70,7 @@ public class ViewMain {
             repository.addConfiguration(new ConfOneDRand());
             repository.addConfiguration(new ConfRandomWalk());
             repository.addConfiguration(new ConfOneOrFour());
+            repository.addConfiguration(new ConfFredkinModulo2());
 
             repository.loadDescriptors();
 

@@ -94,6 +94,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfOneOrFour.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfElementaryCA.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfVonNeumannNeighborState.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfFredkinModulo2.class.getName(), rendererBoolean);
 
     }
 
