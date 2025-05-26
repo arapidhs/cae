@@ -65,6 +65,7 @@ public class ViewMain {
             repository.addConfiguration(new ConfCyclicRank());
             repository.addConfiguration(new ConfOneDRand());
             repository.addConfiguration(new ConfRandomWalk());
+            repository.addConfiguration(new ConfOneOrFour());
 
             repository.loadDescriptors();
 

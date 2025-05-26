@@ -617,7 +617,9 @@
       "LOGICAL",
       "LOGICAL_AND",
       "DECAY",
-      "STABLE"
+      "STABLE",
+      "BOOK",
+      "CLASSIC"
     ]
   },
   {
@@ -645,7 +647,9 @@
       "LOGICAL_AND",
       "DECAY",
       "STABLE",
-      "RANDOM"
+      "RANDOM",
+      "BOOK",
+      "CLASSIC"
     ]
   },
   {
@@ -672,7 +676,9 @@
       "RANDOM",
       "SPIRAL",
       "STATE_MACHINE",
-      "SELF_ORGANIZING"
+      "SELF_ORGANIZING",
+      "BOOK",
+      "CLASSIC"
     ]
   },
   {
@@ -696,7 +702,9 @@
       "DETERMINISTIC",
       "LOGICAL",
       "LOGICAL_XOR",
-      "ONE_DIMENSIONAL"
+      "ONE_DIMENSIONAL",
+      "BOOK",
+      "CLASSIC"
     ]
   },
   {
@@ -720,7 +728,9 @@
       "PROBABILISTIC",
       "RANDOM",
       "ONE_DIMENSIONAL",
-      "PARTICLE_MOVEMENT"
+      "PARTICLE_MOVEMENT",
+      "BOOK",
+      "CLASSIC"
     ]
   },
   {
@@ -742,7 +752,35 @@
     },
     "tags": [
       "DETERMINISTIC",
-      "ONE_DIMENSIONAL"
+      "ONE_DIMENSIONAL",
+      "BOOK",
+      "CLASSIC"
+    ]
+  },
+  {
+    "id": 31,
+    "name": "One or Four Neighbors",
+    "description": "A two-dimensional rule where a cell becomes active (black) if exactly one or all four of its von Neumann neighbors (north, south, east, west) are active, otherwise retaining its current state, producing sparse, structured patterns from a small active seed.",
+    "citation": {
+      "title": "A New Kind of Science",
+      "subtitle": null,
+      "section": "5. Two Dimensions and Beyond",
+      "subsection": "Cellular Automata",
+      "page": 171,
+      "year": 2002,
+      "place": null,
+      "publisher": "Wolfram Media",
+      "url": "https://www.wolframscience.com/nks/",
+      "doi": null,
+      "authors": ["Stephen Wolfram"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "VON_NEUMANN",
+      "COUNTING",
+      "FRACTAL",
+      "TWO_DIMENSIONAL",
+      "BOOK"
     ]
   }
 ]
