@@ -72,7 +72,7 @@ public class RuleSafePass extends RuleBooleanNeighborCount {
         }
 
         // Echo remains unchanged (plane 1 is static)
-        grid.getNextStates()[y][x].set(newValue, currentEcho, liveSum);
+        grid.getNextStates()[y][x].set(newValue, currentEcho, countLiveMooreNeighbors(grid,x,y));
         return grid.getNextStates()[y][x];
     }
 

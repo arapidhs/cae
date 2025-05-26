@@ -55,7 +55,7 @@ public class RuleOneOrFour extends RuleBooleanNeighborCount {
         boolean isActive = liveNeighbors == 1 || liveNeighbors == 4;
 
         BooleanState[][] intermediateStates = grid.getNextStates();
-        intermediateStates[y][x].set(isActive || currentState, echo, liveNeighbors);
+        intermediateStates[y][x].set(isActive || currentState, echo, countLiveMooreNeighbors(grid,x,y));
         return intermediateStates[y][x];
     }
 }

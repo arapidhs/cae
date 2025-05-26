@@ -19,7 +19,7 @@ import java.util.Random;
  * @see BooleanCell
  * @see BooleanState
  */
-public class RuleCandleRain extends AbstractRule<BooleanCell, BooleanState> {
+public class RuleCandleRain extends RuleBooleanNeighborCount {
 
     /**
      * Random number generator for raindrop probability.
@@ -61,7 +61,7 @@ public class RuleCandleRain extends AbstractRule<BooleanCell, BooleanState> {
         boolean newValue = currentState.getValue() && !raindrop;
 
         BooleanState[][] nextStates = grid.getNextStates();
-        nextStates[y][x].set(newValue, echo, 0);
+        nextStates[y][x].set(newValue, echo, countLiveMooreNeighbors(grid,x,y));
         return nextStates[y][x];
     }
 }

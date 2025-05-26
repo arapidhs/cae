@@ -88,25 +88,12 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
     public TextCharacter render(@Nonnull BooleanState state) {
         Objects.requireNonNull(state, "State cannot be null");
         TextColor color;
-        if (state.getValue() && state.getLiveSum() > 0) {
-            color = switch (state.getLiveSum()) {
-                case 1 -> palette.liveSum1;
-                case 2 -> palette.liveSum2;
-                case 3 -> palette.liveSum3;
-                case 4 -> palette.liveSum4;
-                case 5 -> palette.liveSum5;
-                case 6 -> palette.liveSum6;
-                case 7 -> palette.liveSum7;
-                case 8 -> palette.liveSum8;
-                case 9 -> palette.liveSum9;
-                default -> palette.defaultColor;
-            };
-        } else if (state.getValue()) {
-            color = palette.activeNoLiveSum;
+        if (state.getValue()) {
+            color = palette.getLiveSumColor(state.getLiveSum());
         } else if (state.isEcho()) {
-            color = palette.inactiveEcho;
+            color = palette.getInactiveEchoColor(state.getLiveSum());
         } else {
-            color = palette.inactiveNoEcho;
+            color = palette.getInactiveNoEchoColor(state.getLiveSum());
         }
 
         // Apply color inversion if enabled
@@ -189,174 +176,429 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
      * inactive cells with/without echo, and default cases to specific {@link TextColor} values.
      */
     public enum Palette {
+        QUANTUM(
+                "Quantum",
+                "A palette inspired by quantum mechanics and particle physics. Active cells represent high-energy states with vibrant colors, echo cells show quantum tunneling effects, and inactive cells reveal the quantum vacuum state.",
+                Map.of(
+                    0, new TextColor.RGB(255, 255, 255),    // Active, live sum 0 - Pure Energy (White)
+                    1, new TextColor.RGB(255, 200, 0),      // Live sum 1 - Quark Up (Gold)
+                    2, new TextColor.RGB(0, 200, 255),      // Live sum 2 - Quark Down (Blue)
+                    3, new TextColor.RGB(255, 100, 0),      // Live sum 3 - Gluon (Orange)
+                    4, new TextColor.RGB(200, 0, 255),      // Live sum 4 - W Boson (Purple)
+                    5, new TextColor.RGB(0, 255, 200),      // Live sum 5 - Z Boson (Teal)
+                    6, new TextColor.RGB(255, 0, 200),      // Live sum 6 - Higgs (Pink)
+                    7, new TextColor.RGB(200, 255, 0),      // Live sum 7 - Photon (Lime)
+                    8, new TextColor.RGB(0, 200, 0),        // Live sum 8 - Electron (Green)
+                    9, new TextColor.RGB(255, 0, 0)         // Live sum 9 - Proton (Red)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(15, 15, 15),       // Inactive no echo, live sum 0 - Quantum Vacuum
+                    1, new TextColor.RGB(25, 20, 0),        // Live sum 1 - Virtual Up Quark
+                    2, new TextColor.RGB(0, 20, 25),        // Live sum 2 - Virtual Down Quark
+                    3, new TextColor.RGB(25, 10, 0),        // Live sum 3 - Virtual Gluon
+                    4, new TextColor.RGB(20, 0, 25),        // Live sum 4 - Virtual W Boson
+                    5, new TextColor.RGB(0, 25, 20),        // Live sum 5 - Virtual Z Boson
+                    6, new TextColor.RGB(25, 0, 20),        // Live sum 6 - Virtual Higgs
+                    7, new TextColor.RGB(20, 25, 0),        // Live sum 7 - Virtual Photon
+                    8, new TextColor.RGB(0, 20, 0),         // Live sum 8 - Virtual Electron
+                    9, new TextColor.RGB(25, 0, 0)          // Live sum 9 - Virtual Proton
+                ),
+                Map.of(
+                    0, new TextColor.RGB(128, 128, 128),    // Inactive with echo, live sum 0 - Quantum Fluctuation
+                    1, new TextColor.RGB(128, 100, 0),      // Live sum 1 - Tunneling Up Quark
+                    2, new TextColor.RGB(0, 100, 128),      // Live sum 2 - Tunneling Down Quark
+                    3, new TextColor.RGB(128, 50, 0),       // Live sum 3 - Tunneling Gluon
+                    4, new TextColor.RGB(100, 0, 128),      // Live sum 4 - Tunneling W Boson
+                    5, new TextColor.RGB(0, 128, 100),      // Live sum 5 - Tunneling Z Boson
+                    6, new TextColor.RGB(128, 0, 100),      // Live sum 6 - Tunneling Higgs
+                    7, new TextColor.RGB(100, 128, 0),      // Live sum 7 - Tunneling Photon
+                    8, new TextColor.RGB(0, 100, 0),        // Live sum 8 - Tunneling Electron
+                    9, new TextColor.RGB(128, 0, 0)         // Live sum 9 - Tunneling Proton
+                ),
+                TextColor.ANSI.BLACK          // Default - Absolute Zero
+        ),
+        AURORA(
+                "Aurora",
+                "Ethereal palette inspired by the Northern Lights, featuring flowing transitions between cool, mystical colors. Active cells shimmer with aurora colors, echo cells show fading aurora traces, and inactive cells reveal subtle aurora remnants.",
+                Map.of(
+                    0, new TextColor.RGB(0, 255, 255),    // Active, live sum 0 - Bright Cyan
+                    1, new TextColor.RGB(0, 204, 255),    // Live sum 1 - Sky Blue
+                    2, new TextColor.RGB(0, 153, 255),    // Live sum 2 - Deep Sky Blue
+                    3, new TextColor.RGB(0, 102, 255),    // Live sum 3 - Royal Blue
+                    4, new TextColor.RGB(51, 51, 255),    // Live sum 4 - Indigo
+                    5, new TextColor.RGB(102, 0, 255),    // Live sum 5 - Purple
+                    6, new TextColor.RGB(153, 0, 255),    // Live sum 6 - Violet
+                    7, new TextColor.RGB(204, 0, 255),    // Live sum 7 - Magenta
+                    8, new TextColor.RGB(255, 0, 204),    // Live sum 8 - Hot Pink
+                    9, new TextColor.RGB(255, 0, 153)     // Live sum 9 - Deep Pink
+                ),
+                Map.of(
+                    0, new TextColor.RGB(0, 25, 25),      // Inactive no echo, live sum 0
+                    1, new TextColor.RGB(0, 20, 25),      // Live sum 1
+                    2, new TextColor.RGB(0, 15, 25),      // Live sum 2
+                    3, new TextColor.RGB(0, 10, 25),      // Live sum 3
+                    4, new TextColor.RGB(5, 5, 25),       // Live sum 4
+                    5, new TextColor.RGB(10, 0, 25),      // Live sum 5
+                    6, new TextColor.RGB(15, 0, 25),      // Live sum 6
+                    7, new TextColor.RGB(20, 0, 25),      // Live sum 7
+                    8, new TextColor.RGB(25, 0, 20),      // Live sum 8
+                    9, new TextColor.RGB(25, 0, 15)       // Live sum 9
+                ),
+                Map.of(
+                    0, new TextColor.RGB(0, 128, 128),    // Inactive with echo, live sum 0
+                    1, new TextColor.RGB(0, 102, 128),    // Live sum 1
+                    2, new TextColor.RGB(0, 76, 128),     // Live sum 2
+                    3, new TextColor.RGB(0, 51, 128),     // Live sum 3
+                    4, new TextColor.RGB(25, 25, 128),    // Live sum 4
+                    5, new TextColor.RGB(51, 0, 128),     // Live sum 5
+                    6, new TextColor.RGB(76, 0, 128),     // Live sum 6
+                    7, new TextColor.RGB(102, 0, 128),    // Live sum 7
+                    8, new TextColor.RGB(128, 0, 102),    // Live sum 8
+                    9, new TextColor.RGB(128, 0, 76)      // Live sum 9
+                ),
+                TextColor.ANSI.BLACK          // Default
+        ),
+        NEON(
+                "Neon",
+                "Vibrant cyberpunk-inspired palette with neon colors. Active cells glow with bright neon colors, echo cells have a dimmed neon effect, and inactive cells show subtle neon traces.",
+                Map.of(
+                    0, new TextColor.RGB(255, 0, 255),    // Active, live sum 0 - Neon Pink
+                    1, new TextColor.RGB(0, 255, 255),    // Live sum 1 - Cyan
+                    2, new TextColor.RGB(0, 255, 128),    // Live sum 2 - Neon Green
+                    3, new TextColor.RGB(255, 255, 0),    // Live sum 3 - Yellow
+                    4, new TextColor.RGB(255, 128, 0),    // Live sum 4 - Orange
+                    5, new TextColor.RGB(255, 0, 0),      // Live sum 5 - Red
+                    6, new TextColor.RGB(255, 0, 128),    // Live sum 6 - Pink
+                    7, new TextColor.RGB(128, 0, 255),    // Live sum 7 - Purple
+                    8, new TextColor.RGB(0, 128, 255),    // Live sum 8 - Blue
+                    9, new TextColor.RGB(255, 255, 255)   // Live sum 9 - White
+                ),
+                Map.of(
+                    0, new TextColor.RGB(25, 0, 25),      // Inactive no echo, live sum 0
+                    1, new TextColor.RGB(0, 25, 25),      // Live sum 1
+                    2, new TextColor.RGB(0, 25, 12),      // Live sum 2
+                    3, new TextColor.RGB(25, 25, 0),      // Live sum 3
+                    4, new TextColor.RGB(25, 12, 0),      // Live sum 4
+                    5, new TextColor.RGB(25, 0, 0),       // Live sum 5
+                    6, new TextColor.RGB(25, 0, 12),      // Live sum 6
+                    7, new TextColor.RGB(12, 0, 25),      // Live sum 7
+                    8, new TextColor.RGB(0, 12, 25),      // Live sum 8
+                    9, new TextColor.RGB(25, 25, 25)      // Live sum 9
+                ),
+                Map.of(
+                    0, new TextColor.RGB(128, 0, 128),    // Inactive with echo, live sum 0
+                    1, new TextColor.RGB(0, 128, 128),    // Live sum 1
+                    2, new TextColor.RGB(0, 128, 64),     // Live sum 2
+                    3, new TextColor.RGB(128, 128, 0),    // Live sum 3
+                    4, new TextColor.RGB(128, 64, 0),     // Live sum 4
+                    5, new TextColor.RGB(128, 0, 0),      // Live sum 5
+                    6, new TextColor.RGB(128, 0, 64),     // Live sum 6
+                    7, new TextColor.RGB(64, 0, 128),     // Live sum 7
+                    8, new TextColor.RGB(0, 64, 128),     // Live sum 8
+                    9, new TextColor.RGB(128, 128, 128)   // Live sum 9
+                ),
+                TextColor.ANSI.BLACK          // Default
+        ),
         DEFAULT(
                 "Default Black & White",
                 "Black and white ANSI palette for minimalistic visualization.",
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 1
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 2
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 3
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 4
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 5
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 6
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 7
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 8
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 9
-                TextColor.ANSI.WHITE_BRIGHT,  // Active, live sum 0
-                TextColor.ANSI.BLACK,         // Inactive with echo, live sum 0
-                TextColor.ANSI.BLACK,         // Inactive without echo, live sum 0
+                Map.of(
+                    0, TextColor.ANSI.WHITE_BRIGHT,  // Active, live sum 0
+                    1, TextColor.ANSI.WHITE_BRIGHT,
+                    2, TextColor.ANSI.WHITE_BRIGHT,
+                    3, TextColor.ANSI.WHITE_BRIGHT,
+                    4, TextColor.ANSI.WHITE_BRIGHT,
+                    5, TextColor.ANSI.WHITE_BRIGHT,
+                    6, TextColor.ANSI.WHITE_BRIGHT,
+                    7, TextColor.ANSI.WHITE_BRIGHT,
+                    8, TextColor.ANSI.WHITE_BRIGHT,
+                    9, TextColor.ANSI.WHITE_BRIGHT
+                ),
+                Map.of(
+                    0, TextColor.ANSI.BLACK,         // Inactive no echo, live sum 0
+                    1, TextColor.ANSI.BLACK,
+                    2, TextColor.ANSI.BLACK,
+                    3, TextColor.ANSI.BLACK,
+                    4, TextColor.ANSI.BLACK,
+                    5, TextColor.ANSI.BLACK,
+                    6, TextColor.ANSI.BLACK,
+                    7, TextColor.ANSI.BLACK,
+                    8, TextColor.ANSI.BLACK,
+                    9, TextColor.ANSI.BLACK
+                ),
+                Map.of(
+                    0, TextColor.ANSI.BLACK,         // Inactive with echo, live sum 0
+                    1, TextColor.ANSI.BLACK,
+                    2, TextColor.ANSI.BLACK,
+                    3, TextColor.ANSI.BLACK,
+                    4, TextColor.ANSI.BLACK,
+                    5, TextColor.ANSI.BLACK,
+                    6, TextColor.ANSI.BLACK,
+                    7, TextColor.ANSI.BLACK,
+                    8, TextColor.ANSI.BLACK,
+                    9, TextColor.ANSI.BLACK
+                ),
                 TextColor.ANSI.BLACK          // Default
         ),
         GREYSCALE(
                 "Greyscale",
                 "Greyscale palette for subtle, monochromatic visualization.",
-                TextColor.ANSI.WHITE,         // Live sum 1
-                TextColor.ANSI.WHITE,         // Live sum 2
-                new TextColor.RGB(212, 212, 212),  // Live sum 3
-                new TextColor.RGB(212, 212, 212),  // Live sum 4
-                new TextColor.RGB(212, 212, 212),  // Live sum 5
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 6
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 7
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 8
-                TextColor.ANSI.WHITE_BRIGHT,  // Live sum 9
-                TextColor.ANSI.WHITE,         // Active, live sum 0
-                TextColor.ANSI.BLACK_BRIGHT,  // Inactive with echo, live sum 0
-                new TextColor.RGB(16, 16, 16),     // Inactive without echo, live sum 0
+                Map.of(
+                    0, TextColor.ANSI.WHITE,         // Active, live sum 0
+                    1, TextColor.ANSI.WHITE,
+                    2, TextColor.ANSI.WHITE,
+                    3, new TextColor.RGB(212, 212, 212),
+                    4, new TextColor.RGB(212, 212, 212),
+                    5, new TextColor.RGB(212, 212, 212),
+                    6, TextColor.ANSI.WHITE_BRIGHT,
+                    7, TextColor.ANSI.WHITE_BRIGHT,
+                    8, TextColor.ANSI.WHITE_BRIGHT,
+                    9, TextColor.ANSI.WHITE_BRIGHT
+                ),
+                Map.of(
+                    0, new TextColor.RGB(16, 16, 16),     // Inactive no echo, live sum 0
+                    1, new TextColor.RGB(16, 16, 16),
+                    2, new TextColor.RGB(16, 16, 16),
+                    3, new TextColor.RGB(32, 32, 32),
+                    4, new TextColor.RGB(32, 32, 32),
+                    5, new TextColor.RGB(32, 32, 32),
+                    6, new TextColor.RGB(48, 48, 48),
+                    7, new TextColor.RGB(48, 48, 48),
+                    8, new TextColor.RGB(48, 48, 48),
+                    9, new TextColor.RGB(64, 64, 64)
+                ),
+                Map.of(
+                    0, TextColor.ANSI.BLACK_BRIGHT,  // Inactive with echo, live sum 0
+                    1, TextColor.ANSI.BLACK_BRIGHT,
+                    2, TextColor.ANSI.BLACK_BRIGHT,
+                    3, new TextColor.RGB(64, 64, 64),
+                    4, new TextColor.RGB(64, 64, 64),
+                    5, new TextColor.RGB(64, 64, 64),
+                    6, new TextColor.RGB(96, 96, 96),
+                    7, new TextColor.RGB(96, 96, 96),
+                    8, new TextColor.RGB(96, 96, 96),
+                    9, new TextColor.RGB(128, 128, 128)
+                ),
                 TextColor.ANSI.BLACK          // Default
         ),
         ANSI(
                 "ANSI",
                 "Vibrant ANSI palette with blue, cyan, green, yellow, and red for live sums, green for active cells with no neighbors, blue for recently inactive cells, and white for long-inactive or default cells.",
-                TextColor.ANSI.BLUE,          // Live sum 1
-                TextColor.ANSI.CYAN,          // Live sum 2
-                TextColor.ANSI.GREEN,         // Live sum 3
-                TextColor.ANSI.YELLOW_BRIGHT, // Live sum 4
-                TextColor.ANSI.RED,           // Live sum 5
-                TextColor.ANSI.RED,           // Live sum 6
-                TextColor.ANSI.RED,           // Live sum 7
-                TextColor.ANSI.RED,           // Live sum 8
-                TextColor.ANSI.RED,           // Live sum 9
-                TextColor.ANSI.GREEN,         // Active, live sum 0
-                TextColor.ANSI.BLUE,          // Inactive with echo, live sum 0
-                TextColor.ANSI.WHITE_BRIGHT,  // Inactive without echo, live sum 0
+                Map.of(
+                    0, TextColor.ANSI.MAGENTA,         // Active, live sum 0
+                    1, TextColor.ANSI.BLUE,
+                    2, TextColor.ANSI.CYAN,
+                    3, TextColor.ANSI.GREEN,
+                    4, TextColor.ANSI.YELLOW,
+                    5, TextColor.ANSI.RED_BRIGHT,
+                    6, TextColor.ANSI.RED,
+                    7, TextColor.ANSI.RED,
+                    8, TextColor.ANSI.RED,
+                    9, TextColor.ANSI.RED
+                ),
+                Map.of(
+                    0, TextColor.ANSI.BLACK,         // Inactive no echo, live sum 0
+                    1, TextColor.ANSI.BLACK,
+                    2, TextColor.ANSI.BLACK,
+                    3, TextColor.ANSI.BLACK,
+                    4, TextColor.ANSI.BLACK,
+                    5, TextColor.ANSI.BLACK,
+                    6, TextColor.ANSI.BLACK,
+                    7, TextColor.ANSI.BLACK,
+                    8, TextColor.ANSI.BLACK,
+                    9, TextColor.ANSI.BLACK
+                ),
+                Map.of(
+                    0, TextColor.ANSI.BLACK,          // Inactive with echo, live sum 0
+                    1, TextColor.ANSI.BLACK,
+                    2, TextColor.ANSI.BLACK,
+                    3, TextColor.ANSI.BLACK,
+                    4, TextColor.ANSI.BLACK,
+                    5, TextColor.ANSI.BLACK_BRIGHT,
+                    6, TextColor.ANSI.BLACK_BRIGHT,
+                    7, TextColor.ANSI.BLACK_BRIGHT,
+                    8, TextColor.ANSI.BLACK_BRIGHT,
+                    9, TextColor.ANSI.BLACK_BRIGHT
+                ),
                 TextColor.ANSI.WHITE_BRIGHT   // Default
         ),
         BLUE_GRADIENT(
                 "Blue Gradient",
                 "Gradient of blue shades from dark to light for live sums, cyan for active cells with no neighbors, darker blue for recently inactive cells, and dark blue for long-inactive cells.",
-                new TextColor.RGB(0, 0, 51),      // Live sum 1
-                new TextColor.RGB(0, 25, 76),     // Live sum 2
-                new TextColor.RGB(0, 51, 102),    // Live sum 3
-                new TextColor.RGB(0, 76, 127),    // Live sum 4
-                new TextColor.RGB(0, 102, 153),   // Live sum 5
-                new TextColor.RGB(0, 127, 178),   // Live sum 6
-                new TextColor.RGB(0, 153, 204),   // Live sum 7
-                new TextColor.RGB(25, 178, 229),  // Live sum 8
-                new TextColor.RGB(51, 204, 255),  // Live sum 9
-                new TextColor.RGB(0, 153, 204),   // Active, live sum 0
-                new TextColor.RGB(0, 51, 153),    // Inactive with echo, live sum 0
-                new TextColor.RGB(0, 25, 76),     // Inactive without echo, live sum 0
+                Map.of(
+                    0, new TextColor.RGB(0, 153, 204),   // Active, live sum 0
+                    1, new TextColor.RGB(0, 0, 51),
+                    2, new TextColor.RGB(0, 25, 76),
+                    3, new TextColor.RGB(0, 51, 102),
+                    4, new TextColor.RGB(0, 76, 127),
+                    5, new TextColor.RGB(0, 102, 153),
+                    6, new TextColor.RGB(0, 127, 178),
+                    7, new TextColor.RGB(0, 153, 204),
+                    8, new TextColor.RGB(25, 178, 229),
+                    9, new TextColor.RGB(51, 204, 255)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(0, 25, 76),     // Inactive no echo, live sum 0
+                    1, new TextColor.RGB(0, 0, 25),
+                    2, new TextColor.RGB(0, 12, 38),
+                    3, new TextColor.RGB(0, 25, 51),
+                    4, new TextColor.RGB(0, 38, 64),
+                    5, new TextColor.RGB(0, 51, 76),
+                    6, new TextColor.RGB(0, 64, 89),
+                    7, new TextColor.RGB(0, 76, 102),
+                    8, new TextColor.RGB(12, 89, 115),
+                    9, new TextColor.RGB(25, 102, 128)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(0, 51, 153),    // Inactive with echo, live sum 0
+                    1, new TextColor.RGB(0, 25, 102),
+                    2, new TextColor.RGB(0, 38, 115),
+                    3, new TextColor.RGB(0, 51, 128),
+                    4, new TextColor.RGB(0, 64, 140),
+                    5, new TextColor.RGB(0, 77, 153),
+                    6, new TextColor.RGB(0, 89, 166),
+                    7, new TextColor.RGB(0, 102, 179),
+                    8, new TextColor.RGB(25, 115, 192),
+                    9, new TextColor.RGB(51, 128, 204)
+                ),
                 TextColor.ANSI.WHITE          // Default
         ),
         PURPLE_GRADIENT(
                 "Purple Gradient",
                 "Gradient of purple shades from dark to light for live sums, magenta for active cells with no neighbors, deep purple for recently inactive cells, and dark purple for long-inactive cells.",
-                new TextColor.RGB(51, 0, 102),    // Live sum 1
-                new TextColor.RGB(76, 25, 127),   // Live sum 2
-                new TextColor.RGB(102, 51, 153),  // Live sum 3
-                new TextColor.RGB(127, 76, 178),  // Live sum 4
-                new TextColor.RGB(153, 102, 204), // Live sum 5
-                new TextColor.RGB(178, 127, 229), // Live sum 6
-                new TextColor.RGB(204, 153, 255), // Live sum 7
-                new TextColor.RGB(229, 178, 255), // Live sum 8
-                new TextColor.RGB(255, 204, 255), // Live sum 9
-                new TextColor.RGB(204, 0, 204),   // Active, live sum 0
-                new TextColor.RGB(102, 0, 153),   // Inactive with echo, live sum 0
-                new TextColor.RGB(51, 0, 102),    // Inactive without echo, live sum 0
+                Map.of(
+                    0, new TextColor.RGB(204, 0, 204),   // Active, live sum 0
+                    1, new TextColor.RGB(51, 0, 102),
+                    2, new TextColor.RGB(76, 25, 127),
+                    3, new TextColor.RGB(102, 51, 153),
+                    4, new TextColor.RGB(127, 76, 178),
+                    5, new TextColor.RGB(153, 102, 204),
+                    6, new TextColor.RGB(178, 127, 229),
+                    7, new TextColor.RGB(204, 153, 255),
+                    8, new TextColor.RGB(229, 178, 255),
+                    9, new TextColor.RGB(255, 204, 255)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(51, 0, 102),    // Inactive no echo, live sum 0
+                    1, new TextColor.RGB(25, 0, 51),
+                    2, new TextColor.RGB(38, 12, 64),
+                    3, new TextColor.RGB(51, 25, 77),
+                    4, new TextColor.RGB(64, 38, 89),
+                    5, new TextColor.RGB(77, 51, 102),
+                    6, new TextColor.RGB(89, 64, 115),
+                    7, new TextColor.RGB(102, 77, 128),
+                    8, new TextColor.RGB(115, 89, 140),
+                    9, new TextColor.RGB(128, 102, 153)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(102, 0, 153),   // Inactive with echo, live sum 0
+                    1, new TextColor.RGB(51, 0, 102),
+                    2, new TextColor.RGB(64, 12, 115),
+                    3, new TextColor.RGB(77, 25, 128),
+                    4, new TextColor.RGB(89, 38, 140),
+                    5, new TextColor.RGB(102, 51, 153),
+                    6, new TextColor.RGB(115, 64, 166),
+                    7, new TextColor.RGB(128, 77, 179),
+                    8, new TextColor.RGB(140, 89, 192),
+                    9, new TextColor.RGB(153, 102, 204)
+                ),
                 TextColor.ANSI.WHITE          // Default
         ),
         FIRE_GRADIENT(
                 "Fire Gradient",
                 "Fiery palette from deep red to yellow for live sums, bright orange for active cells with no neighbors, dark red for recently inactive cells, and charcoal gray for long-inactive cells.",
-                new TextColor.RGB(51, 0, 0),       // Live sum 1
-                new TextColor.RGB(102, 0, 0),      // Live sum 2
-                new TextColor.RGB(153, 0, 0),      // Live sum 3
-                new TextColor.RGB(204, 51, 0),     // Live sum 4
-                new TextColor.RGB(255, 102, 0),    // Live sum 5
-                new TextColor.RGB(255, 153, 0),    // Live sum 6
-                new TextColor.RGB(255, 178, 51),   // Live sum 7
-                new TextColor.RGB(255, 204, 102),  // Live sum 8
-                new TextColor.RGB(255, 255, 153),  // Live sum 9
-                new TextColor.RGB(255, 128, 0),    // Active, live sum 0
-                new TextColor.RGB(128, 0, 0),      // Inactive with echo, live sum 0
-                new TextColor.RGB(64, 64, 64),     // Inactive without echo, live sum 0
+                Map.of(
+                    0, new TextColor.RGB(255, 128, 0),    // Active, live sum 0
+                    1, new TextColor.RGB(51, 0, 0),
+                    2, new TextColor.RGB(102, 0, 0),
+                    3, new TextColor.RGB(153, 0, 0),
+                    4, new TextColor.RGB(204, 51, 0),
+                    5, new TextColor.RGB(255, 102, 0),
+                    6, new TextColor.RGB(255, 153, 0),
+                    7, new TextColor.RGB(255, 178, 51),
+                    8, new TextColor.RGB(255, 204, 102),
+                    9, new TextColor.RGB(255, 255, 153)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(64, 64, 64),     // Inactive no echo, live sum 0
+                    1, new TextColor.RGB(25, 0, 0),
+                    2, new TextColor.RGB(51, 0, 0),
+                    3, new TextColor.RGB(77, 0, 0),
+                    4, new TextColor.RGB(102, 25, 0),
+                    5, new TextColor.RGB(128, 51, 0),
+                    6, new TextColor.RGB(153, 77, 0),
+                    7, new TextColor.RGB(178, 102, 25),
+                    8, new TextColor.RGB(204, 128, 51),
+                    9, new TextColor.RGB(229, 153, 77)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(128, 0, 0),      // Inactive with echo, live sum 0
+                    1, new TextColor.RGB(51, 0, 0),
+                    2, new TextColor.RGB(77, 0, 0),
+                    3, new TextColor.RGB(102, 0, 0),
+                    4, new TextColor.RGB(128, 25, 0),
+                    5, new TextColor.RGB(153, 51, 0),
+                    6, new TextColor.RGB(179, 77, 0),
+                    7, new TextColor.RGB(204, 102, 25),
+                    8, new TextColor.RGB(229, 128, 51),
+                    9, new TextColor.RGB(255, 153, 77)
+                ),
                 TextColor.ANSI.WHITE           // Default
         ),
         EARTH_TONES(
                 "Earth Tones",
                 "Earthy palette from deep brown to pale sand for live sums, forest green for active cells with no neighbors, terracotta for recently inactive cells, and dark soil for long-inactive cells.",
-                new TextColor.RGB(59, 31, 24),     // Live sum 1
-                new TextColor.RGB(87, 46, 28),     // Live sum 2
-                new TextColor.RGB(120, 60, 30),    // Live sum 3
-                new TextColor.RGB(150, 82, 45),    // Live sum 4
-                new TextColor.RGB(179, 106, 51),   // Live sum 5
-                new TextColor.RGB(204, 133, 63),   // Live sum 6
-                new TextColor.RGB(224, 163, 97),   // Live sum 7
-                new TextColor.RGB(237, 195, 137),  // Live sum 8
-                new TextColor.RGB(245, 222, 179),  // Live sum 9
-                new TextColor.RGB(34, 102, 51),    // Active, live sum 0
-                new TextColor.RGB(150, 82, 45),    // Inactive with echo, live sum 0
-                new TextColor.RGB(35, 18, 11),     // Inactive without echo, live sum 0
+                Map.of(
+                    0, new TextColor.RGB(34, 102, 51),    // Active, live sum 0
+                    1, new TextColor.RGB(59, 31, 24),
+                    2, new TextColor.RGB(87, 46, 28),
+                    3, new TextColor.RGB(120, 60, 30),
+                    4, new TextColor.RGB(150, 82, 45),
+                    5, new TextColor.RGB(179, 106, 51),
+                    6, new TextColor.RGB(204, 133, 63),
+                    7, new TextColor.RGB(224, 163, 97),
+                    8, new TextColor.RGB(237, 195, 137),
+                    9, new TextColor.RGB(245, 222, 179)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(35, 18, 11),     // Inactive no echo, live sum 0
+                    1, new TextColor.RGB(29, 15, 12),
+                    2, new TextColor.RGB(43, 23, 14),
+                    3, new TextColor.RGB(60, 30, 15),
+                    4, new TextColor.RGB(75, 41, 22),
+                    5, new TextColor.RGB(89, 53, 25),
+                    6, new TextColor.RGB(102, 66, 31),
+                    7, new TextColor.RGB(112, 81, 48),
+                    8, new TextColor.RGB(118, 97, 68),
+                    9, new TextColor.RGB(122, 111, 89)
+                ),
+                Map.of(
+                    0, new TextColor.RGB(150, 82, 45),    // Inactive with echo, live sum 0
+                    1, new TextColor.RGB(89, 46, 36),
+                    2, new TextColor.RGB(115, 69, 42),
+                    3, new TextColor.RGB(140, 90, 45),
+                    4, new TextColor.RGB(165, 112, 67),
+                    5, new TextColor.RGB(191, 134, 77),
+                    6, new TextColor.RGB(204, 156, 95),
+                    7, new TextColor.RGB(214, 179, 125),
+                    8, new TextColor.RGB(224, 202, 155),
+                    9, new TextColor.RGB(234, 225, 185)
+                ),
                 TextColor.ANSI.WHITE           // Default
         );
 
         /**
-         * Color for live sum 1.
+         * Map of live sum values to their corresponding colors for active cells.
          */
-        final TextColor liveSum1;
+        private final Map<Integer, TextColor> liveSumColors;
         /**
-         * Color for live sum 2.
+         * Map of live sum values to their corresponding colors for inactive cells with no echo.
          */
-        final TextColor liveSum2;
+        private final Map<Integer, TextColor> inactiveNoEchoColors;
         /**
-         * Color for live sum 3.
+         * Map of live sum values to their corresponding colors for inactive cells with echo.
          */
-        final TextColor liveSum3;
-        /**
-         * Color for live sum 4.
-         */
-        final TextColor liveSum4;
-        /**
-         * Color for live sum 5.
-         */
-        final TextColor liveSum5;
-        /**
-         * Color for live sum 6.
-         */
-        final TextColor liveSum6;
-        /**
-         * Color for live sum 7.
-         */
-        final TextColor liveSum7;
-        /**
-         * Color for live sum 8.
-         */
-        final TextColor liveSum8;
-        /**
-         * Color for live sum 9.
-         */
-        final TextColor liveSum9;
-        /**
-         * Color for active cells with live sum 0.
-         */
-        final TextColor activeNoLiveSum;
-        /**
-         * Color for inactive cells with echo and live sum 0.
-         */
-        final TextColor inactiveEcho;
-        /**
-         * Color for inactive cells without echo and live sum 0.
-         */
-        final TextColor inactiveNoEcho;
+        private final Map<Integer, TextColor> inactiveEchoColors;
         /**
          * Default color for unexpected cases.
          */
@@ -371,43 +613,54 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
         private final String description;
 
         /**
-         * Constructs a palette with the specified name, description, and colors for live sums (1–9), active/inactive states, and default cases.
+         * Constructs a palette with the specified name, description, and colors for live sums (0–9), active/inactive states, and default cases.
          *
-         * @param name            the user-friendly name
-         * @param description     the description of the palette's style
-         * @param liveSum1        color for live sum 1
-         * @param liveSum2        color for live sum 2
-         * @param liveSum3        color for live sum 3
-         * @param liveSum4        color for live sum 4
-         * @param liveSum5        color for live sum 5
-         * @param liveSum6        color for live sum 6
-         * @param liveSum7        color for live sum 7
-         * @param liveSum8        color for live sum 8
-         * @param liveSum9        color for live sum 9
-         * @param activeNoLiveSum color for active cells with live sum 0
-         * @param inactiveEcho    color for inactive cells with echo, live sum 0
-         * @param inactiveNoEcho  color for inactive cells without echo, live sum 0
-         * @param defaultColor    default color for unexpected cases
+         * @param name                the user-friendly name
+         * @param description         the description of the palette's style
+         * @param liveSumColors       map of live sum values to their corresponding colors for active cells
+         * @param inactiveNoEchoColors map of live sum values to their corresponding colors for inactive cells with no echo
+         * @param inactiveEchoColors  map of live sum values to their corresponding colors for inactive cells with echo
+         * @param defaultColor        default color for unexpected cases
          */
-        Palette(String name, String description, TextColor liveSum1, TextColor liveSum2, TextColor liveSum3,
-                TextColor liveSum4, TextColor liveSum5, TextColor liveSum6, TextColor liveSum7, TextColor liveSum8,
-                TextColor liveSum9, TextColor activeNoLiveSum, TextColor inactiveEcho,
-                TextColor inactiveNoEcho, TextColor defaultColor) {
+        Palette(String name, String description, Map<Integer, TextColor> liveSumColors,
+                Map<Integer, TextColor> inactiveNoEchoColors, Map<Integer, TextColor> inactiveEchoColors,
+                TextColor defaultColor) {
             this.name = name;
             this.description = description;
-            this.liveSum1 = liveSum1;
-            this.liveSum2 = liveSum2;
-            this.liveSum3 = liveSum3;
-            this.liveSum4 = liveSum4;
-            this.liveSum5 = liveSum5;
-            this.liveSum6 = liveSum6;
-            this.liveSum7 = liveSum7;
-            this.liveSum8 = liveSum8;
-            this.liveSum9 = liveSum9;
-            this.activeNoLiveSum = activeNoLiveSum;
-            this.inactiveEcho = inactiveEcho;
-            this.inactiveNoEcho = inactiveNoEcho;
+            this.liveSumColors = liveSumColors;
+            this.inactiveNoEchoColors = inactiveNoEchoColors;
+            this.inactiveEchoColors = inactiveEchoColors;
             this.defaultColor = defaultColor;
+        }
+
+        /**
+         * Returns the color for a given live sum value.
+         *
+         * @param liveSum the live sum value (0-9)
+         * @return the corresponding color, or defaultColor if not found
+         */
+        public TextColor getLiveSumColor(int liveSum) {
+            return liveSumColors.getOrDefault(liveSum, defaultColor);
+        }
+
+        /**
+         * Returns the color for a given live sum value for inactive cells with no echo.
+         *
+         * @param liveSum the live sum value (0-9)
+         * @return the corresponding color, or defaultColor if not found
+         */
+        public TextColor getInactiveNoEchoColor(int liveSum) {
+            return inactiveNoEchoColors.getOrDefault(liveSum, defaultColor);
+        }
+
+        /**
+         * Returns the color for a given live sum value for inactive cells with echo.
+         *
+         * @param liveSum the live sum value (0-9)
+         * @return the corresponding color, or defaultColor if not found
+         */
+        public TextColor getInactiveEchoColor(int liveSum) {
+            return inactiveEchoColors.getOrDefault(liveSum, defaultColor);
         }
 
         /**

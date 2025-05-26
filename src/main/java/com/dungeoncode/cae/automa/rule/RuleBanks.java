@@ -53,7 +53,7 @@ public class RuleBanks extends RuleBooleanNeighborCount {
         boolean echo = currentState;
 
         // Count live neighbors in the von Neumann neighborhood (excluding the center)
-        int liveNeighbors = countLiveVonNeumannNeighbors(grid, x, y);
+        int activeNeighbors = countLiveVonNeumannNeighbors(grid, x, y);
 
         // Check north and south neighbors
         int nxNorth = x;
@@ -65,7 +65,7 @@ public class RuleBanks extends RuleBooleanNeighborCount {
 
         // Handle the case of exactly 2 live neighbors: check for corner or straight line
         boolean nextState = currentState;
-        if (liveNeighbors == 2) {
+        if (activeNeighbors == 2) {
             // Check west and east neighbors
             int nxWest = (x - 1 + width) % width;
             int nyWest = y;
@@ -79,11 +79,12 @@ public class RuleBanks extends RuleBooleanNeighborCount {
                 // Straight line (e.g., north-south or west-east): fill pocket (cell becomes active)
                 nextState = northState && southState || eastState && westState; // Straight line (e.g., north-south or west-east): fill pocket (cell becomes active)
             }
-        } else if (liveNeighbors > 2) {
+        } else if (activeNeighbors > 2) {
             nextState = true; // Corner configuration: erase corner (cell becomes inactive)
         }
 
-        grid.getNextStates()[y][x].set(nextState, echo, liveNeighbors);
+        int liveSum = countLiveMooreNeighbors(grid,x,y);
+        grid.getNextStates()[y][x].set(nextState, echo, liveSum);
         return grid.getNextStates()[y][x];
     }
 }

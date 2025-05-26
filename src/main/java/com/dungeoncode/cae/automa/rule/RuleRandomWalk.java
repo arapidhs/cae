@@ -46,7 +46,7 @@ public class RuleRandomWalk extends RuleOneDScroll {
     protected boolean computeNewState(Grid<BooleanCell, BooleanState> grid, int x, int y, int step) {
 
         int width = grid.getWidth();
-        boolean currentValue = grid.getCell((x + width) % width, y).getState().getValue();
+        boolean currentValue = grid.getCell((x + width) % width, y-1).getState().getValue();
         if (currentValue) {
             return false;
         }

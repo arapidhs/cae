@@ -15,7 +15,7 @@ import com.dungeoncode.cae.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public class RuleTimeTunnel extends AbstractRule<BooleanCell, BooleanState> {
+public class RuleTimeTunnel extends RuleBooleanNeighborCount {
 
     public RuleTimeTunnel() {
         super(17);
@@ -42,38 +42,39 @@ public class RuleTimeTunnel extends AbstractRule<BooleanCell, BooleanState> {
         BooleanState currentState = cell.getState();
 
         // Compute sum of live cells in von Neumann neighborhood (center + 4 orthogonal cells)
-        int liveSum = currentState.getValue() ? 1 : 0;
+        int activeSum = currentState.getValue() ? 1 : 0;
         // North neighbor
         int nxNorth = x;
         int nyNorth = (y - 1 + height) % height;
         if (grid.getCell(nxNorth, nyNorth).getState().getValue()) {
-            liveSum++;
+            activeSum++;
         }
         // South neighbor
         int nxSouth = x;
         int nySouth = (y + 1) % height;
         if (grid.getCell(nxSouth, nySouth).getState().getValue()) {
-            liveSum++;
+            activeSum++;
         }
         // West neighbor
         int nxWest = (x - 1 + width) % width;
         int nyWest = y;
         if (grid.getCell(nxWest, nyWest).getState().getValue()) {
-            liveSum++;
+            activeSum++;
         }
         // East neighbor
         int nxEast = (x + 1) % width;
         int nyEast = y;
         if (grid.getCell(nxEast, nyEast).getState().getValue()) {
-            liveSum++;
+            activeSum++;
         }
 
         // Apply decision table: return 1 if not all cells are the same (sum 1 to 4), 0 otherwise
-        boolean decision = liveSum >= 1 && liveSum <= 4;
+        boolean decision = activeSum >= 1 && activeSum <= 4;
 
         // XOR the decision table result with the previous state (echo)
         boolean newState = decision ^ currentState.isEcho();
 
+        int liveSum = countLiveMooreNeighbors(grid,x,y);
         grid.getNextStates()[y][x].set(newState, currentState.getValue(), liveSum);
         return grid.getNextStates()[y][x];
     }

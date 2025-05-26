@@ -57,7 +57,6 @@ public class RuleVonNeumannNeighborState extends RuleBooleanNeighborCount {
         int x = cell.getPosition().getX();
         int y = cell.getPosition().getY();
         boolean currentState = cell.getState().getValue();
-        boolean echo = cell.getState().isEcho();
 
         // Count active neighbors in the von Neumann neighborhood (north, south, east, west)
         int activeNeighbors = countLiveVonNeumannNeighbors(grid, x, y);

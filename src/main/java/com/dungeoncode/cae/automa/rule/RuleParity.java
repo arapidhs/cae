@@ -16,7 +16,7 @@ import com.dungeoncode.cae.core.impl.BooleanState;
  * @see Rule
  * @see BooleanState
  */
-public class RuleParity extends AbstractRule<BooleanCell, BooleanState> {
+public class RuleParity extends RuleBooleanNeighborCount {
 
     public RuleParity() {
         super(4);
@@ -53,7 +53,7 @@ public class RuleParity extends AbstractRule<BooleanCell, BooleanState> {
         boolean east = grid.getCell((x + 1) % width, y).getState().getValue();
 
         // Compute the sum of live (true) states
-        int liveSum = (center ? 1 : 0) + (north ? 1 : 0) + (south ? 1 : 0) + (west ? 1 : 0) + (east ? 1 : 0);
+        int liveSum = countLiveMooreNeighbors(grid,x,y);
 
         // Compute parity using XOR (odd number of true values yields true)
         boolean newState = center ^ north ^ south ^ west ^ east;

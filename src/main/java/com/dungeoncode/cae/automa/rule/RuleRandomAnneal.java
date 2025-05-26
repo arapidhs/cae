@@ -77,7 +77,7 @@ public class RuleRandomAnneal extends RuleBooleanNeighborCount {
         }
 
         // Echo tracks the previous state
-        grid.getNextStates()[y][x].set(newValue, currentState.getValue(), liveSum);
+        grid.getNextStates()[y][x].set(newValue, currentState.getValue(), countLiveMooreNeighbors(grid,x,y));
         return grid.getNextStates()[y][x];
     }
 
