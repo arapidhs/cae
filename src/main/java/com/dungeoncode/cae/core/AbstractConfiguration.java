@@ -28,7 +28,7 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
     private final List<Rule<C, S>> rules;
 
     /**
-     * The dimension of the configuration..
+     * The dimension of the configuration.
      */
     private final Dimension dimension;
 

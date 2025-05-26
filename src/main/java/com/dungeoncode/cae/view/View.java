@@ -1,5 +1,6 @@
 package com.dungeoncode.cae.view;
 
+import com.dungeoncode.cae.automa.conf.ConfElementaryCA;
 import com.dungeoncode.cae.core.*;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
@@ -71,6 +72,11 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
      * The index of the currently selected configuration, or -1 if none selected.
      */
     private int selectedConfId;
+
+    /**
+     * The selected configuration to run.
+     */
+    private Configuration<C,S> selectedConfiguration;
 
     /**
      * The Lanterna terminal screen for rendering the UI.
@@ -174,6 +180,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         Panel topPanel = new Panel(new LinearLayout(Direction.VERTICAL))
                 .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
         Panel mainPanel = new Panel(new LinearLayout(Direction.VERTICAL));
+        Panel ecaPanel = new Panel(new LinearLayout(Direction.HORIZONTAL)); // Elementary Cellular Automata Panel
         Panel centerPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
         Panel buttonsPanel = new Panel(new LinearLayout(Direction.HORIZONTAL))
                 .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
@@ -187,6 +194,22 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         topPanel.addComponent(new Label("Select an automaton and press Start to begin.").addStyle(SGR.ITALIC)
                 .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Beginning)));
 
+        // Elementary Cellular Automata Panel
+        ActionListBox ecaActionListBox = new ActionListBox();
+        ecaActionListBox.setSize(new TerminalSize(5,5));
+        ecaActionListBox.setPreferredSize(new TerminalSize(5,5));
+        for ( int i=0;i<256;i++){
+            int ruleNumber = i;
+            ecaActionListBox.addItem(String.valueOf(i), new Runnable() {
+                @Override
+                public void run() {
+                    selectedConfiguration = (Configuration<C, S>) new ConfElementaryCA(ruleNumber);
+                    close();
+                }
+            });
+        }
+        ecaPanel.addComponent(new Label("Rule"));
+        ecaPanel.addComponent(ecaActionListBox);
         // Configuration list
         MyRadioBoxList configList = new MyRadioBoxList();
         configList.setPreferredSize(new TerminalSize(30, 35));
@@ -235,6 +258,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
         // Layout assembly
         mainPanel.addComponent(topPanel);
+        mainPanel.addComponent(ecaPanel.withBorder(Borders.singleLineBevel("Elementary Cellular Automata")));
         mainPanel.addComponent(centerPanel);
         mainPanel.addComponent(buttonsPanel);
         rootPanel.addComponent(mainPanel);
@@ -401,6 +425,8 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
     public Configuration<C, S> getSelectedConfiguration() {
         if (selectedConfId > -1 && selectedConfId < repository.getConfigurations().size()) {
             return repository.getConfigurations().get(selectedConfId);
+        } else if ( selectedConfiguration != null ) {
+            return selectedConfiguration;
         }
         return null;
     }

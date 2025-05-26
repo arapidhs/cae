@@ -722,5 +722,27 @@
       "ONE_DIMENSIONAL",
       "PARTICLE_MOVEMENT"
     ]
+  },
+  {
+    "id": 30,
+    "name": "Elementary Cellular Automaton",
+    "description": "A one-dimensional rule where a cell's state based on the left, center, and right neighbors, using a rule number (0-255) whose binary representation defines outputs for all 8 neighborhood configurations. The 2D grid stores spacetime history, scrolling up when full with toroidal left/right wrapping.",
+    "citation": {
+      "title": "A New Kind of Science",
+      "subtitle": null,
+      "section": "2. The Crucial Experiment",
+      "subsection": "How Do Simple Programs Behave?",
+      "page": 23,
+      "year": 2002,
+      "place": null,
+      "publisher": "Wolfram Media",
+      "url": "https://www.wolframscience.com/nks/",
+      "doi": null,
+      "authors": ["Stephen Wolfram"]
+    },
+    "tags": [
+      "DETERMINISTIC",
+      "ONE_DIMENSIONAL"
+    ]
   }
 ]

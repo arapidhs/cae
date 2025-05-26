@@ -21,7 +21,7 @@ public class ConfRandomWalk extends AbstractConfiguration<BooleanCell, BooleanSt
      * Constructs a new RANDOM-WALK configuration with a random initializer for row 0 (5% density for all regions).
      */
     public ConfRandomWalk() {
-        super(30, new InitOneDRandom(0.10, 0.25, 0.05),
+        super(30, new InitOneDRandom(0.10, 0.25, 0.05, false),
                 List.of(new RuleRandomWalk()), Dimension.ONE);
     }
 }

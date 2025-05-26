@@ -21,7 +21,7 @@ public class ConfOneDRand extends AbstractConfiguration<BooleanCell, BooleanStat
      * Constructs a new ONED-RAND configuration with a random initializer for row 0 (default 50% density for all regions).
      */
     public ConfOneDRand() {
-        super(28, new InitOneDRandom(0.5, 0.5, 0.5),
+        super(28, new InitOneDRandom(0.5, 0.5, 0.5, false),
                 List.of(new RuleOneDRand()), Dimension.ONE);
     }
 }

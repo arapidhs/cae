@@ -90,7 +90,7 @@ public class ViewMain {
     private static void setup(@Nonnull Repository repository) {
         Objects.requireNonNull(repository, "Repository cannot be null");
         view.setup();
-        if (view.getSelectedConfId() > -1) {
+        if (view.getSelectedConfiguration() != null) {
             Configuration conf = view.getSelectedConfiguration();
             ViewEngine<Cell<CellState<?>>, CellState<?>> viewEngine =
                     new ViewEngine<>(1080, 720, 4, repository.getConfigurations(), conf);
