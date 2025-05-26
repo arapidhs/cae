@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Runs the Fredkin Modulo 2 Neighbor Rule, a two-dimensional cellular automaton, invented by Edward Fredkin, where a
  * cell becomes active if the sum of its active von Neumann neighbors is odd (1 or 3), or inactive if even (0, 2, or 4).
- * Initialized with an 8x8 central square of active cells, it produces dynamic patterns, as described in
+ * Initialized with a 8x8 central square of active cells, it produces dynamic patterns, as described in
  * <i>Information Processing and Transmission in Cellular Automata</i>.
  */
 public class ConfFredkinModulo2 extends AbstractConfiguration<BooleanCell, BooleanState> {
