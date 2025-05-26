@@ -16,7 +16,9 @@ import com.dungeoncode.cae.core.impl.BooleanState;
  */
 public class RuleElementaryCA extends RuleOneDScroll {
 
-    /** The rule number (0-255) defining the ECA's output table. */
+    /**
+     * The rule number (0-255) defining the ECA's output table.
+     */
     private final int ruleNumber;
 
     /**
@@ -38,9 +40,9 @@ public class RuleElementaryCA extends RuleOneDScroll {
      * The 3-bit neighborhood configuration (left, center, right) forms an index (0-7), and the corresponding bit in the
      * rule number's binary representation determines the new state. Uses toroidal wrapping for left/right edges.
      *
-     * @param grid  the {@link Grid} containing the cell and its neighbors
-     * @param x     the x-coordinate of the cell
-     * @param y     the y-coordinate of the cell (target row)
+     * @param grid the {@link Grid} containing the cell and its neighbors
+     * @param x    the x-coordinate of the cell
+     * @param y    the y-coordinate of the cell (target row)
      * @param step the current step
      * @return the new boolean state
      */

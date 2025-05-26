@@ -21,11 +21,14 @@ import java.util.Random;
  */
 public class RuleSoilErosionRandom extends RuleSoilErosion {
 
-    /** Random number generator for update probability. */
-    private final Random random = new Random();
-
-    /** Probability of updating a cell (1/512 as per book). */
+    /**
+     * Probability of updating a cell (1/512 as per book).
+     */
     private static final double UPDATE_PROBABILITY = 1.0 / 512.0;
+    /**
+     * Random number generator for update probability.
+     */
+    private final Random random = new Random();
 
     /**
      * Constructs a new SOIL-EROSION-RANDOM rule with a fixed ID.

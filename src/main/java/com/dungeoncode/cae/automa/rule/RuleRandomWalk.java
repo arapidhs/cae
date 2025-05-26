@@ -19,7 +19,9 @@ import java.util.Random;
  */
 public class RuleRandomWalk extends RuleOneDScroll {
 
-    /** Random number generator for left/right movement. */
+    /**
+     * Random number generator for left/right movement.
+     */
     private final Random random = new Random();
 
     /**
@@ -45,13 +47,13 @@ public class RuleRandomWalk extends RuleOneDScroll {
 
         int width = grid.getWidth();
         boolean currentValue = grid.getCell((x + width) % width, y).getState().getValue();
-        if( currentValue ) {
+        if (currentValue) {
             return false;
         }
 
         // Get neighbor states from row above (y-1)
-        boolean left = grid.getCell((x - 1 + width) % width, y-1).getState().getValue();
-        boolean right = grid.getCell((x + 1) % width, y-1).getState().getValue();
+        boolean left = grid.getCell((x - 1 + width) % width, y - 1).getState().getValue();
+        boolean right = grid.getCell((x + 1) % width, y - 1).getState().getValue();
 
         // Random direction: true = right, false = left
         boolean moveRight = random.nextBoolean();

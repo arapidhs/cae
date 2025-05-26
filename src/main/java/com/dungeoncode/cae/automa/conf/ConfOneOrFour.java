@@ -1,6 +1,6 @@
 package com.dungeoncode.cae.automa.conf;
 
-import com.dungeoncode.cae.automa.rules.RuleOneOrFour;
+import com.dungeoncode.cae.automa.rule.RuleOneOrFour;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
@@ -21,7 +21,7 @@ public class ConfOneOrFour extends AbstractConfiguration<BooleanCell, BooleanSta
      * Constructs a new ONE-OR-FOUR configuration with a central 3x3 square initializer.
      */
     public ConfOneOrFour() {
-        super(32, new InitCentralSquare(1),
+        super(32, new InitCentralSquare(0),
                 List.of(new RuleOneOrFour()), Dimension.TWO);
     }
 }

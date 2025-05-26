@@ -1,6 +1,5 @@
-package com.dungeoncode.cae.automa.rules;
+package com.dungeoncode.cae.automa.rule;
 
-import com.dungeoncode.cae.automa.rule.RuleBooleanNeighborCount;
 import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;

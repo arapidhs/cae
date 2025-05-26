@@ -2,9 +2,9 @@ package com.dungeoncode.cae.automa.conf;
 
 import com.dungeoncode.cae.automa.rule.RuleOneDRand;
 import com.dungeoncode.cae.core.AbstractConfiguration;
+import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
-import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitOneDRandom;
 
 import java.util.List;

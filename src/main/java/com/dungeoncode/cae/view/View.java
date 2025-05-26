@@ -76,7 +76,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
     /**
      * The selected configuration to run.
      */
-    private Configuration<C,S> selectedConfiguration;
+    private Configuration<C, S> selectedConfiguration;
 
     /**
      * The Lanterna terminal screen for rendering the UI.
@@ -103,7 +103,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
     public void setup() {
         try {
             // Load custom font (work-in-progress)
-            String fontPath="/fonts/jetbrains/JetBrainsMono-ExtraLight.ttf";
+            String fontPath = "/fonts/jetbrains/JetBrainsMono-ExtraLight.ttf";
             Font font;
             try (InputStream is = View.class.getResourceAsStream(fontPath)) {
                 if (is == null) {
@@ -196,9 +196,9 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
         // Elementary Cellular Automata Panel
         ActionListBox ecaActionListBox = new ActionListBox();
-        ecaActionListBox.setSize(new TerminalSize(5,5));
-        ecaActionListBox.setPreferredSize(new TerminalSize(5,5));
-        for ( int i=0;i<256;i++){
+        ecaActionListBox.setSize(new TerminalSize(5, 5));
+        ecaActionListBox.setPreferredSize(new TerminalSize(5, 5));
+        for (int i = 0; i < 256; i++) {
             int ruleNumber = i;
             ecaActionListBox.addItem(String.valueOf(i), new Runnable() {
                 @Override
@@ -308,7 +308,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         Objects.requireNonNull(detailsBox, "Details box cannot be null");
         Descriptor descriptorByConfId = repository.getDescriptorByConfId(selectedConf.getId());
         String s = descriptorByConfId.toString();
-        detailsBox.setText(formatWithWrapping(s,44));
+        detailsBox.setText(formatWithWrapping(s, 44));
     }
 
     /**
@@ -400,38 +400,6 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Returns the list of configurations from the repository.
-     *
-     * @return the list of {@link Configuration} objects
-     */
-    public List<Configuration<C, S>> getConfigurations() {
-        return repository.getConfigurations();
-    }
-
-    /**
-     * Returns the index of the currently selected configuration.
-     *
-     * @return the selected configuration ID, or -1 if none selected
-     */
-    public int getSelectedConfId() {
-        return selectedConfId;
-    }
-
-    /**
-     * Returns the currently selected configuration, if any.
-     *
-     * @return the selected {@link Configuration}, or null if none selected
-     */
-    public Configuration<C, S> getSelectedConfiguration() {
-        if (selectedConfId > -1 && selectedConfId < repository.getConfigurations().size()) {
-            return repository.getConfigurations().get(selectedConfId);
-        } else if ( selectedConfiguration != null ) {
-            return selectedConfiguration;
-        }
-        return null;
-    }
-
-    /**
      * Formats a string with word-wrapping for narrow Lanterna widgets.
      *
      * @param text     the text to wrap
@@ -462,6 +430,29 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         return result.toString();
     }
 
+    /**
+     * Returns the index of the currently selected configuration.
+     *
+     * @return the selected configuration ID, or -1 if none selected
+     */
+    public int getSelectedConfId() {
+        return selectedConfId;
+    }
+
+    /**
+     * Returns the currently selected configuration, if any.
+     *
+     * @return the selected {@link Configuration}, or null if none selected
+     */
+    public Configuration<C, S> getSelectedConfiguration() {
+        if (selectedConfId > -1 && selectedConfId < repository.getConfigurations().size()) {
+            return repository.getConfigurations().get(selectedConfId);
+        } else if (selectedConfiguration != null) {
+            return selectedConfiguration;
+        }
+        return null;
+    }
+
     private void exampleTableWindow(TerminalScreen screen) {
         final MultiWindowTextGUI textGUI = new MultiWindowTextGUI(screen);
         //
@@ -477,28 +468,28 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
         final BasicWindow tableWindow = new BasicWindow("Window 2");
         tableWindow.setHints(List.of(NO_POST_RENDERING, FIXED_POSITION, NO_DECORATIONS));
-        tableWindow.setFixedSize(new TerminalSize(width,height));
+        tableWindow.setFixedSize(new TerminalSize(width, height));
         tableWindow.setPosition(TerminalPosition.TOP_LEFT_CORNER);
 
         Panel tablePanel = new Panel(new AbsoluteLayout());
 
         Table<String> table = new Table<>("Automaton", "");
         Border borderedtable = table.withBorder(Borders.singleLine());
-        borderedtable.setPosition(new TerminalPosition(0,0));
-        borderedtable.setSize(new TerminalSize(width,height));
+        borderedtable.setPosition(new TerminalPosition(0, 0));
+        borderedtable.setSize(new TerminalSize(width, height));
 
-        for( Configuration configuration:repository.getConfigurations()){
+        for (Configuration configuration : repository.getConfigurations()) {
             Descriptor descriptorByConfId = repository.getDescriptorByConfId(configuration.getId());
-            table.getTableModel().addRow( descriptorByConfId.getName(),descriptorByConfId.getDescription().substring(0,150));
+            table.getTableModel().addRow(descriptorByConfId.getName(), descriptorByConfId.getDescription().substring(0, 150));
         }
 
         TextBox textBox = new TextBox("");
         textBox.setTextChangeListener((newText, changedByUserInteraction) -> {
-            table.setSelectedRow(table.getSelectedRow()+1);
+            table.setSelectedRow(table.getSelectedRow() + 1);
             table.takeFocus();
         });
         textBox.setPosition(TerminalPosition.TOP_LEFT_CORNER);
-        textBox.setSize(new TerminalSize(width,1));
+        textBox.setSize(new TerminalSize(width, 1));
 
         //tablePanel.addComponent(textBox);
         tablePanel.addComponent(borderedtable);
@@ -511,6 +502,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         rootwindow.waitUntilClosed();
 
     }
+
     private void exampleMultiWindow(TerminalScreen screen) {
         final MultiWindowTextGUI textGUI = new MultiWindowTextGUI(screen);
         textGUI.setTheme(LanternaThemes.getRegisteredTheme("blaster"));
@@ -535,7 +527,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         rootPanel.setSize(new TerminalSize(width / 2, height / 2));
         rootPanel.setPreferredSize(new TerminalSize(width / 2, height / 2));
         Panel topPanel = new Panel();
-        topPanel.setPosition(new TerminalPosition(0,0 ));
+        topPanel.setPosition(new TerminalPosition(0, 0));
         topPanel.setSize(new TerminalSize(80, 1));
         Panel centerPanel = new Panel();
 
@@ -546,12 +538,12 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         centerPanel.setFillColorOverride(TextColor.ANSI.BLUE);
         MenuBar menubar = new MenuBar();
 
-        menubar.setPosition(new TerminalPosition(5,0));
-        menubar.setSize(new TerminalSize(40,1));
+        menubar.setPosition(new TerminalPosition(5, 0));
+        menubar.setSize(new TerminalSize(40, 1));
         // "File" menu
         Menu menuFile = new Menu("File");
 
-        menuFile.setSize(new TerminalSize(40,1));
+        menuFile.setSize(new TerminalSize(40, 1));
         menubar.add(menuFile);
         MenuItem openItem = new MenuItem("Open...", new Runnable() {
             public void run() {
@@ -627,7 +619,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         menubar.getMenu(0).setInputFilter(new InputFilter() {
             @Override
             public boolean onInput(Interactable interactable, KeyStroke keyStroke) {
-                if(keyStroke.getKeyType()==KeyType.F1) {
+                if (keyStroke.getKeyType() == KeyType.F1) {
                     interactable.takeFocus();
                     return true;
                 }
@@ -637,15 +629,12 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
         // ESC key to confirm exit
         textGUI.addListener((gui, key) -> {
-            if (key.isCtrlDown() &&  key.getKeyType() == KeyType.Character && key.getCharacter()=='x') {
+            if (key.isCtrlDown() && key.getKeyType() == KeyType.Character && key.getCharacter() == 'x') {
                 confirmExit(textGUI);
             }
             menubar.getMenu(0).handleInput(key);
             return false;
         });
-
-
-
 
 
         // Launch the GUI
@@ -656,10 +645,19 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
     }
 
+    /**
+     * Returns the list of configurations from the repository.
+     *
+     * @return the list of {@link Configuration} objects
+     */
+    public List<Configuration<C, S>> getConfigurations() {
+        return repository.getConfigurations();
+    }
+
     class MyRadioBoxList extends RadioBoxList<String> {
         @Override
         public synchronized Result handleKeyStroke(KeyStroke keyStroke) {
-            if ( keyStroke.getKeyType() == KeyType.ArrowRight) {
+            if (keyStroke.getKeyType() == KeyType.ArrowRight) {
                 return Result.HANDLED;
             } else {
                 return super.handleKeyStroke(keyStroke);

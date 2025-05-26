@@ -24,7 +24,7 @@ public class BooleanCell extends AbstractCell<BooleanState> {
      */
     public BooleanCell(int x, int y, boolean state, boolean echo, int id) {
         super(x, y);
-        this.state = new BooleanState(state, echo, 0,  id);
+        this.state = new BooleanState(state, echo, 0, id);
     }
 
     /**

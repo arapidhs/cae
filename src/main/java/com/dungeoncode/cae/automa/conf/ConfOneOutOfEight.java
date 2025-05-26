@@ -3,9 +3,9 @@ package com.dungeoncode.cae.automa.conf;
 import com.dungeoncode.cae.automa.rule.RuleOneOutOfEight;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
+import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
-import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralSquare;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class ConfOneOutOfEight extends AbstractConfiguration<BooleanCell, Boolea
      * growth of active cells, and cites the book by Toffoli and Margolus.
      */
     public ConfOneOutOfEight() {
-        super(8, new InitCentralSquare(1),
+        super(8, new InitCentralSquare(0),
                 List.of(new RuleOneOutOfEight()), Dimension.TWO);
     }
 

@@ -69,7 +69,7 @@ public abstract class RuleOneDScroll extends RuleBooleanNeighborCount {
                 newValue = grid.getCell(x, y + 1).getState().getValue();
             } else if (y == height - 1) {
                 // Compute bottom row using row height-1
-                newValue = computeNewState(grid, x, y+1, step);
+                newValue = computeNewState(grid, x, y + 1, step);
             }
         }
 

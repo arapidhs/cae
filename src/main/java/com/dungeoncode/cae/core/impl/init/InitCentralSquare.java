@@ -10,7 +10,8 @@ import javax.annotation.Nonnull;
 /**
  * Initializes a {@link Grid} by setting cells in a centered square region to active ({@code true}) states
  * and all other cells to inactive ({@code false}). The square region is defined by a half-side length offset
- * from the grid's center, creating a localized active area suitable for cellular automata experiments.
+ * from the grid's center. If the half-side length is 0, only the central cell is set to active, creating
+ * a single active point suitable for cellular automata experiments.
  *
  * @see GridInitializer
  * @see BooleanCell
@@ -44,7 +45,8 @@ public class InitCentralSquare extends InitNextStatesBoolean {
      * ({@code true}) states and all other cells to inactive ({@code false}). The square spans from
      * {@code centerX - halfSideLength} to {@code centerX + halfSideLength} horizontally and
      * {@code centerY - halfSideLength} to {@code centerY + halfSideLength} vertically, where
-     * {@code centerX} and {@code centerY} are the grid's center coordinates.
+     * {@code centerX} and {@code centerY} are the grid's center coordinates. If {@code halfSideLength}
+     * is 0, only the central cell at ({@code centerX}, {@code centerY}) is set to active.
      *
      * @param grid the {@link Grid} to initialize
      */
@@ -61,16 +63,29 @@ public class InitCentralSquare extends InitNextStatesBoolean {
         int startY = centerY - halfSideLength;
         int endY = centerY + halfSideLength;
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                boolean isActive = x >= startX && x < endX && y >= startY && y < endY;
-                boolean echo = withEcho && isActive;
-                if (grid.getCell(x, y) == null) {
-                    grid.setCell(x, y, new BooleanCell(x, y, isActive, echo, 0));
-                } else {
-                    grid.getCell(x, y).setState(isActive, echo, 0);
+        if (halfSideLength > 0) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    boolean isActive = x >= startX && x < endX && y >= startY && y < endY;
+                    boolean echo = withEcho && isActive;
+                    if (grid.getCell(x, y) == null) {
+                        grid.setCell(x, y, new BooleanCell(x, y, isActive, echo, 0));
+                    } else {
+                        grid.getCell(x, y).setState(isActive, echo, 0);
+                    }
                 }
             }
+        } else {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    if (grid.getCell(x, y) == null) {
+                        grid.setCell(x, y, new BooleanCell(x, y, false, false, 0));
+                    } else {
+                        grid.getCell(x, y).setState(false, false, 0);
+                    }
+                }
+            }
+            grid.getCell(centerX, centerY).setState(true, withEcho, 0);
         }
     }
 }

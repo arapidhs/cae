@@ -21,7 +21,9 @@ import java.util.Random;
  */
 public class RuleCyclicRank extends RuleBooleanNeighborCount {
 
-    /** Random number generator for neighbor selection. */
+    /**
+     * Random number generator for neighbor selection.
+     */
     private final Random random = new Random();
 
     /**

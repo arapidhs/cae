@@ -28,10 +28,9 @@ public class RuleSoilErosion extends RuleBooleanNeighborCount {
     }
 
     /**
-     *
      * @param id the id of the configuration.
      */
-    public RuleSoilErosion(final int id ) {
+    public RuleSoilErosion(final int id) {
         super((id));
     }
 

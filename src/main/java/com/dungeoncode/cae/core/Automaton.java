@@ -85,7 +85,7 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
      */
     public void configure(Map<String, Object> config) {
         this.grid = (Grid<C, S>) config.get(CONF_GRID);
-        this.dimension= (Dimension) config.get(CONF_DIMENSION);
+        this.dimension = (Dimension) config.get(CONF_DIMENSION);
         this.rules = (List<Rule<C, S>>) config.get(CONF_RULES);
         this.intervalMillis = Long.parseLong(String.valueOf(config.get(CONF_INTERVAL_MILLIS)));
         this.step = 0;

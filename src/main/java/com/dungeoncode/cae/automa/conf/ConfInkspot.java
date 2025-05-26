@@ -3,9 +3,9 @@ package com.dungeoncode.cae.automa.conf;
 import com.dungeoncode.cae.automa.rule.RuleInkspot;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
+import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
-import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitCentralBlob;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class ConfInkspot extends AbstractConfiguration<BooleanCell, BooleanState
      * ink-like pattern, and cites the book by Toffoli and Margolus.
      */
     public ConfInkspot() {
-        super(1, new InitCentralBlob(3, 3), List.of(new RuleInkspot()), Dimension.TWO );
+        super(1, new InitCentralBlob(3, 3), List.of(new RuleInkspot()), Dimension.TWO);
     }
 
 }

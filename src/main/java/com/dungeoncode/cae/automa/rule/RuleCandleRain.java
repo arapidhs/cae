@@ -21,7 +21,9 @@ import java.util.Random;
  */
 public class RuleCandleRain extends AbstractRule<BooleanCell, BooleanState> {
 
-    /** Random number generator for raindrop probability. */
+    /**
+     * Random number generator for raindrop probability.
+     */
     private final Random random = new Random();
 
     /**

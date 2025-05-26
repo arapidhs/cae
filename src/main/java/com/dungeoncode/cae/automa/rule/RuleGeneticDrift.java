@@ -21,16 +21,24 @@ import java.util.Random;
  */
 public class RuleGeneticDrift extends RuleBooleanNeighborCount {
 
-    /** Random number generator for neighbor selection. */
+    /**
+     * Random number generator for neighbor selection.
+     */
     private final Random random = new Random();
 
-    /** Indicates whether subgrid boundaries are enforced. */
+    /**
+     * Indicates whether subgrid boundaries are enforced.
+     */
     private final boolean useGrid;
 
-    /** Indicates whether handshake mechanism is used for diffusion. */
+    /**
+     * Indicates whether handshake mechanism is used for diffusion.
+     */
     private final boolean useHandshake;
 
-    /** Number of subgrids per axis (3x3 grid). */
+    /**
+     * Number of subgrids per axis (3x3 grid).
+     */
     private final int subgridCountPerAxis = 3;
 
     /**

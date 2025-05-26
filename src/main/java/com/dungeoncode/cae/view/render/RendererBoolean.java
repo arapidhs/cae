@@ -20,13 +20,19 @@ import java.util.Objects;
  */
 public class RendererBoolean implements StateRenderer<BooleanState> {
 
-    /** Cache for inverted RGB colors. */
+    /**
+     * Cache for inverted RGB colors.
+     */
     private static final Map<TextColor.RGB, TextColor.RGB> invertedColorCache = new HashMap<>();
 
-    /** The selected color palette for rendering. */
+    /**
+     * The selected color palette for rendering.
+     */
     private Palette palette;
 
-    /** Whether to invert colors during rendering. */
+    /**
+     * Whether to invert colors during rendering.
+     */
     private boolean inverted = false;
 
     /**
@@ -144,7 +150,7 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
         }
         if (color instanceof TextColor.RGB rgbColor) {
             // Check cache for inverted color
-            if ( invertedColorCache.containsKey(rgbColor)){
+            if (invertedColorCache.containsKey(rgbColor)) {
                 return invertedColorCache.get(rgbColor);
             } else {
                 TextColor.RGB invertedRgb = new TextColor.RGB(
@@ -303,35 +309,65 @@ public class RendererBoolean implements StateRenderer<BooleanState> {
                 TextColor.ANSI.WHITE           // Default
         );
 
-        /** Color for live sum 1. */
+        /**
+         * Color for live sum 1.
+         */
         final TextColor liveSum1;
-        /** Color for live sum 2. */
+        /**
+         * Color for live sum 2.
+         */
         final TextColor liveSum2;
-        /** Color for live sum 3. */
+        /**
+         * Color for live sum 3.
+         */
         final TextColor liveSum3;
-        /** Color for live sum 4. */
+        /**
+         * Color for live sum 4.
+         */
         final TextColor liveSum4;
-        /** Color for live sum 5. */
+        /**
+         * Color for live sum 5.
+         */
         final TextColor liveSum5;
-        /** Color for live sum 6. */
+        /**
+         * Color for live sum 6.
+         */
         final TextColor liveSum6;
-        /** Color for live sum 7. */
+        /**
+         * Color for live sum 7.
+         */
         final TextColor liveSum7;
-        /** Color for live sum 8. */
+        /**
+         * Color for live sum 8.
+         */
         final TextColor liveSum8;
-        /** Color for live sum 9. */
+        /**
+         * Color for live sum 9.
+         */
         final TextColor liveSum9;
-        /** Color for active cells with live sum 0. */
+        /**
+         * Color for active cells with live sum 0.
+         */
         final TextColor activeNoLiveSum;
-        /** Color for inactive cells with echo and live sum 0. */
+        /**
+         * Color for inactive cells with echo and live sum 0.
+         */
         final TextColor inactiveEcho;
-        /** Color for inactive cells without echo and live sum 0. */
+        /**
+         * Color for inactive cells without echo and live sum 0.
+         */
         final TextColor inactiveNoEcho;
-        /** Default color for unexpected cases. */
+        /**
+         * Default color for unexpected cases.
+         */
         final TextColor defaultColor;
-        /** The user-friendly name of the palette. */
+        /**
+         * The user-friendly name of the palette.
+         */
         private final String name;
-        /** A brief description of the palette's visual style. */
+        /**
+         * A brief description of the palette's visual style.
+         */
         private final String description;
 
         /**

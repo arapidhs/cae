@@ -3,9 +3,9 @@ package com.dungeoncode.cae.automa.conf;
 import com.dungeoncode.cae.automa.rule.RuleAnneal;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Automaton;
+import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
-import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.init.InitRandomBoolean;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class ConfVichniacAnneal extends AbstractConfiguration<BooleanCell, Boole
      * straightening boundaries, and cites the book by Toffoli and Margolus.
      */
     public ConfVichniacAnneal() {
-        super(12, new InitRandomBoolean(), List.of(new RuleAnneal()), Dimension.TWO );
+        super(12, new InitRandomBoolean(), List.of(new RuleAnneal()), Dimension.TWO);
     }
 
 }

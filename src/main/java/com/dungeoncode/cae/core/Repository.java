@@ -70,7 +70,7 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
     /**
      * Load all descriptors.
      */
-    public void loadDescriptors(){
+    public void loadDescriptors() {
         loadDescriptors(DESCRIPTORS_FILE_RULES, ruleDescriptors);
         loadDescriptors(DESCRIPTORS_FILE_CONFS, confDescriptors);
         loadDescriptors(DESCRIPTORS_FILE_INITS, initDescriptors);

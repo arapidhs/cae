@@ -37,9 +37,9 @@ public class RuleOneDRand extends RuleOneDScroll {
     @Override
     protected boolean computeNewState(Grid<BooleanCell, BooleanState> grid, int x, int y, int step) {
         int width = grid.getWidth();
-        boolean west = grid.getCell((x - 1 + width) % width, y-1).getState().getValue();
-        boolean center = grid.getCell(x, y-1).getState().getValue();
-        boolean east = grid.getCell((x + 1) % width, y-1).getState().getValue();
+        boolean west = grid.getCell((x - 1 + width) % width, y - 1).getState().getValue();
+        boolean center = grid.getCell(x, y - 1).getState().getValue();
+        boolean east = grid.getCell((x + 1) % width, y - 1).getState().getValue();
         return west ^ center ^ east;
     }
 }

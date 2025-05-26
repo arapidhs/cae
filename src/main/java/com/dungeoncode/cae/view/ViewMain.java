@@ -18,14 +18,18 @@ import java.util.Objects;
  */
 public class ViewMain {
 
-    /** Logger for application events and errors. */
+    /**
+     * Logger for application events and errors.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ViewMain.class);
-
-    /** The view for selecting automaton configurations. */
-    private static View view;
-
-    /** Flag indicating whether the application is running. */
+    /**
+     * Flag indicating whether the application is running.
+     */
     static boolean running;
+    /**
+     * The view for selecting automaton configurations.
+     */
+    private static View view;
 
     /**
      * Starts the Cellular Automata application. Initializes the configuration repository,

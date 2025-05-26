@@ -1,8 +1,8 @@
 package com.dungeoncode.cae.core.impl.init;
 
+import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
-import com.dungeoncode.cae.core.Grid;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -21,28 +21,45 @@ import java.util.Random;
  */
 public class InitOneDRandom extends InitNextStatesBoolean {
 
-    /** Random number generator for state assignment. */
+    /**
+     * Random number generator for state assignment.
+     */
     private final Random random = new Random();
 
-    /** Probability of active cells in the west region (columns 0 to width/3-1). */
+    /**
+     * Probability of active cells in the west region (columns 0 to width/3-1).
+     */
     private final double westDensity;
 
-    /** Probability of active cells in the center region (columns width/3 to 2*width/3-1). */
+    /**
+     * Probability of active cells in the center region (columns width/3 to 2*width/3-1).
+     */
     private final double centerDensity;
 
-    /** Probability of active cells in the east region (columns 2*width/3 to width-1). */
+    /**
+     * Probability of active cells in the east region (columns 2*width/3 to width-1).
+     */
     private final double eastDensity;
 
-    /** Whether to initialize with only one active cell at the center of row 0. */
+    /**
+     * Whether to initialize with only one active cell at the center of row 0.
+     */
     private final boolean singleActiveCenter;
+
+    /**
+     * Constructs a new one-dimensional random initializer with default density of 0.5 for all regions and random mode.
+     */
+    public InitOneDRandom() {
+        this(0.5, 0.5, 0.5, false);
+    }
 
     /**
      * Constructs a new one-dimensional random initializer with specified density probabilities for west, center,
      * and east regions of row 0, and an option for single active center cell.
      *
-     * @param westDensity       probability of active cells in west region (0.0 to 1.0)
-     * @param centerDensity     probability of active cells in center region (0.0 to 1.0)
-     * @param eastDensity       probability of active cells in east region (0.0 to 1.0)
+     * @param westDensity        probability of active cells in west region (0.0 to 1.0)
+     * @param centerDensity      probability of active cells in center region (0.0 to 1.0)
+     * @param eastDensity        probability of active cells in east region (0.0 to 1.0)
      * @param singleActiveCenter if true, only the center cell of row 0 is active; if false, uses random densities
      * @throws IllegalArgumentException if any density is not in [0.0, 1.0]
      */
@@ -57,13 +74,6 @@ public class InitOneDRandom extends InitNextStatesBoolean {
         this.centerDensity = centerDensity;
         this.eastDensity = eastDensity;
         this.singleActiveCenter = singleActiveCenter;
-    }
-
-    /**
-     * Constructs a new one-dimensional random initializer with default density of 0.5 for all regions and random mode.
-     */
-    public InitOneDRandom() {
-        this(0.5, 0.5, 0.5, false);
     }
 
     /**
