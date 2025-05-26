@@ -1,5 +1,6 @@
 package com.dungeoncode.cae.automa.conf;
 
+import com.dungeoncode.cae.automa.rule.RuleElementaryCA;
 import com.dungeoncode.cae.automa.rule.RuleVonNeumannNeighborState;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Dimension;
@@ -26,6 +27,13 @@ public class ConfVonNeumannNeighborState extends AbstractConfiguration<BooleanCe
      * @throws IllegalArgumentException if codeNumber is not in [0, 1023]
      */
     public ConfVonNeumannNeighborState(int codeNumber) {
-        super(33, new InitCentralSquare(0), List.of(new RuleVonNeumannNeighborState(codeNumber)), Dimension.TWO);
+        super(33, new InitCentralSquare(1), List.of(new RuleVonNeumannNeighborState(codeNumber)), Dimension.TWO);
     }
+
+    @Override
+    public String toString() {
+        final RuleVonNeumannNeighborState rule = (RuleVonNeumannNeighborState) getRules().get(0);
+        return super.toString() + "-Code-"+rule.getCodeNumber();
+    }
+
 }

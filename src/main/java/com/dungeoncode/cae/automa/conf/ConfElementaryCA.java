@@ -28,4 +28,11 @@ public class ConfElementaryCA extends AbstractConfiguration<BooleanCell, Boolean
         super(31, new InitOneDRandom(0.0, 0.0, 0.0, true),
                 List.of(new RuleElementaryCA(ruleNumber)), Dimension.ONE);
     }
+
+    @Override
+    public String toString() {
+        final RuleElementaryCA rule = (RuleElementaryCA) getRules().get(0);
+        return super.toString() + "-Rule-"+rule.getRuleNumber();
+    }
+
 }

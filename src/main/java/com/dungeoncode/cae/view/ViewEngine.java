@@ -770,13 +770,13 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
 
             // Create the screenshots directory in the user's home directory
             String userHome = System.getProperty("user.home");
-            File screenshotDir = new File(userHome, ".cell-automata/screenshots");
+            File screenshotDir = new File(userHome, ".cae/screenshots");
             if (!screenshotDir.exists() && !screenshotDir.mkdirs()) {
                 throw new IOException("Failed to create directory: " + screenshotDir.getAbsolutePath());
             }
 
             // Generate filename with configuration name and millisecond-precision timestamp
-            String configName = configuration.getClass().getName().replaceAll("[^a-zA-Z0-9]", "_");
+            String configName = configuration.toString();
             String timestamp = String.format("%tY%tm%td%tH%tM%tS%tL",
                     System.currentTimeMillis(), System.currentTimeMillis(),
                     System.currentTimeMillis(), System.currentTimeMillis(),

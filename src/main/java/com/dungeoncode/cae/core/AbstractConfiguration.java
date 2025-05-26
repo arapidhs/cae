@@ -123,4 +123,10 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
     public void setGridInitializer(GridInitializer<C, S> gridInitializer) {
         this.gridInitializer = gridInitializer;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
 }
