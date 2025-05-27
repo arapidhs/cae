@@ -1,4 +1,4 @@
-package com.dungeoncode.cae.automa.rule;
+package com.dungeoncode.cae.automa.eca.rule;
 
 import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
@@ -10,11 +10,11 @@ import com.dungeoncode.cae.core.impl.BooleanState;
  * whose binary representation defines the output for each of the 8 possible neighborhood configurations. The 2D grid
  * stores spacetime history, scrolling up when full of toroidal left/right wrapping.
  *
- * @see RuleOneDScroll
+ * @see AbstractRuleECA
  * @see BooleanCell
  * @see BooleanState
  */
-public class RuleElementaryCA extends RuleOneDScroll {
+public class RuleECA extends AbstractRuleECA {
 
     /**
      * The rule number (0-255) defining the ECA's output table.
@@ -27,7 +27,7 @@ public class RuleElementaryCA extends RuleOneDScroll {
      * @param ruleNumber the rule number (0-255) defining the output table
      * @throws IllegalArgumentException if ruleNumber is not in [0, 255]
      */
-    public RuleElementaryCA(int ruleNumber) {
+    public RuleECA(int ruleNumber) {
         super(30); // New ID
         if (ruleNumber < 0 || ruleNumber > 255) {
             throw new IllegalArgumentException("Rule number must be between 0 and 255, got: " + ruleNumber);

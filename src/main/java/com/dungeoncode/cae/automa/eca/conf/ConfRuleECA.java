@@ -1,11 +1,12 @@
-package com.dungeoncode.cae.automa.conf;
+package com.dungeoncode.cae.automa.eca.conf;
 
-import com.dungeoncode.cae.automa.rule.RuleElementaryCA;
+import com.dungeoncode.cae.automa.eca.rule.RuleECA;
 import com.dungeoncode.cae.core.AbstractConfiguration;
+import com.dungeoncode.cae.core.Configuration;
 import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
-import com.dungeoncode.cae.core.impl.init.InitOneDRandom;
+import com.dungeoncode.cae.automa.eca.init.InitOneDRandom;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * for all 8 neighborhood configurations. Initialized with a single active cell in the center of row 0, the 2D grid
  * stores spacetime history, scrolling up when full, as described in <i>A New Kind of Science</i> by Stephen Wolfram.
  */
-public class ConfElementaryCA extends AbstractConfiguration<BooleanCell, BooleanState> {
+public class ConfRuleECA extends AbstractConfiguration<BooleanCell, BooleanState> {
 
     /**
      * Constructs a new elementary cellular automaton configuration with a single active cell initializer for row 0
@@ -24,15 +25,31 @@ public class ConfElementaryCA extends AbstractConfiguration<BooleanCell, Boolean
      * @param ruleNumber the rule number (0-255) defining the ECA's output table
      * @throws IllegalArgumentException if ruleNumber is not in [0, 255]
      */
-    public ConfElementaryCA(int ruleNumber) {
+    public ConfRuleECA(int ruleNumber) {
         super(31, new InitOneDRandom(0.0, 0.0, 0.0, true),
-                List.of(new RuleElementaryCA(ruleNumber)), Dimension.ONE);
+                List.of(new RuleECA(ruleNumber)), Dimension.ONE);
     }
 
     @Override
     public String toString() {
-        final RuleElementaryCA rule = (RuleElementaryCA) getRules().get(0);
+        final RuleECA rule = (RuleECA) getRules().get(0);
         return super.toString() + "-Rule-"+rule.getRuleNumber();
+    }
+
+    @Override
+    public Configuration<BooleanCell, BooleanState> next() {
+        final RuleECA rule = (RuleECA) getRules().get(0);
+        final int nextRuleNumber = (rule.getRuleNumber()+1+256)%256;
+        rule.setRuleNumber(nextRuleNumber);
+        return this;
+    }
+
+    @Override
+    public Configuration<BooleanCell, BooleanState> previous() {
+        final RuleECA rule = (RuleECA) getRules().get(0);
+        final int previousRuleNumber = (rule.getRuleNumber()-1+256)%256;
+        rule.setRuleNumber(previousRuleNumber);
+        return this;
     }
 
 }

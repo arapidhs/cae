@@ -1,8 +1,9 @@
 package com.dungeoncode.cae.automa.conf;
 
-import com.dungeoncode.cae.automa.rule.RuleElementaryCA;
+import com.dungeoncode.cae.automa.eca.rule.RuleECA;
 import com.dungeoncode.cae.automa.rule.RuleVonNeumannNeighborState;
 import com.dungeoncode.cae.core.AbstractConfiguration;
+import com.dungeoncode.cae.core.Configuration;
 import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
@@ -34,6 +35,25 @@ public class ConfVonNeumannNeighborState extends AbstractConfiguration<BooleanCe
     public String toString() {
         final RuleVonNeumannNeighborState rule = (RuleVonNeumannNeighborState) getRules().get(0);
         return super.toString() + "-Code-"+rule.getCodeNumber();
+    }
+
+    @Override
+    public Configuration<BooleanCell, BooleanState> next() {
+        final RuleVonNeumannNeighborState rule = (RuleVonNeumannNeighborState) getRules().get(0);
+        final int nextCodeNumber = (rule.getCodeNumber()+1+1024)%1024;
+        rule.setCodeNumber(nextCodeNumber);
+        return this;
+    }
+
+    @Override
+    public Configuration<BooleanCell, BooleanState> previous() {
+        final RuleVonNeumannNeighborState rule = (RuleVonNeumannNeighborState) getRules().get(0);
+        int previousCodeNumber = (rule.getCodeNumber()-1+1024)%1024;
+        if (previousCodeNumber < 0) {
+            previousCodeNumber = 1023;
+        }
+        rule.setCodeNumber(previousCodeNumber);
+        return this;
     }
 
 }

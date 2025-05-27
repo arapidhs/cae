@@ -1,4 +1,4 @@
-package com.dungeoncode.cae.automa.rule;
+package com.dungeoncode.cae.automa.eca.rule;
 
 import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
@@ -7,20 +7,20 @@ import com.dungeoncode.cae.core.impl.BooleanState;
 /**
  * Implements the ONED-RAND rule for a one-dimensional cellular automaton, where the current row computes its state as
  * the XOR of west, center, and east neighbors from the row above, forming a random-number generator. Extends
- * RuleOneDScroll to use its scrolling logic, computing row t at step t, with no shifting until step >= height, then
+ * AbstractRuleECA to use its scrolling logic, computing row t at step t, with no shifting until step >= height, then
  * scrolls the history. Described in Chapter 9, Section 9.7 of <i>Cellular Automata Machines: A New Environment for
  * Modeling</i> (MIT Press).
  *
- * @see RuleOneDScroll
+ * @see AbstractRuleECA
  * @see BooleanCell
  * @see BooleanState
  */
-public class RuleOneDRand extends RuleOneDScroll {
+public class ECAXORRule extends AbstractRuleECA {
 
     /**
      * Constructs a new ONED-RAND rule with a fixed ID.
      */
-    public RuleOneDRand() {
+    public ECAXORRule() {
         super(27);
     }
 

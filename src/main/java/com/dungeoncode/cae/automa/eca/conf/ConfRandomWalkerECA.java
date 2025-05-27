@@ -1,11 +1,11 @@
-package com.dungeoncode.cae.automa.conf;
+package com.dungeoncode.cae.automa.eca.conf;
 
-import com.dungeoncode.cae.automa.rule.RuleRandomWalk;
+import com.dungeoncode.cae.automa.eca.rule.RandomWalkerECA;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
-import com.dungeoncode.cae.core.impl.init.InitOneDRandom;
+import com.dungeoncode.cae.automa.eca.init.InitOneDRandom;
 
 import java.util.List;
 
@@ -15,13 +15,13 @@ import java.util.List;
  * the 2D grid stores spacetime history, scrolling up when full of toroidal left/right wrapping, as described in
  * Chapter 10, Section 10.1 of <i>Cellular Automata Machines: A New Environment for Modeling</i> (MIT Press).
  */
-public class ConfRandomWalk extends AbstractConfiguration<BooleanCell, BooleanState> {
+public class ConfRandomWalkerECA extends AbstractConfiguration<BooleanCell, BooleanState> {
 
     /**
      * Constructs a new RANDOM-WALK configuration with a random initializer for row 0 (5% density for all regions).
      */
-    public ConfRandomWalk() {
+    public ConfRandomWalkerECA() {
         super(30, new InitOneDRandom(0.10, 0.25, 0.05, false),
-                List.of(new RuleRandomWalk()), Dimension.ONE);
+                List.of(new RandomWalkerECA()), Dimension.ONE);
     }
 }

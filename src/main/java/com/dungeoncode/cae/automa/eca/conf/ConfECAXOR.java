@@ -1,11 +1,11 @@
-package com.dungeoncode.cae.automa.conf;
+package com.dungeoncode.cae.automa.eca.conf;
 
-import com.dungeoncode.cae.automa.rule.RuleOneDRand;
+import com.dungeoncode.cae.automa.eca.rule.ECAXORRule;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
-import com.dungeoncode.cae.core.impl.init.InitOneDRandom;
+import com.dungeoncode.cae.automa.eca.init.InitOneDRandom;
 
 import java.util.List;
 
@@ -15,13 +15,13 @@ import java.util.List;
  * region-specific density probabilities, the grid stores spacetime history, scrolling up when full, as described in
  * Chapter 9, Section 9.7 of <i>Cellular Automata Machines: A New Environment for Modeling</i> (MIT Press).
  */
-public class ConfOneDRand extends AbstractConfiguration<BooleanCell, BooleanState> {
+public class ConfECAXOR extends AbstractConfiguration<BooleanCell, BooleanState> {
 
     /**
      * Constructs a new ONED-RAND configuration with a random initializer for row 0 (default 50% density for all regions).
      */
-    public ConfOneDRand() {
+    public ConfECAXOR() {
         super(28, new InitOneDRandom(0.5, 0.5, 0.5, false),
-                List.of(new RuleOneDRand()), Dimension.ONE);
+                List.of(new ECAXORRule()), Dimension.ONE);
     }
 }

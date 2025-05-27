@@ -1,7 +1,10 @@
 package com.dungeoncode.cae.view;
 
 import com.dungeoncode.cae.automa.conf.*;
-import com.dungeoncode.cae.automa.rule.RuleElementaryCA;
+import com.dungeoncode.cae.automa.eca.conf.ConfECAXOR;
+import com.dungeoncode.cae.automa.eca.conf.ConfRandomWalkerECA;
+import com.dungeoncode.cae.automa.eca.conf.ConfRuleECA;
+import com.dungeoncode.cae.automa.eca.rule.RuleECA;
 import com.dungeoncode.cae.automa.rule.RuleVonNeumannNeighborState;
 import com.dungeoncode.cae.core.*;
 import com.dungeoncode.cae.core.impl.BooleanCell;
@@ -89,10 +92,10 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         CELL_RENDERER.put(ConfSoilErosion.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfSoilErosionRandom.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfCyclicRank.class.getName(), rendererBooleanId);
-        CELL_RENDERER.put(ConfOneDRand.class.getName(), rendererBoolean);
-        CELL_RENDERER.put(ConfRandomWalk.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfECAXOR.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfRandomWalkerECA.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfOneOrFour.class.getName(), rendererBoolean);
-        CELL_RENDERER.put(ConfElementaryCA.class.getName(), rendererBoolean);
+        CELL_RENDERER.put(ConfRuleECA.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfVonNeumannNeighborState.class.getName(), rendererBoolean);
         CELL_RENDERER.put(ConfFredkinModulo2.class.getName(), rendererBoolean);
 
@@ -821,21 +824,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
      * Stops the current automaton, updates the configuration, reconfigures the automaton, and restarts it.
      */
     public void startNextAutoma() {
-        if (configuration instanceof ConfVonNeumannNeighborState){
-            RuleVonNeumannNeighborState csRule = (RuleVonNeumannNeighborState) configuration.getRules().get(0);
-            int codeNumber = csRule.getCodeNumber();
-            codeNumber = (codeNumber+1+1024)%(1024);
-            codeNumber=Math.max(codeNumber,128);
-            csRule.setCodeNumber(codeNumber);
-        } else if (configuration instanceof ConfElementaryCA){
-            RuleElementaryCA csRule = (RuleElementaryCA) configuration.getRules().get(0);
-            int ruleNumber = csRule.getRuleNumber();
-            ruleNumber = (ruleNumber+1+256)%256;
-            csRule.setRuleNumber(ruleNumber);
-        } else {
-            int i = configurations.indexOf(configuration);
-            this.configuration = (Configuration<C, S>) configurations.get((i + 1) % configurations.size());
-        }
+        this.configuration = configuration.next();
         automaton.stop();
         configureAutoma();
         automaton.start();
@@ -846,23 +835,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
      * Stops the current automaton, updates the configuration, reconfigures the automaton, and restarts it.
      */
     public void startPreviousAutoma() {
-        if (configuration instanceof ConfVonNeumannNeighborState){
-            RuleVonNeumannNeighborState csRule = (RuleVonNeumannNeighborState) configuration.getRules().get(0);
-            int codeNumber = csRule.getCodeNumber();
-            codeNumber = (codeNumber-1+1024)%(1024);
-            if (codeNumber < 128) {
-                codeNumber = 1023;
-            }
-            csRule.setCodeNumber(codeNumber);
-        } else if (configuration instanceof ConfElementaryCA){
-            RuleElementaryCA csRule = (RuleElementaryCA) configuration.getRules().get(0);
-            int ruleNumber = csRule.getRuleNumber();
-            ruleNumber = (ruleNumber-1+256)%256;
-            csRule.setRuleNumber(ruleNumber);
-        } else {
-            int i = configurations.indexOf(configuration);
-            this.configuration = (Configuration<C, S>) configurations.get((i - 1 + configurations.size()) % configurations.size());
-        }
+        this.configuration = configuration.previous();
         automaton.stop();
         configureAutoma();
         automaton.start();

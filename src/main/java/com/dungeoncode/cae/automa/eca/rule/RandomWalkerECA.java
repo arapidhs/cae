@@ -1,4 +1,4 @@
-package com.dungeoncode.cae.automa.rule;
+package com.dungeoncode.cae.automa.eca.rule;
 
 import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
@@ -13,11 +13,11 @@ import java.util.Random;
  * history, scrolling up when full of toroidal left/right wrapping. Described in Chapter 10, Section 10.1 of
  * <i>Cellular Automata Machines: A New Environment for Modeling</i> (MIT Press).
  *
- * @see RuleOneDScroll
+ * @see AbstractRuleECA
  * @see BooleanCell
  * @see BooleanState
  */
-public class RuleRandomWalk extends RuleOneDScroll {
+public class RandomWalkerECA extends AbstractRuleECA {
 
     /**
      * Random number generator for left/right movement.
@@ -27,7 +27,7 @@ public class RuleRandomWalk extends RuleOneDScroll {
     /**
      * Constructs a new RANDOM-WALK rule with a fixed ID.
      */
-    public RuleRandomWalk() {
+    public RandomWalkerECA() {
         super(29); // New ID
     }
 

@@ -1,8 +1,8 @@
 package com.dungeoncode.cae.view;
 
-import com.dungeoncode.cae.automa.conf.ConfElementaryCA;
+import com.dungeoncode.cae.automa.eca.conf.ConfRuleECA;
 import com.dungeoncode.cae.automa.conf.ConfVonNeumannNeighborState;
-import com.dungeoncode.cae.automa.rule.RuleElementaryCA;
+import com.dungeoncode.cae.automa.eca.rule.RuleECA;
 import com.dungeoncode.cae.core.*;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
@@ -207,13 +207,13 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
                 @Override
                 public void run() {
                     selectedConfId = -1;
-                    selectedConfiguration = (Configuration<C, S>) new ConfElementaryCA(ruleNumber);
+                    selectedConfiguration = (Configuration<C, S>) new ConfRuleECA(ruleNumber);
                     close();
                 }
             });
         }
-        if ( selectedConfiguration instanceof ConfElementaryCA){
-            final RuleElementaryCA csRule = (RuleElementaryCA) selectedConfiguration.getRules().get(0);
+        if ( selectedConfiguration instanceof ConfRuleECA){
+            final RuleECA csRule = (RuleECA) selectedConfiguration.getRules().get(0);
             ecaActionListBox.setSelectedIndex(csRule.getRuleNumber());
         }
 
@@ -287,9 +287,9 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         rootPanel.addComponent(mainPanel);
         window.setComponent(rootPanel);
 
-        if ( selectedConfiguration instanceof ConfElementaryCA){
+        if ( selectedConfiguration instanceof ConfRuleECA){
             System.out.println(selectedConfiguration.getClass().getName());
-            final RuleElementaryCA csRule = (RuleElementaryCA) selectedConfiguration.getRules().get(0);
+            final RuleECA csRule = (RuleECA) selectedConfiguration.getRules().get(0);
             ecaActionListBox.setSelectedIndex(csRule.getRuleNumber());
             ecaActionListBox.takeFocus();
         }

@@ -48,4 +48,8 @@ public interface Configuration<C extends Cell<S>, S extends CellState<?>> {
      * @param intervalMillis the interval in milliseconds between automaton steps
      */
     void configure(Automaton<C, S> automaton, int width, int height, long intervalMillis);
+
+    Configuration<C,S> next();
+
+    Configuration<C,S> previous();
 }

@@ -1,6 +1,8 @@
 package com.dungeoncode.cae.view;
 
 import com.dungeoncode.cae.automa.conf.*;
+import com.dungeoncode.cae.automa.eca.conf.ConfECAXOR;
+import com.dungeoncode.cae.automa.eca.conf.ConfRandomWalkerECA;
 import com.dungeoncode.cae.core.Cell;
 import com.dungeoncode.cae.core.CellState;
 import com.dungeoncode.cae.core.Configuration;
@@ -67,8 +69,8 @@ public class ViewMain {
             repository.addConfiguration(new ConfSoilErosion());
             repository.addConfiguration(new ConfSoilErosionRandom());
             repository.addConfiguration(new ConfCyclicRank());
-            repository.addConfiguration(new ConfOneDRand());
-            repository.addConfiguration(new ConfRandomWalk());
+            repository.addConfiguration(new ConfECAXOR());
+            repository.addConfiguration(new ConfRandomWalkerECA());
             repository.addConfiguration(new ConfOneOrFour());
             repository.addConfiguration(new ConfFredkinModulo2());
 

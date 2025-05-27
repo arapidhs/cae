@@ -129,4 +129,14 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
         return this.getClass().getSimpleName();
     }
 
+    @Override
+    public Configuration<C, S> next() {
+        return this;
+    }
+
+    @Override
+    public Configuration<C, S> previous() {
+        return this;
+    }
+
 }

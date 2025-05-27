@@ -1,5 +1,6 @@
-package com.dungeoncode.cae.automa.rule;
+package com.dungeoncode.cae.automa.eca.rule;
 
+import com.dungeoncode.cae.automa.rule.RuleBooleanNeighborCount;
 import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
@@ -12,14 +13,14 @@ import java.util.Objects;
  * Computes row t at step t using a rule-specific state calculation, with no shifting until step >= height, then shifts
  * rows up to scroll the history. Uses toroidal wrapping for left/right edges. Subclasses implement the state computation.
  */
-public abstract class RuleOneDScroll extends RuleBooleanNeighborCount {
+public abstract class AbstractRuleECA extends RuleBooleanNeighborCount {
 
     /**
      * Constructs a new one-dimensional scrolling rule with the specified ID.
      *
      * @param id the unique identifier for the rule
      */
-    protected RuleOneDScroll(int id) {
+    protected AbstractRuleECA(int id) {
         super(id);
     }
 

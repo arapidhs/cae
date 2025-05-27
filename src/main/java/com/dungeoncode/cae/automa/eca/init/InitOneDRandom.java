@@ -1,8 +1,9 @@
-package com.dungeoncode.cae.core.impl.init;
+package com.dungeoncode.cae.automa.eca.init;
 
 import com.dungeoncode.cae.core.Grid;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
+import com.dungeoncode.cae.core.impl.init.InitNextStatesBoolean;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
