@@ -4,6 +4,8 @@ import com.dungeoncode.cae.automa.eca.conf.ConfRuleECA;
 import com.dungeoncode.cae.automa.conf.ConfVonNeumannNeighborState;
 import com.dungeoncode.cae.automa.eca.rule.RuleECA;
 import com.dungeoncode.cae.core.*;
+import com.dungeoncode.cae.view.gui.GUI;
+import com.dungeoncode.cae.view.gui.state.StateSetup;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
@@ -84,6 +86,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
      * The Lanterna terminal screen for rendering the UI.
      */
     private TerminalScreen screen;
+    private StateManager stateManager;
 
     /**
      * Constructs a new view with the specified configuration repository.
@@ -140,15 +143,30 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
             screen.setCursorPosition(null);
             screen.startScreen();
 
+            // setupView(screen);
+            // update();
             // Display configuration selection window
             showConfigurationWindow(screen);
+
             //exampleMultiWindow(screen);
             //exampleTableWindow(screen);
+
         } catch (IOException e) {
             throw new RuntimeException("Failed to initialize terminal: " + e.getMessage(), e);
         } finally {
             close();
         }
+    }
+
+    private void setupView(@Nonnull TerminalScreen screen) {
+        Objects.requireNonNull(screen, "Screen cannot be null");
+        final GUI gui = new GUI(screen,width,height);
+        stateManager = new StateManager(gui);
+        stateManager.transitionTo(new StateSetup());
+    }
+
+    public void update(){
+        stateManager.update();
     }
 
     /**
@@ -299,6 +317,8 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
         // Launch the GUI
         textGUI.addWindowAndWait(window);
+
+        MessageDialog.showMessageDialog(textGUI, "", "Select a configuration first!", MessageDialogButton.OK);
 
     }
 

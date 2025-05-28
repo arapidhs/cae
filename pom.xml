@@ -8,7 +8,7 @@
 	<artifactId>cae</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
-	<name>Cellular Automata Engine (CAE)</name>
+	<name>Terminal based Cellular Automata Simulation (TCAS)</name>
 	<description>Terminal-based cellular automata simulation.</description>
 
 	<!-- Developer info -->
