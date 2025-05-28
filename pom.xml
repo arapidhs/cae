@@ -5,10 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.dungeoncode</groupId>
-	<artifactId>cae</artifactId>
+	<artifactId>cae-parent</artifactId>
 	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-	<name>Terminal based Cellular Automata Simulation (TCAS)</name>
+	<name>Terminal based Cellular Automata Simulation &amp; Engine</name>
 	<description>Terminal-based cellular automata simulation.</description>
 
 	<!-- Developer info -->
@@ -27,13 +28,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- Terminal UI library -->
-		<dependency>
-			<groupId>com.googlecode.lanterna</groupId>
-			<artifactId>lanterna</artifactId>
-			<version>3.1.2</version>
-		</dependency>
-
 		<!-- JSON support -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -52,7 +46,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>2.0.9</version>
+			<version>2.0.17</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -69,138 +63,9 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<!-- Builds a fat/uber JAR only when this profile is active -->
-		<profile>
-			<id>fatjar</id>
-			<build>
-				<plugins>
-
-					<!-- Copies .bat file to target dir -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>3.3.1</version>
-						<executions>
-							<execution>
-								<id>copy-bat-file</id>
-								<phase>package</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-									<resources>
-										<resource>
-											<!-- Absolute path to avoid conflict with shade -->
-											<directory>${project.basedir}/src/main/resources</directory>
-											<includes>
-												<include>cae.bat</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>3.5.0</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-								<configuration>
-									<!-- Adds Main-Class to manifest -->
-									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<mainClass>com.dungeoncode.cae.view.ViewMain</mainClass>
-										</transformer>
-									</transformers>
-									<!-- Output file name -->
-									<finalName>cae</finalName>
-									<!-- Prevents overwritten pom issues -->
-									<dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-									<!-- Suppresses warnings and overlapping resource issues -->
-									<filters>
-										<filter>
-											<artifact>*:*</artifact>
-											<excludes>
-												<exclude>META-INF/*.SF</exclude>
-												<exclude>META-INF/*.DSA</exclude>
-												<exclude>META-INF/*.RSA</exclude>
-												<exclude>META-INF/LICENSE</exclude>
-												<exclude>META-INF/LICENSE.txt</exclude>
-												<exclude>META-INF/NOTICE</exclude>
-												<exclude>META-INF/NOTICE.txt</exclude>
-												<exclude>META-INF/MANIFEST.MF</exclude>
-												<exclude>META-INF/versions/9/module-info.class</exclude>
-												<exclude>module-info.class</exclude>
-											</excludes>
-										</filter>
-									</filters>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
-	<build>
-		<plugins>
-
-			<!-- Copies .bat file to target dir -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.1</version>
-				<executions>
-					<execution>
-						<id>copy-bat-file</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}</outputDirectory>
-							<resources>
-								<resource>
-									<!-- Absolute path to avoid conflict with shade -->
-									<directory>${project.basedir}/src/main/resources</directory>
-									<includes>
-										<include>cae.bat</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Java compilation -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.13.0</version>
-				<configuration>
-					<source>17</source>
-					<target>17</target>
-				</configuration>
-			</plugin>
-
-			<!-- JUnit test runner with stress group config -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.2.5</version>
-			</plugin>
-		</plugins>
-	</build>
+	<modules>
+		<module>cae-core</module>
+		<module>cae-terminal</module>
+	</modules>
 
 </project>
