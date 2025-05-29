@@ -232,4 +232,7 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
         this.step = 0;
     }
 
+    public int getStep() {
+        return step;
+    }
 }
