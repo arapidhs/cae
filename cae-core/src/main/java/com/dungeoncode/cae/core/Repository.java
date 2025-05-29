@@ -19,9 +19,9 @@ import static com.dungeoncode.cae.core.Constants.*;
 public class Repository<C extends Cell<S>, S extends CellState<?>> {
 
     /**
-     * The list of configurations in the repository.
+     * The map of configurations in the repository, keyed by ID.
      */
-    private final List<Configuration<C, S>> configurations;
+    private final Map<Integer, Configuration<C, S>> configurations;
 
     /**
      * The list of rules in the repository.
@@ -58,7 +58,7 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
      * and empty maps for descriptors. Loads descriptors from JSON files specified in {@link Constants}.
      */
     public Repository() {
-        this.configurations = new ArrayList<>();
+        this.configurations = new HashMap<>();
         this.rules = new ArrayList<>();
         this.initializers = new ArrayList<>();
         this.ruleDescriptors = new HashMap<>();
@@ -114,12 +114,12 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
     }
 
     /**
-     * Returns a copy of the list of configurations in the repository.
+     * Returns a collection of the configurations in the repository.
      *
-     * @return a new list of {@link Configuration} objects
+     * @return a new collection of {@link Configuration} objects
      */
     public List<Configuration<C, S>> getConfigurations() {
-        return new ArrayList<>(configurations);
+        return new ArrayList<>(configurations.values());
     }
 
     /**
@@ -178,7 +178,7 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
      */
     public void addConfiguration(Configuration<C, S> configuration) {
         Objects.requireNonNull(configuration, "Configuration cannot be null");
-        this.configurations.add(configuration);
+        this.configurations.put(configuration.getId(), configuration);
     }
 
     /**
@@ -201,6 +201,16 @@ public class Repository<C extends Cell<S>, S extends CellState<?>> {
     public void addInitializer(GridInitializer<C, S> initializer) {
         Objects.requireNonNull(initializer, "Initializer cannot be null");
         this.initializers.add(initializer);
+    }
+
+    /**
+     * Returns the configuration for the specified configuration ID.
+     *
+     * @param confId the ID of the configuration
+     * @return the matching {@link Configuration}, or null if not found
+     */
+    public Configuration<C, S> getConfigurationById(int confId) {
+        return configurations.get(confId);
     }
 
     public Collection<Descriptor> getConfDescriptors() {
