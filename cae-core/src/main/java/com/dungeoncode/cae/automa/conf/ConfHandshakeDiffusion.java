@@ -59,5 +59,6 @@ public class ConfHandshakeDiffusion extends AbstractConfiguration<BooleanCell, B
         config.put(CONF_RULES, getRules());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automaton.configure(config);
+        automaton.setConfiguration(this);
     }
 }

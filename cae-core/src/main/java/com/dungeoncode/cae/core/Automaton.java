@@ -65,6 +65,7 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
      */
     private int step;
 
+    private Configuration<C,S> configuration;
     /**
      * Constructs a new automaton with a single-threaded executor for periodic updates.
      */
@@ -234,5 +235,17 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
 
     public int getStep() {
         return step;
+    }
+
+    public Configuration<C, S> getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration<C, S> configuration) {
+        this.configuration = configuration;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
     }
 }

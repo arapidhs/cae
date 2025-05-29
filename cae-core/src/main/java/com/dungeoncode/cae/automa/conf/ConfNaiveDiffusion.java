@@ -57,6 +57,7 @@ public class ConfNaiveDiffusion extends AbstractConfiguration<BooleanCell, Boole
         config.put(CONF_RULES, getRules());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automaton.configure(config);
+        automaton.setConfiguration(this);
     }
 
 }

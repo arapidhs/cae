@@ -113,6 +113,7 @@ public abstract class AbstractConfiguration<C extends Cell<S>, S extends CellSta
         config.put(CONF_RULES, getRules());
         config.put(CONF_INTERVAL_MILLIS, intervalMillis);
         automaton.configure(config);
+        automaton.setConfiguration(this);
     }
 
     /**
