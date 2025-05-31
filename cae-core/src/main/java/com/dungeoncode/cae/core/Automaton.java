@@ -245,7 +245,4 @@ public class Automaton<C extends Cell<S>, S extends CellState<?>> {
         this.configuration = configuration;
     }
 
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
 }

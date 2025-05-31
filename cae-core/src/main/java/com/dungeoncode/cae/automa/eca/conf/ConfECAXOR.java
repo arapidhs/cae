@@ -1,6 +1,6 @@
 package com.dungeoncode.cae.automa.eca.conf;
 
-import com.dungeoncode.cae.automa.eca.rule.ECAXORRule;
+import com.dungeoncode.cae.automa.eca.rule.RuleECAXOR;
 import com.dungeoncode.cae.core.AbstractConfiguration;
 import com.dungeoncode.cae.core.Dimension;
 import com.dungeoncode.cae.core.impl.BooleanCell;
@@ -22,6 +22,6 @@ public class ConfECAXOR extends AbstractConfiguration<BooleanCell, BooleanState>
      */
     public ConfECAXOR() {
         super(28, new InitOneDRandom(0.5, 0.5, 0.5, false),
-                List.of(new ECAXORRule()), Dimension.ONE);
+                List.of(new RuleECAXOR()), Dimension.ONE);
     }
 }

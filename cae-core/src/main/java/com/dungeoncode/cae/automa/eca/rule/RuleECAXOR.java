@@ -15,12 +15,12 @@ import com.dungeoncode.cae.core.impl.BooleanState;
  * @see BooleanCell
  * @see BooleanState
  */
-public class ECAXORRule extends AbstractRuleECA {
+public class RuleECAXOR extends AbstractRuleECA {
 
     /**
      * Constructs a new ONED-RAND rule with a fixed ID.
      */
-    public ECAXORRule() {
+    public RuleECAXOR() {
         super(27);
     }
 
