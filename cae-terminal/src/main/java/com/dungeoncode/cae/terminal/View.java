@@ -55,12 +55,12 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
     /**
      * The default terminal width in columns.
      */
-    private final int width = 180;
+    private final int width = 80;
 
     /**
      * The default terminal height in rows.
      */
-    private final int height = 60;
+    private final int height = 30;
 
     /**
      * The font size for terminal rendering.
@@ -202,6 +202,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
         Panel mainPanel = new Panel(new LinearLayout(Direction.VERTICAL));
         Panel ecaPanel = new Panel(new LinearLayout(Direction.HORIZONTAL)); // Elementary Cellular Automata Panel
         Panel ttlNPanel = new Panel(new LinearLayout(Direction.HORIZONTAL)); // Totalistic von Neumann panel
+        Panel middlePanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
         Panel centerPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
         Panel buttonsPanel = new Panel(new LinearLayout(Direction.HORIZONTAL))
                 .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
@@ -298,8 +299,9 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
 
         // Layout assembly
         mainPanel.addComponent(topPanel);
-        mainPanel.addComponent(ecaPanel.withBorder(Borders.singleLineBevel("Elementary Cellular Automata")));
-        mainPanel.addComponent(ttlNPanel.withBorder(Borders.singleLineBevel("Totalistic Von Neumann Automata")));
+        middlePanel.addComponent(ecaPanel.withBorder(Borders.singleLineBevel("Elementary Cellular Automata")));
+        middlePanel.addComponent(ttlNPanel.withBorder(Borders.singleLineBevel("Totalistic Von Neumann Automata")));
+        mainPanel.addComponent(middlePanel);
         mainPanel.addComponent(centerPanel);
         mainPanel.addComponent(buttonsPanel);
         rootPanel.addComponent(mainPanel);
