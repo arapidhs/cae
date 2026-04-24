@@ -101,7 +101,7 @@ public class ViewMain {
         if (view.getSelectedConfiguration() != null) {
             Configuration conf = view.getSelectedConfiguration();
             ViewEngine<Cell<CellState<?>>, CellState<?>> viewEngine =
-                    new ViewEngine<>(1080, 720, 4, repository.getConfigurations(), conf);
+                    new ViewEngine<>(1080, 720, 4, conf);
             viewEngine.run();
         } else {
             System.exit(0);

@@ -4,8 +4,6 @@ import com.dungeoncode.cae.automa.conf.*;
 import com.dungeoncode.cae.automa.eca.conf.ConfECAXOR;
 import com.dungeoncode.cae.automa.eca.conf.ConfRandomWalkerECA;
 import com.dungeoncode.cae.automa.eca.conf.ConfRuleECA;
-import com.dungeoncode.cae.automa.eca.rule.RuleECA;
-import com.dungeoncode.cae.automa.rule.RuleVonNeumannNeighborState;
 import com.dungeoncode.cae.core.*;
 import com.dungeoncode.cae.core.impl.BooleanCell;
 import com.dungeoncode.cae.core.impl.BooleanState;
@@ -119,7 +117,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
      * The font size used for rendering display elements like the controls menu.
      */
     private final int displayFontSize;
-    private final List<Configuration> configurations;
+
     /**
      * The configuration defining the automaton's setup and behavior.
      */
@@ -178,12 +176,11 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
      * @param px             the pixel width of the terminal window
      * @param py             the pixel height of the terminal window
      * @param cellFontSize   the font size for rendering simulation cells
-     * @param configurations
      * @param configuration  the automaton configuration, must not be null
      * @throws NullPointerException if configuration is null
      * @throws RuntimeException     if font loading fails
      */
-    public ViewEngine(int px, int py, int cellFontSize, List<Configuration> configurations, @NonNull Configuration<C, S> configuration) {
+    public ViewEngine(int px, int py, int cellFontSize, @NonNull Configuration<C, S> configuration) {
         Objects.requireNonNull(configuration);
         this.px = px;
         this.py = py;
@@ -193,7 +190,6 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         this.controls = new Controls();
         this.configuration = configuration;
         this.displayFontSize = 18;
-        this.configurations = configurations;
         setupFonts();
         initialize(true);
     }
@@ -373,7 +369,6 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
     public void run() {
         boolean scaleChange = false;
         boolean showControls = false;
-        boolean showConfigurationDetails = false;
         boolean quit = false;
         automaton.start();
         try {
@@ -382,9 +377,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
                 KeyType keyType = key.getKeyType();
                 if (keyType != Character) {
                     switch (key.getKeyType()) {
-                        case Escape -> {
-                            quit = true;
-                        }
+                        case Escape -> quit = true;
                         case F1 -> {
                             if (renderer.getStateRenderer() instanceof RendererBoolean) {
                                 ((RendererBoolean) renderer.getStateRenderer()).toggleInversion();
@@ -447,9 +440,6 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
                                 }
                                 automaRestarting = false;
                             }
-                        }
-                        case 'i', 'I' -> {
-                            showConfigurationDetails = true;
                         }
                         case '+' -> {
                             if (cellFontSize > 2) {
@@ -524,7 +514,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
                     }
                 }
 
-                if (scaleChange || showControls || showConfigurationDetails || quit) {
+                if (scaleChange || showControls || quit) {
                     setupFonts();
                     break;
                 }
@@ -541,8 +531,6 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
             run();
         } else if (showControls) {
             showControls();
-        } else if (showConfigurationDetails) {
-            showConfigurationDetails();
         }
 
     }
@@ -631,130 +619,6 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         } catch (Exception e) {
             throw new RuntimeException("Failed to display controls: " + e.getMessage(), e);
         }
-    }
-
-    /**
-     * Displays the selected configuration details on the left side of the screen and
-     * a list of all available configurations on the right.
-     * Handles text wrapping for long descriptions and citations.
-     */
-    private void showConfigurationDetails() {
-        try {
-            boolean simulation = false;
-            setupScreen(simulation);
-
-            // Clear screen
-            textGraphics.fill(' ');
-
-            // ===== LEFT SIDE: Configuration Details =====
-            int leftColumnWidth = screen.getTerminalSize().getColumns() / 2 - 5; // Half screen minus margin
-            int leftStartCol = 2;
-            int row = 1;
-
-            // Show configuration details if one is selected
-            if (configuration != null) {
-                // Display Name with emphasis
-                textGraphics.putString(leftStartCol, row++, "Automaton: " + configuration.getClass().getName(), SGR.BOLD);
-                row++;
-
-//                // Display Description with word wrapping
-//                //textGraphics.putString(leftStartCol, row++, "Description:", SGR.BOLD);
-//                String description = configuration.getDescription();
-//                if (description != null && !description.isEmpty()) {
-//                    row = wrapAndPrintText(description, leftStartCol + 2, row, leftColumnWidth - 2);
-//                } else {
-//                    textGraphics.putString(leftStartCol + 2, row++, "No description available.");
-//                }
-
-            } else {
-                textGraphics.putString(leftStartCol, row++, "No configuration selected.", SGR.BOLD);
-            }
-
-            // ===== RIGHT SIDE: Configuration List =====
-            int rightStartCol = leftColumnWidth + 7; // Position right after left column with padding
-            row = 1;
-
-            textGraphics.putString(rightStartCol, row++, "Available Automas:", SGR.BOLD);
-            row++;
-
-            // Print numbered list of configurations
-            for (int i = 0; i < configurations.size(); i++) {
-                Configuration<C, S> config = configurations.get(i);
-                String listItem = String.format("%d. %s", i + 1, config.getClass().getName());
-
-                // Highlight selected configuration
-                if (config == configuration) {
-                    textGraphics.putString(rightStartCol, row++, listItem, SGR.BOLD, SGR.REVERSE);
-                } else {
-                    textGraphics.putString(rightStartCol, row++, listItem);
-                }
-            }
-
-            // Instructions at bottom
-            int bottomRow = screen.getTerminalSize().getRows() - 2;
-            textGraphics.putString(leftStartCol, bottomRow, "Press any key to return", SGR.ITALIC);
-
-            screen.refresh();
-            screen.readInput(); // Wait for user input before returning
-
-            boolean resetAutoma = false;
-            initialize(resetAutoma);
-            run();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to display configuration details: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Helper method to wrap text at word boundaries and print it line by line.
-     *
-     * @param text     The text to wrap and print
-     * @param startCol The starting column (x position)
-     * @param startRow The starting row (y position)
-     * @param maxWidth The maximum width for wrapping
-     * @return The next row position after all text is printed
-     */
-    private int wrapAndPrintText(String text, int startCol, int startRow, int maxWidth) {
-        int currentRow = startRow;
-
-        // Split by existing line breaks first
-        String[] paragraphs = text.split("\\n");
-
-        for (String paragraph : paragraphs) {
-            if (paragraph.isEmpty()) {
-                currentRow++;
-                continue;
-            }
-
-            // Now handle word wrapping within each paragraph
-            String[] words = paragraph.split("\\s+");
-            StringBuilder currentLine = new StringBuilder();
-
-            for (String word : words) {
-                // Check if adding this word would exceed the max width
-                if (currentLine.length() + word.length() + 1 > maxWidth) {
-                    // Print current line and reset
-                    textGraphics.putString(startCol, currentRow++, currentLine.toString());
-                    currentLine = new StringBuilder(word);
-                } else {
-                    // Add word to current line
-                    if (!currentLine.isEmpty()) {
-                        currentLine.append(" ");
-                    }
-                    currentLine.append(word);
-                }
-            }
-
-            // Print any remaining text
-            if (!currentLine.isEmpty()) {
-                textGraphics.putString(startCol, currentRow++, currentLine.toString());
-            }
-
-            // Add a blank line between paragraphs
-            currentRow++;
-        }
-
-        return currentRow;
     }
 
     /**

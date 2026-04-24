@@ -30,7 +30,6 @@ public class Controls {
         controls.add(new Control("r", "Restart simulation"));
         controls.add(new Control("PgDn", "Start next automa"));
         controls.add(new Control("PgUp", "Start previous automa"));
-        controls.add(new Control("i", "Show Automaton Info"));
         controls.add(new Control("s", "Step one tick"));
         controls.add(new Control("q", "Exit simulation"));
         controls.add(new Control(">", "Inc. speed"));
@@ -41,7 +40,7 @@ public class Controls {
         controls.add(new Control("→", "Next palette"));
         controls.add(new Control("←", "Previous palette"));
         controls.add(new Control("F1", "Invert palette"));
-        controls.add(new Control("Ctrl+s", "Save screen as image"));
+        controls.add(new Control("Ctrl+s", "Save screenshot"));
 
         mouseControls = new ArrayList<>();
         mouseControls.add(new Control("L. Clk Drag", "Paint random cells"));
