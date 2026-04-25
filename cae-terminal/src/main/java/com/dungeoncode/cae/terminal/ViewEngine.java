@@ -11,6 +11,7 @@ import com.dungeoncode.cae.terminal.render.GridRenderer;
 import com.dungeoncode.cae.terminal.render.RendererBoolean;
 import com.dungeoncode.cae.terminal.render.RendererBooleanId;
 import com.dungeoncode.cae.terminal.render.StateRenderer;
+import com.dungeoncode.cae.terminal.utils.ScreenshotRecorder;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -162,6 +163,8 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
      * The renderer for displaying the grid's boolean states.
      */
     private GridRenderer<C, S> renderer;
+
+    private ScreenshotRecorder screenshotRecorder;
 
     /**
      * Tracks whether the automaton is restarting due to user control input.
@@ -335,6 +338,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
         }
         screen = new TerminalScreen(terminal);
         screen.setCursorPosition(null);
+        screenshotRecorder = new ScreenshotRecorder(16,screen);
     }
 
     /**
@@ -404,6 +408,13 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
                 } else if (key.isCtrlDown() && key.getKeyType() == KeyType.Character) {
                     if (key.getCharacter() == 's') {
                         saveScreenToImage();
+                    }
+                    if (key.getCharacter() == 'r' && screenshotRecorder != null) {
+                        if ( screenshotRecorder.isRunning()) {
+                            screenshotRecorder.stop();
+                        } else {
+                            screenshotRecorder.start( configuration.toString() );
+                        }
                     }
                 } else if (key.getKeyType() == KeyType.Character) {
                     Character character = key.getCharacter();
