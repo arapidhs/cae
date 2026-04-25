@@ -60,7 +60,7 @@ public class View<C extends Cell<S>, S extends CellState<?>> {
     /**
      * The default terminal height in rows.
      */
-    private final int height = 30;
+    private final int height = 40;
 
     /**
      * The font size for terminal rendering.
