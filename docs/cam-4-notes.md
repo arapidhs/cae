@@ -17,7 +17,7 @@ these extra neighbors are called
 &CENTER'
 or, collectively, &CENTERS
 
-The declaration re/PHASEcSon nects the two extra probes to two of these
+The declaration re/PHASE connects the two extra probes to two of these
 pseudo-neighbors, namely
 &PHASE
 &PHASE'
