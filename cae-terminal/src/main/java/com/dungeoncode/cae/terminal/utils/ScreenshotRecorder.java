@@ -172,12 +172,7 @@ public final class ScreenshotRecorder {
             }
 
             // Generate filename with filename prefix and millisecond-precision timestamp
-            String timestamp = String.format("%tY%tm%td%tH%tM%tS%tL",
-                    System.currentTimeMillis(), System.currentTimeMillis(),
-                    System.currentTimeMillis(), System.currentTimeMillis(),
-                    System.currentTimeMillis(), System.currentTimeMillis(),
-                    System.currentTimeMillis());
-
+            String timestamp = String.valueOf( System.currentTimeMillis() );
             String fileName = filenamePrefix + "_" + timestamp + ".png";
             File outputFile = new File(screenshotDir, fileName);
 

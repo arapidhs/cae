@@ -668,11 +668,7 @@ public class ViewEngine<C extends Cell<S>, S extends CellState<?>> {
 
             // Generate filename with configuration name and millisecond-precision timestamp
             String configName = configuration.toString();
-            String timestamp = String.format("%tY%tm%td%tH%tM%tS%tL",
-                    System.currentTimeMillis(), System.currentTimeMillis(),
-                    System.currentTimeMillis(), System.currentTimeMillis(),
-                    System.currentTimeMillis(), System.currentTimeMillis(),
-                    System.currentTimeMillis());
+            String timestamp = String.valueOf( System.currentTimeMillis() );
             String fileName = configName + "_" + timestamp + ".png";
             File outputFile = new File(screenshotDir, fileName);
 
